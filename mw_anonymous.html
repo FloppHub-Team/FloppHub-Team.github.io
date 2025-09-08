@@ -161,3 +161,24 @@
     transform: scale(1.05);
   }
 </style>
+
+
+  <!-- AUDIO -->
+  <audio id="bgAudio" loop>
+    <source src="https://files.catbox.moe/ydjl0r.m4a" type="audio/mp4">
+    Tu navegador no soporta audio HTML5.
+  </audio>
+
+  <!-- SCRIPT -->
+  <script>
+    const audio = document.getElementById("bgAudio");
+    audio.volume = 0.25;
+
+    document.addEventListener("click", () => {
+      if (audio.paused) {
+        audio.play();
+      }
+    }, { once: true });
+  </script>
+</body>
+</html>
