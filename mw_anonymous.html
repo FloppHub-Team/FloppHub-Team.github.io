@@ -63,9 +63,151 @@
     .image-container img:hover {
       transform: scale(1.05);
     }
+
+    .discord-section {
+      margin-top: 60px;
+      background-color: #1a1a1a;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #a020f0;
+      animation: pulse-purple 3s infinite;
+      color: #d8b4ff;
+    }
+
+    @keyframes pulse-purple {
+      0% { box-shadow: 0 0 10px #a020f0; }
+      50% { box-shadow: 0 0 25px #c084fc; }
+      100% { box-shadow: 0 0 10px #a020f0; }
+    }
+
+    .discord-section h1 {
+      text-align: center;
+      font-size: 2em;
+      color: #c084fc;
+      margin-bottom: 10px;
+    }
+
+    .discord-section p {
+      font-size: 1.1em;
+      line-height: 1.6;
+      text-align: center;
+      padding: 0 10px;
+    }
+
+    .discord-section a {
+      color: #d8b4ff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .discord-section a:hover {
+      color: #ffffff;
+      text-shadow: 0 0 5px #c084fc;
+    }
+
+    .discord-section .image-container img {
+      width: 320px;
+      height: 240px;
+      border: 3px solid #c084fc;
+      border-radius: 8px;
+      box-shadow: 0 0 15px #a020f0;
+      transition: transform 0.3s ease;
+    }
+
+    .discord-section .image-container img:hover {
+      transform: scale(1.05);
+    }
+
+    /* Estilos para el control de audio */
+    .audio-control {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1000;
+      border: 2px solid #ffa500;
+      box-shadow: 0 0 10px #ff8c00;
+      transition: all 0.3s ease;
+    }
+
+    .audio-control:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px #ff8c00;
+    }
+
+    .audio-control.muted {
+      opacity: 0.7;
+    }
+
+    .audio-control svg {
+      width: 24px;
+      height: 24px;
+      fill: #ffa500;
+    }
+
+    /* Overlay de bienvenida */
+    .welcome-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      color: #ffa500;
+      text-align: center;
+    }
+
+    .welcome-overlay h2 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #ff8c00;
+    }
+
+    .welcome-overlay p {
+      font-size: 1.2em;
+      margin-bottom: 30px;
+      max-width: 80%;
+    }
+
+    .start-button {
+      background-color: #ff8c00;
+      color: #000;
+      border: none;
+      padding: 15px 40px;
+      font-size: 1.2em;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px #ff8c00;
+    }
+
+    .start-button:hover {
+      background-color: #ffa500;
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #ff8c00;
+    }
   </style>
 </head>
 <body>
+  <!-- Overlay de bienvenida -->
+  <div class="welcome-overlay" id="welcomeOverlay">
+    <h2>Welcome to My Website</h2>
+    <p>This site features background music. Click the button below to enter and enjoy the experience.</p>
+    <button class="start-button" id="startButton">Enter Site</button>
+  </div>
+
   <div class="container">
     <h1>Hi, I'm Mw_Anonymous</h1>
     <p>
@@ -85,83 +227,32 @@
       <img src="https://i.postimg.cc/kXNP45Th/Idk.png" alt="Mw_Anonymous">
     </div>
   </div>
-</body>
-</html>
 
-<div class="container discord-section">
-  <h1>FloppHub Discord Server</h1>
-  <p>
-    Welcome to my official Discord server — a bypass-focused community with its own custom <strong>script hub</strong> and over <strong>700+ members</strong> actively sharing, testing, and innovating.
-  </p>
-  <p>
-    Whether you're into Roblox exploits, creative scripting, or just want to connect with like-minded devs, FloppHub is the place to be.
-  </p>
-  <div class="image-container">
-    <a href="https://discord.gg/J9dSv7hq55" target="_blank">
-      <img src="https://i.postimg.cc/brq86RKj/loc-phub-jpg.png" alt="FloppHub Discord Logo">
-    </a>
+  <div class="container discord-section">
+    <h1>FloppHub Discord Server</h1>
+    <p>
+      Welcome to my official Discord server — a bypass-focused community with its own custom <strong>script hub</strong> and over <strong>700+ members</strong> actively sharing, testing, and innovating.
+    </p>
+    <p>
+      Whether you're into Roblox exploits, creative scripting, or just want to connect with like-minded devs, FloppHub is the place to be.
+    </p>
+    <div class="image-container">
+      <a href="https://discord.gg/J9dSv7hq55" target="_blank">
+        <img src="https://i.postimg.cc/brq86RKj/loc-phub-jpg.png" alt="FloppHub Discord Logo">
+      </a>
+    </div>
+    <p style="text-align:center; margin-top: 20px;">
+      🔗 <a href="https://discord.gg/J9dSv7hq55" target="_blank">discord.gg/J9dSv7hq55</a><br>
+      🔗 <a href="https://dsc.gg/flopphub-team" target="_blank">dsc.gg/flopphub-team</a>
+    </p>
   </div>
-  <p style="text-align:center; margin-top: 20px;">
-    🔗 <a href="https://discord.gg/J9dSv7hq55" target="_blank">discord.gg/J9dSv7hq55</a><br>
-    🔗 <a href="https://dsc.gg/flopphub-team" target="_blank">dsc.gg/flopphub-team</a>
-  </p>
-</div>
 
-<style>
-  .discord-section {
-    margin-top: 60px;
-    background-color: #1a1a1a;
-    border-radius: 10px;
-    box-shadow: 0 0 20px #a020f0;
-    animation: pulse-purple 3s infinite;
-    color: #d8b4ff;
-  }
-
-  @keyframes pulse-purple {
-    0% { box-shadow: 0 0 10px #a020f0; }
-    50% { box-shadow: 0 0 25px #c084fc; }
-    100% { box-shadow: 0 0 10px #a020f0; }
-  }
-
-  .discord-section h1 {
-    text-align: center;
-    font-size: 2em;
-    color: #c084fc;
-    margin-bottom: 10px;
-  }
-
-  .discord-section p {
-    font-size: 1.1em;
-    line-height: 1.6;
-    text-align: center;
-    padding: 0 10px;
-  }
-
-  .discord-section a {
-    color: #d8b4ff;
-    text-decoration: none;
-    font-weight: bold;
-  }
-
-  .discord-section a:hover {
-    color: #ffffff;
-    text-shadow: 0 0 5px #c084fc;
-  }
-
-  .discord-section .image-container img {
-    width: 320px;
-    height: 240px;
-    border: 3px solid #c084fc;
-    border-radius: 8px;
-    box-shadow: 0 0 15px #a020f0;
-    transition: transform 0.3s ease;
-  }
-
-  .discord-section .image-container img:hover {
-    transform: scale(1.05);
-  }
-</style>
-
+ 
+  <div class="audio-control" id="audioControl">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M12 3.984v4.219l-2.109-2.109-1.406 1.406 3.516 3.516 3.516-3.516-1.406-1.406-2.109 2.109v-4.219h-0.984zM16.5 12c0-1.266-0.516-2.438-1.359-3.328l-1.406 1.406c0.469 0.516 0.75 1.219 0.75 1.922 0 0.703-0.281 1.406-0.75 1.922l1.406 1.406c0.844-0.891 1.359-2.063 1.359-3.328zM16.5 17.484l-1.5-1.5c1.031-1.031 1.5-2.438 1.5-3.984s-0.469-2.953-1.5-3.984l1.5-1.5c1.359 1.359 2.016 3.172 2.016 5.484s-0.656 4.125-2.016 5.484z"/>
+    </svg>
+  </div>
 
   <!-- AUDIO -->
   <audio id="bgAudio" loop>
@@ -172,11 +263,44 @@
   <!-- SCRIPT -->
   <script>
     const audio = document.getElementById("bgAudio");
+    const audioControl = document.getElementById("audioControl");
+    const welcomeOverlay = document.getElementById("welcomeOverlay");
+    const startButton = document.getElementById("startButton");
+    
+    
     audio.volume = 0.25;
-
-    document.addEventListener("click", () => {
+    
+    
+    function startAudio() {
       if (audio.paused) {
-        audio.play();
+        const playPromise = audio.play();
+        
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.log("Reproducción automática prevenida:", error);
+            audioControl.classList.add("muted");
+          });
+        }
+      }
+    }
+    
+    startButton.addEventListener("click", () => {
+      welcomeOverlay.style.display = "none";
+      startAudio();
+    });
+   
+    audioControl.addEventListener("click", () => {
+      if (audio.muted) {
+        audio.muted = false;
+        audioControl.classList.remove("muted");
+      } else {
+        audio.muted = true;
+        audioControl.classList.add("muted");
+      }
+    });
+    document.addEventListener("click", () => {
+      if (audio.paused && welcomeOverlay.style.display === "none") {
+        startAudio();
       }
     }, { once: true });
   </script>
