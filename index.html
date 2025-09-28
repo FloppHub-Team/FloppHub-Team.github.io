@@ -22,13 +22,13 @@
       --warning: #ff9900;
       --danger: #ff4444;
     }
-    
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    
+
     html, body {
       height: 100%;
       margin: 0;
@@ -54,7 +54,7 @@
       position: relative;
       padding: 20px 0;
     }
-    
+
     header::after {
       content: '';
       position: absolute;
@@ -84,7 +84,7 @@
       border: 2px solid var(--primary);
       transition: all 0.3s ease;
     }
-    
+
     .logo:hover {
       transform: scale(1.05);
       box-shadow: 0 0 25px rgba(255, 119, 0, 0.6);
@@ -97,7 +97,7 @@
       text-shadow: 0 0 10px rgba(255, 119, 0, 0.7);
       margin: 0;
     }
-    
+
     h1 span {
       color: var(--primary);
     }
@@ -126,7 +126,7 @@
       border-left: 4px solid var(--primary);
       transition: transform 0.3s ease;
     }
-    
+
     .section:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
@@ -159,7 +159,7 @@
       color: var(--text-secondary);
       position: relative;
     }
-    
+
     li::before {
       content: '•';
       color: var(--primary);
@@ -216,7 +216,7 @@
       gap: 10px;
       margin: 15px 0;
     }
-    
+
     .invite-links a {
       display: flex;
       align-items: center;
@@ -226,12 +226,12 @@
       border-radius: 6px;
       transition: all 0.3s ease;
     }
-    
+
     .invite-links a:hover {
       background: rgba(255, 119, 0, 0.2);
       transform: translateX(5px);
     }
-    
+
     .invite-links i {
       color: var(--primary);
     }
@@ -252,28 +252,57 @@
       vertical-align: middle;
     }
 
+    .founder-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 20px 0;
+      padding: 12px 25px;
+      background: linear-gradient(to right, var(--primary-dark), var(--primary));
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 500;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(255, 119, 0, 0.3);
+      text-decoration: none;
+    }
+
+    .founder-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(255, 119, 0, 0.4);
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
+    }
+
+    .founder-button i {
+      font-size: 1.1rem;
+    }
+
     @media (max-width: 768px) {
       .container {
         padding: 20px 15px;
       }
-      
+
       h1 {
         font-size: 2.2rem;
       }
-      
+
       h2 {
         font-size: 1.5rem;
       }
-      
+
       h3 {
         font-size: 1.2rem;
       }
-      
+
       .logo {
         width: 90px;
         height: 90px;
       }
-      
+
       .section {
         padding: 20px;
       }
@@ -283,7 +312,7 @@
       h1 {
         font-size: 1.8rem;
       }
-      
+
       .logo-container {
         flex-direction: column;
         text-align: center;
@@ -321,6 +350,10 @@
 
       <p><strong>Join. Learn. Break the system.</strong><br>
       <span class="highlight">#FloppHubTeam — Where code has character.</span></p>
+      
+      <a href="https://flopphub-team.github.io/mw_anonymous" class="founder-button" target="_blank">
+        <i class="fas fa-user-circle"></i> Learn more about the founder and owner of FloppHub Team 👉 @mw_anonymous
+      </a>
     </div>
 
     <div class="section">
