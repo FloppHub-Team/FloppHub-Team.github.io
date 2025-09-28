@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to FloppHub Discord</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #5865F2 0%, #8B5CF6 50%, #6D28D9 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(35, 39, 42, 0.9);
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #5865F2, #8B5CF6, #6D28D9);
+        }
+
+        .discord-logo {
+            font-size: 4rem;
+            color: #5865F2;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: white;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #B9BBBE;
+            font-weight: 500;
+        }
+
+        .countdown {
+            font-size: 1.8rem;
+            margin: 25px 0;
+            font-weight: bold;
+            color: #8B5CF6;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(88, 101, 242, 0.2);
+            border-radius: 4px;
+            margin: 25px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #5865F2, #8B5CF6);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #5865F2;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            margin-top: 15px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.4);
+        }
+
+        .btn:hover {
+            background: #4752C4;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(88, 101, 242, 0.5);
+        }
+
+        .btn i {
+            font-size: 1.2rem;
+        }
+
+        .server-info {
+            background: rgba(47, 49, 54, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: left;
+            border-left: 4px solid #5865F2;
+        }
+
+        .server-info h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .server-info ul {
+            list-style-type: none;
+        }
+
+        .server-info li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #B9BBBE;
+        }
+
+        .server-info li i {
+            color: #5865F2;
+            width: 20px;
+        }
+
+        .flopphub-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 3px solid #5865F2;
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #B9BBBE;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.3rem;
+            }
+            
+            .discord-logo {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://i.postimg.cc/brq86RKj/loc-phub-jpg.png" alt="FloppHub Logo" class="flopphub-logo">
+        <i class="fab fa-discord discord-logo"></i>
+        <h1>Redirecting to FloppHub Discord</h1>
+        <h2>We're taking you to our Discord server</h2>
+        
+        <div class="countdown" id="countdown">Redirecting in 5 seconds...</div>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div class="server-info">
+            <h3><i class="fas fa-info-circle"></i> Server Information</h3>
+            <ul>
+                <li><i class="fas fa-users"></i> <strong>700+ active members</strong></li>
+                <li><i class="fas fa-bolt"></i> Exclusive bypass bots and scripts</li>
+                <li><i class="fas fa-shield-alt"></i> Safe and verified community</li>
+                <li><i class="fas fa-rocket"></i> Active technical support</li>
+            </ul>
+        </div>
+        
+        <a href="https://discord.gg/J9dSv7hq55" class="btn" id="redirectBtn">
+            <i class="fab fa-discord"></i> Join Now
+        </a>
+        
+        <div class="footer">
+            <p>If you are not redirected automatically, click the button above</p>
+        </div>
+    </div>
+
+    <script>
+        let countdown = 5;
+        const countdownElement = document.getElementById('countdown');
+        const progressElement = document.getElementById('progress');
+        const redirectBtn = document.getElementById('redirectBtn');
+        
+        function updateCountdown() {
+            countdownElement.textContent = `Redirecting in ${countdown} seconds...`;
+            progressElement.style.width = `${(5 - countdown) * 20}%`;
+            
+            if (countdown === 0) {
+                window.location.href = "https://discord.gg/J9dSv7hq55";
+            } else {
+                countdown--;
+                setTimeout(updateCountdown, 1000);
+            }
+        }
+        
+        updateCountdown();
+        
+        redirectBtn.addEventListener('click', function() {
+            window.location.href = "https://discord.gg/J9dSv7hq55";
+        });
+    </script>
+</body>
+</html>
