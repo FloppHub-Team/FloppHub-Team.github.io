@@ -5,35 +5,36 @@
   <title>About Me – Mw_Anonymous</title>
   <link rel="icon" href="https://i.postimg.cc/NMdT27RK/FloppHub_favicon.png" type="image/png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #ff7700;
       --primary-dark: #e65c00;
       --primary-light: #ff9436;
-      --secondary: #2a2a2a;
-      --secondary-light: #3d3d3d;
-      --text: #f0f0f0;
-      --text-secondary: #cccccc;
+      --secondary: #1a1a1a;
+      --secondary-light: #2a2a2a;
+      --text: #ffffff;
+      --text-secondary: #b0b0b0;
       --accent: #ffaa44;
-      --card-bg: #252525;
+      --card-bg: rgba(30, 30, 30, 0.8);
       --discord-purple: #7289da;
       --discord-purple-dark: #5b6eae;
+      --glow: 0 0 20px rgba(255, 119, 0, 0.3);
     }
-    
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    
+
     html, body {
       height: 100%;
       margin: 0;
       padding: 0;
-      background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
       color: var(--text);
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Inter', sans-serif;
       line-height: 1.6;
       display: flex;
       flex-direction: column;
@@ -41,257 +42,333 @@
     }
 
     .container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
-      padding: 30px 20px;
+      padding: 40px 20px;
       flex: 1;
     }
 
     .card {
       background: var(--card-bg);
-      border-radius: 12px;
-      padding: 30px;
+      border-radius: 16px;
+      padding: 40px;
       margin-bottom: 30px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-      border-left: 4px solid var(--primary);
-      transition: transform 0.3s ease;
+      border: 1px solid rgba(255, 119, 0, 0.2);
+      backdrop-filter: blur(10px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
     }
-    
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 119, 0, 0.1), transparent);
+      transition: left 0.6s;
+    }
+
+    .card:hover::before {
+      left: 100%;
+    }
+
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      transform: translateY(-8px);
+      box-shadow: var(--glow), 0 20px 40px rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 119, 0, 0.4);
     }
 
     h1 {
       font-family: 'Orbitron', sans-serif;
-      font-size: 2.8rem;
+      font-size: 3.2rem;
       color: var(--primary);
       text-align: center;
-      margin-bottom: 20px;
-      text-shadow: 0 0 10px rgba(255, 119, 0, 0.3);
+      margin-bottom: 30px;
+      text-shadow: 0 0 30px rgba(255, 119, 0, 0.5);
+      letter-spacing: 2px;
+      position: relative;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      border-radius: 2px;
     }
 
     h2 {
       font-family: 'Orbitron', sans-serif;
-      font-size: 1.8rem;
+      font-size: 2rem;
       color: var(--primary-light);
-      margin: 20px 0 15px;
+      margin: 30px 0 20px;
+      position: relative;
+      display: inline-block;
+    }
+
+    h2::before {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: width 0.3s ease;
+    }
+
+    .card:hover h2::before {
+      width: 100%;
     }
 
     p {
       font-size: 1.1rem;
-      line-height: 1.7;
-      margin-bottom: 15px;
+      line-height: 1.8;
+      margin-bottom: 20px;
       color: var(--text-secondary);
+      transition: color 0.3s ease;
+    }
+
+    .card:hover p {
+      color: var(--text);
     }
 
     strong {
       color: var(--primary-light);
-      font-weight: 700;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(255, 148, 54, 0.3);
     }
 
     em {
       color: var(--accent);
       font-style: italic;
+      font-weight: 500;
     }
 
     .image-container {
       text-align: center;
-      margin: 30px 0;
+      margin: 40px 0;
+      position: relative;
     }
 
     .image-container img {
       width: 100%;
-      max-width: 400px;
+      max-width: 450px;
       height: auto;
-      border-radius: 10px;
-      border: 2px solid var(--primary);
-      box-shadow: 0 0 20px rgba(255, 119, 0, 0.2);
-      transition: all 0.3s ease;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 119, 0, 0.3);
+      box-shadow: 0 0 30px rgba(255, 119, 0, 0.2);
+      transition: all 0.4s ease;
+      position: relative;
     }
-    
-    .image-container img:hover {
-      transform: scale(1.02);
-      box-shadow: 0 0 25px rgba(255, 119, 0, 0.3);
+
+    .image-container::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      max-width: 450px;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255, 119, 0, 0.1) 0%, transparent 70%);
+      border-radius: 12px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .image-container:hover::before {
+      opacity: 1;
+    }
+
+    .image-container:hover img {
+      transform: scale(1.03);
+      box-shadow: 0 0 40px rgba(255, 119, 0, 0.3);
+      border-color: rgba(255, 119, 0, 0.6);
     }
 
     .discord-card {
-      border-left: 4px solid var(--discord-purple);
-      background: linear-gradient(to right, rgba(42, 42, 42, 0.7), rgba(42, 42, 42, 0.9));
+      border: 1px solid rgba(114, 137, 218, 0.3);
+      background: rgba(30, 30, 50, 0.6);
+      position: relative;
+    }
+
+    .discord-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at top right, rgba(114, 137, 218, 0.1) 0%, transparent 50%);
+      pointer-events: none;
     }
 
     .discord-card h2 {
       color: var(--discord-purple);
       text-align: center;
+      text-shadow: 0 0 20px rgba(114, 137, 218, 0.3);
     }
 
     .discord-links {
       display: flex;
       flex-direction: column;
       gap: 15px;
-      margin: 20px 0;
+      margin: 30px 0;
     }
-    
+
     .discord-links a {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 12px 20px;
+      gap: 15px;
+      padding: 15px 25px;
       background: rgba(114, 137, 218, 0.1);
-      border-radius: 8px;
+      border-radius: 10px;
       transition: all 0.3s ease;
       color: var(--text);
       text-decoration: none;
+      border: 1px solid rgba(114, 137, 218, 0.2);
+      position: relative;
+      overflow: hidden;
     }
-    
+
+    .discord-links a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(114, 137, 218, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .discord-links a:hover::before {
+      left: 100%;
+    }
+
     .discord-links a:hover {
       background: rgba(114, 137, 218, 0.2);
-      transform: translateX(5px);
+      transform: translateX(8px);
+      box-shadow: 0 5px 15px rgba(114, 137, 218, 0.2);
+      border-color: rgba(114, 137, 218, 0.4);
     }
-    
+
     .discord-links i {
       color: var(--discord-purple);
-      font-size: 1.2rem;
+      font-size: 1.3rem;
+      transition: transform 0.3s ease;
     }
 
-    .audio-control {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: var(--secondary);
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 1000;
-      border: 2px solid var(--primary);
-      box-shadow: 0 0 15px rgba(255, 119, 0, 0.3);
-      transition: all 0.3s ease;
-    }
-
-    .audio-control:hover {
+    .discord-links a:hover i {
       transform: scale(1.1);
-      box-shadow: 0 0 20px rgba(255, 119, 0, 0.4);
     }
 
-    .audio-control.muted {
-      opacity: 0.7;
-    }
-
-    .audio-control i {
+    .highlight {
       color: var(--primary);
-      font-size: 1.2rem;
+      font-weight: 600;
+      text-shadow: 0 0 10px rgba(255, 119, 0, 0.3);
     }
 
-    /* Overlay de bienvenida */
-    .welcome-overlay {
+    /* Animated background */
+    body::before {
+      content: '';
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.95);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      color: var(--text);
-      text-align: center;
-      padding: 20px;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 119, 0, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(114, 137, 218, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(255, 170, 68, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+      animation: float 20s ease-in-out infinite;
     }
 
-    .welcome-overlay h2 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      color: var(--primary);
-      text-shadow: 0 0 10px rgba(255, 119, 0, 0.3);
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(30px, -30px) rotate(120deg); }
+      66% { transform: translate(-20px, 20px) rotate(240deg); }
     }
 
-    .welcome-overlay p {
-      font-size: 1.2rem;
-      margin-bottom: 30px;
-      max-width: 80%;
-      color: var(--text-secondary);
-    }
-
-    .start-button {
-      background: linear-gradient(to right, var(--primary-dark), var(--primary));
-      color: #000;
-      border: none;
-      padding: 15px 40px;
-      font-size: 1.2rem;
-      border-radius: 30px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 15px rgba(255, 119, 0, 0.3);
-    }
-
-    .start-button:hover {
-      background: linear-gradient(to right, var(--primary), var(--primary-light));
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(255, 119, 0, 0.4);
-    }
-
-    .highlight {
-      color: var(--primary);
-      font-weight: bold;
-    }
-
+    /* Responsive design */
     @media (max-width: 768px) {
       .container {
-        padding: 20px 15px;
+        padding: 30px 15px;
       }
-      
+
       h1 {
-        font-size: 2.2rem;
+        font-size: 2.5rem;
+        letter-spacing: 1px;
       }
-      
+
       h2 {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
       }
-      
+
       .card {
-        padding: 20px;
+        padding: 30px 20px;
       }
-      
-      .welcome-overlay h2 {
-        font-size: 2rem;
-      }
-      
-      .welcome-overlay p {
-        font-size: 1rem;
+
+      .discord-links a {
+        padding: 12px 20px;
+        font-size: 0.95rem;
       }
     }
 
     @media (max-width: 480px) {
       h1 {
-        font-size: 1.8rem;
+        font-size: 2rem;
       }
-      
-      .discord-links a {
-        padding: 10px 15px;
-        font-size: 0.9rem;
+
+      h2 {
+        font-size: 1.4rem;
       }
-      
-      .start-button {
-        padding: 12px 30px;
-        font-size: 1rem;
+
+      .card {
+        padding: 25px 15px;
       }
+
+      .image-container img {
+        max-width: 100%;
+      }
+    }
+
+    /* Loading animation */
+    .card {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .discord-card {
+      animation-delay: 0.4s;
     }
   </style>
 </head>
 <body>
-
-  <div class="welcome-overlay" id="welcomeOverlay">
-    <h2>Welcome to My Website</h2>
-    <p>FloppHub Team On Top 🗣️🗣️🗣️</p>
-    <button class="start-button" id="startButton">Enter Site</button>
-  </div>
 
   <div class="container">
     <div class="card">
@@ -317,18 +394,18 @@
     <div class="card discord-card">
       <h2>FloppHub Discord Server</h2>
       <p>
-        Welcome to my official Discord server — a bypass-focused community with its own custom <strong>script hub</strong> and over <strong>700+ members</strong> actively sharing, testing, and innovating.
+        Welcome to my official Discord server — a bypass-focused community with its own custom <strong>script hub</strong> and over <strong>800+ members</strong> actively sharing, testing, and innovating.
       </p>
       <p>
         Whether you're into Roblox exploits, creative scripting, or just want to connect with like-minded devs, FloppHub is the place to be.
       </p>
-      
+
       <div class="image-container">
         <a href="https://discord.gg/J9dSv7hq55" target="_blank">
           <img src="https://i.postimg.cc/brq86RKj/loc-phub-jpg.png" alt="FloppHub Discord Logo">
         </a>
       </div>
-      
+
       <div class="discord-links">
         <a href="https://discord.gg/J9dSv7hq55" target="_blank">
           <i class="fab fa-discord"></i> discord.gg/J9dSv7hq55
@@ -340,60 +417,5 @@
     </div>
   </div>
 
-  <div class="audio-control" id="audioControl">
-    <i class="fas fa-volume-up"></i>
-  </div>
-
-  <!-- AUDIO -->
-  <audio id="bgAudio" loop>
-    <source src="https://files.catbox.moe/ydjl0r.m4a" type="audio/mp4">
-    Your browser does not support the audio element.
-  </audio>
-
-  <!-- SCRIPT -->
-  <script>
-    const audio = document.getElementById("bgAudio");
-    const audioControl = document.getElementById("audioControl");
-    const welcomeOverlay = document.getElementById("welcomeOverlay");
-    const startButton = document.getElementById("startButton");
-
-    audio.volume = 0.25;
-
-    function startAudio() {
-      if (audio.paused) {
-        const playPromise = audio.play();
-
-        if (playPromise !== undefined) {
-          playPromise.catch(error => {
-            console.log("Autoplay prevented:", error);
-            audioControl.classList.add("muted");
-          });
-        }
-      }
-    }
-
-    startButton.addEventListener("click", () => {
-      welcomeOverlay.style.display = "none";
-      startAudio();
-    });
-
-    audioControl.addEventListener("click", () => {
-      if (audio.muted) {
-        audio.muted = false;
-        audioControl.classList.remove("muted");
-        audioControl.innerHTML = '<i class="fas fa-volume-up"></i>';
-      } else {
-        audio.muted = true;
-        audioControl.classList.add("muted");
-        audioControl.innerHTML = '<i class="fas fa-volume-mute"></i>';
-      }
-    });
-
-    document.addEventListener("click", () => {
-      if (audio.paused && welcomeOverlay.style.display === "none") {
-        startAudio();
-      }
-    }, { once: true });
-  </script>
 </body>
 </html>
