@@ -48,6 +48,12 @@
             padding: 20px;
             background: rgba(20, 20, 20, 0.85);
             backdrop-filter: blur(10px);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .logo {
@@ -59,7 +65,7 @@
             background: rgba(0, 0, 0, 0.3);
             box-shadow: 0 0 25px rgba(255, 140, 0, 0.6);
             margin-bottom: 20px;
-            animation: pulse 2s infinite;
+            animation: pulse 2s infinite, slideInDown 0.8s ease-out;
         }
 
         @keyframes pulse {
@@ -68,12 +74,23 @@
             100% { box-shadow: 0 0 15px rgba(255, 140, 0, 0.6); }
         }
 
+        @keyframes slideInDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
         h1 {
             color: #ff8c00;
             font-size: 32px;
             margin-bottom: 10px;
             text-shadow: 0 0 15px rgba(255, 140, 0, 0.8);
             letter-spacing: 1px;
+            animation: slideInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .subtitle {
@@ -81,12 +98,14 @@
             font-size: 18px;
             margin-bottom: 40px;
             text-shadow: 0 0 8px rgba(255, 165, 0, 0.5);
+            animation: slideInUp 0.8s ease-out 0.4s both;
         }
 
         .password-container {
             width: 100%;
             max-width: 320px;
             margin-bottom: 30px;
+            animation: slideInUp 0.8s ease-out 0.6s both;
         }
 
         input[type="password"] {
@@ -107,6 +126,7 @@
             border-color: #ffa500;
             box-shadow: 0 0 25px rgba(255, 140, 0, 0.7);
             background: rgba(40, 40, 40, 0.8);
+            transform: scale(1.02);
         }
 
         button {
@@ -126,11 +146,30 @@
             box-shadow: 0 0 20px rgba(255, 140, 0, 0.6);
             position: relative;
             overflow: hidden;
+            animation: slideInUp 0.8s ease-out 0.8s both;
         }
 
         button:active {
             transform: scale(0.98);
             box-shadow: 0 0 15px rgba(255, 140, 0, 0.4);
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:active::after {
+            width: 300px;
+            height: 300px;
         }
 
         .error {
@@ -175,13 +214,96 @@
             text-align: center;
             opacity: 0.8;
             text-shadow: 0 0 5px rgba(255, 165, 0, 0.5);
+            animation: fadeIn 1s ease-out 1s both;
+        }
+
+        /* Pantalla de acceso concedido */
+        .success-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .success-content {
+            text-align: center;
+            animation: zoomIn 0.6s ease-out 0.3s both;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .success-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 30px;
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.6);
+            animation: successPulse 1s infinite;
+        }
+
+        @keyframes successPulse {
+            0% { box-shadow: 0 0 30px rgba(0, 255, 136, 0.6); }
+            50% { box-shadow: 0 0 50px rgba(0, 255, 136, 0.9); }
+            100% { box-shadow: 0 0 30px rgba(0, 255, 136, 0.6); }
+        }
+
+        .success-icon::before {
+            content: '✓';
+            font-size: 60px;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .success-title {
+            color: #00ff88;
+            font-size: 28px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+            animation: slideInUp 0.6s ease-out 0.6s both;
+        }
+
+        .success-message {
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            animation: slideInUp 0.6s ease-out 0.8s both;
+        }
+
+        .countdown {
+            font-size: 72px;
+            color: #ff8c00;
+            font-weight: bold;
+            text-shadow: 0 0 30px rgba(255, 140, 0, 0.8);
+            animation: countdownPulse 1s infinite;
+        }
+
+        @keyframes countdownPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
     <canvas id="particles"></canvas>
     
-    <div class="container">
+    <div class="container" id="mainContainer">
         <img src="https://i.postimg.cc/brq86RKj/loc-phub.jpg.png" alt="FloppHub Team" class="logo">
         <h1>FloppHub Team</h1>
         <p class="subtitle">Acceso Protegido</p>
@@ -198,10 +320,23 @@
         <p class="protected-file">Este archivo está protegido por FloppHub Team</p>
     </div>
 
+    <!-- Pantalla de éxito -->
+    <div class="success-screen" id="successScreen">
+        <div class="success-content">
+            <div class="success-icon"></div>
+            <h2 class="success-title">¡ACCESO CONCEDIDO!</h2>
+            <p class="success-message">Bienvenido desarrollador de FloppHub</p>
+            <div class="countdown" id="countdown">3</div>
+        </div>
+    </div>
+
     <script>
         // CONTRASEÑAS VÁLIDAS - PUEDES EDITAR ESTAS CONTRASEÑAS
         const validPasswords = [
-            'M.Sr Sigman'
+            'key123',
+            'key34555',
+            'flopphub2024',
+            'premiumaccess'
         ];
 
         // URL de redirección
@@ -251,7 +386,7 @@
         }
 
         function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.canvas.height);
             for (let i = 0; i < particles.length; i++) {
                 particles[i].update();
                 particles[i].draw();
@@ -282,11 +417,39 @@
                 loadingMessage.style.display = 'none';
                 
                 if (validPasswords.includes(password)) {
-                    window.location.href = redirectUrl;
+                    showSuccessScreen();
                 } else {
                     errorMessage.style.display = 'block';
                     passwordInput.value = '';
                     passwordInput.focus();
+                }
+            }, 1000);
+        }
+
+        function showSuccessScreen() {
+            const mainContainer = document.getElementById('mainContainer');
+            const successScreen = document.getElementById('successScreen');
+            
+            mainContainer.style.display = 'none';
+            successScreen.style.display = 'flex';
+            
+            startCountdown();
+        }
+
+        function startCountdown() {
+            let count = 3;
+            const countdownElement = document.getElementById('countdown');
+            
+            const interval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownElement.textContent = count;
+                } else {
+                    countdownElement.textContent = '¡YA!';
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 500);
                 }
             }, 1000);
         }
@@ -303,5 +466,4 @@
         });
     </script>
 </body>
-  </html>
-  
+</html>
