@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blox Fruits Stock - THE NOTORIUS B.H.R</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bf-orange': '#FF8C00',
+                        'bf-dark': '#0a0a0a',
+                        'bf-card': '#141414',
+                        'bf-accent': '#ff4500',
+                        'mirage-purple': '#9333ea'
+                    },
+                    fontFamily: {
+                        'display': ['Orbitron', 'sans-serif'],
+                        'body': ['Roboto', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            '0%, 100%': { boxShadow: '0 0 20px rgba(147, 51, 234, 0.4)' },
+                            '50%': { boxShadow: '0 0 30px rgba(147, 51, 234, 0.8)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            background-image: radial-gradient(circle at 50% 50%, #1a1000 0%, #000000 100%);
+            color: white;
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #FF8C00; border-radius: 4px; }
+
+        .fruit-card {
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 140, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .fruit-card:hover {
+            transform: translateY(-5px);
+            border-color: #FF8C00;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
+        }
+
+        .fruit-card.mirage {
+            border: 1px solid rgba(147, 51, 234, 0.2);
+            background: rgba(30, 20, 40, 0.8);
+        }
+        .fruit-card.mirage:hover {
+            border-color: #9333ea;
+            box-shadow: 0 0 25px rgba(147, 51, 234, 0.5);
+        }
+
+        .rarity-common { border-bottom: 3px solid #a0a0a0; }
+        .rarity-uncommon { border-bottom: 3px solid #4CAF50; }
+        .rarity-rare { border-bottom: 3px solid #2196F3; }
+        .rarity-legendary { border-bottom: 3px solid #9C27B0; }
+        .rarity-mythical { border-bottom: 3px solid #FF3D00; box-shadow: 0 0 15px rgba(255, 61, 0, 0.2); }
+
+        .section-header {
+            position: relative;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .section-header.normal {
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.1) 0%, rgba(255, 140, 0, 0.05) 100%);
+            border: 1px solid rgba(255, 140, 0, 0.3);
+        }
+
+        .section-header.mirage {
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.15) 0%, rgba(147, 51, 234, 0.05) 100%);
+            border: 1px solid rgba(147, 51, 234, 0.4);
+        }
+
+        .loader {
+            border: 4px solid #1a1a1a;
+            border-top: 4px solid #FF8C00;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .mirage-badge {
+            background: linear-gradient(135deg, #9333ea 0%, #a855f7 100%);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .notification {
+            max-width: 400px;
+        }
+    </style>
+</head>
+<body class="font-body min-h-screen flex flex-col">
+
+    <header class="w-full p-4 border-b border-bf-orange/30 bg-bf-dark/90 sticky top-0 z-50 shadow-[0_4px_20px_rgba(255,140,0,0.2)]">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-skull-crossbones text-bf-orange text-3xl animate-pulse-slow"></i>
+                <div>
+                    <h1 class="font-display text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-bf-orange to-yellow-500 tracking-wider">
+                        BLOX FRUITS STOCK
+                    </h1>
+                    <p class="text-xs text-gray-400 tracking-[0.2em]">LIVE MARKET TRACKER</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4 bg-black/50 px-4 py-2 rounded-full border border-bf-orange/20">
+                <div id="status-indicator" class="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
+                <span id="timer" class="font-mono text-bf-orange text-sm">Actualizando...</span>
+                <button onclick="fetchStock()" class="text-white hover:text-bf-orange transition-colors">
+                    <i class="fa-solid fa-rotate"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto p-6 max-w-7xl">
+        
+        <!-- Notification Container -->
+        <div id="notification-container" class="fixed top-20 right-4 z-50 flex flex-col gap-3"></div>
+        
+        <div id="error-box" class="hidden bg-red-900/20 border border-red-500 text-red-200 p-4 rounded-lg mb-6 text-center">
+            <i class="fa-solid fa-triangle-exclamation mr-2"></i>
+            <span id="error-msg">Error.</span>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="flex flex-col items-center justify-center py-20">
+            <div class="loader mb-4"></div>
+            <p class="text-bf-orange animate-pulse">Conectando al servidor de THE NOTORIUS B.H.R...</p>
+        </div>
+
+        <!-- Normal Stock Section -->
+        <section id="normal-section" class="hidden">
+            <div class="section-header normal">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-apple-whole text-bf-orange text-2xl"></i>
+                        <h2 class="font-display text-2xl font-bold text-white">STOCK NORMAL</h2>
+                    </div>
+                    <span id="normal-count" class="bg-bf-orange text-black px-3 py-1 rounded-full font-bold text-sm">0</span>
+                </div>
+            </div>
+            <div id="normal-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12"></div>
+        </section>
+
+        <!-- Mirage Stock Section -->
+        <section id="mirage-section" class="hidden">
+            <div class="section-header mirage">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-gem text-mirage-purple text-2xl"></i>
+                        <h2 class="font-display text-2xl font-bold text-white">STOCK MIRAGE</h2>
+                        <span class="mirage-badge text-white px-2 py-1 rounded text-xs font-bold">ESPECIAL</span>
+                    </div>
+                    <span id="mirage-count" class="bg-mirage-purple text-white px-3 py-1 rounded-full font-bold text-sm">0</span>
+                </div>
+            </div>
+            <div id="mirage-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+        </section>
+
+        <!-- No Stock Message -->
+        <div id="no-stock" class="hidden text-center py-20">
+            <i class="fa-solid fa-box-open text-gray-600 text-6xl mb-4"></i>
+            <p class="text-gray-400 text-xl">No hay frutas disponibles en este momento</p>
+        </div>
+
+    </main>
+
+    <footer class="bg-bf-dark border-t border-gray-800 mt-10 py-8">
+        <div class="container mx-auto text-center px-4">
+            <div class="flex flex-col items-center justify-center gap-4">
+                <div class="w-16 h-1 bg-gradient-to-r from-transparent via-bf-orange to-transparent mb-2"></div>
+                <p class="text-gray-400 text-sm uppercase tracking-widest mb-1">API & Web Development</p>
+                <h2 class="font-display text-xl md:text-2xl text-white relative group cursor-default">
+                    <span class="absolute -inset-1 bg-bf-orange blur opacity-20 group-hover:opacity-50 transition duration-500"></span>
+                    <span class="relative">⛧⃝𓄃 THE NOTORIUS B.H.R ♡♱</span>
+                </h2>
+                <p class="text-gray-600 text-xs mt-6">
+                    Blox Fruits Asset Tracker © 2024. All rights reserved by B.H.R.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'http://104.234.236.61:30200/api/stock?name=bf&mode=free';
+        const PROXY_URL = `https://api.allorigins.win/get?url=${encodeURIComponent(API_URL)}`;
+
+        const REFRESH_RATE = 30;
+        let countdown = REFRESH_RATE;
+        let previousStock = null;
+
+        const fruitDb = {
+            'Rocket': { emoji: '🚀', color: 'text-gray-400', rarity: 'common' },
+            'Spin': { emoji: '🌪️', color: 'text-yellow-200', rarity: 'common' },
+            'Chop': { emoji: '🔪', color: 'text-blue-300', rarity: 'common' },
+            'Blade': { emoji: '⚔️', color: 'text-gray-300', rarity: 'common' },
+            'Spring': { emoji: '🌀', color: 'text-pink-300', rarity: 'common' },
+            'Bomb': { emoji: '💣', color: 'text-gray-900', rarity: 'common' },
+            'Smoke': { emoji: '☁️', color: 'text-gray-200', rarity: 'common' },
+            'Spike': { emoji: '🌵', color: 'text-green-400', rarity: 'common' },
+            'Flame': { emoji: '🔥', color: 'text-orange-500', rarity: 'uncommon' },
+            'Falcon': { emoji: '🦅', color: 'text-amber-700', rarity: 'uncommon' },
+            'Ice': { emoji: '🧊', color: 'text-cyan-300', rarity: 'uncommon' },
+            'Sand': { emoji: '🏜️', color: 'text-yellow-600', rarity: 'uncommon' },
+            'Dark': { emoji: '⚫', color: 'text-purple-900', rarity: 'uncommon' },
+            'Ghost': { emoji: '👻', color: 'text-green-200', rarity: 'rare' },
+            'Revive': { emoji: '💀', color: 'text-green-200', rarity: 'rare' },
+            'Diamond': { emoji: '💎', color: 'text-cyan-100', rarity: 'rare' },
+            'Light': { emoji: '💡', color: 'text-yellow-300', rarity: 'rare' },
+            'Love': { emoji: '💗', color: 'text-pink-500', rarity: 'rare' },
+            'Rubber': { emoji: '👒', color: 'text-purple-400', rarity: 'rare' },
+            'Barrier': { emoji: '🚧', color: 'text-green-600', rarity: 'rare' },
+            'Magma': { emoji: '🌋', color: 'text-red-600', rarity: 'rare' },
+            'Quake': { emoji: '🌏', color: 'text-blue-800', rarity: 'legendary' },
+            'Buddha': { emoji: '🧘', color: 'text-yellow-500', rarity: 'legendary' },
+            'Spider': { emoji: '🕷️', color: 'text-gray-300', rarity: 'legendary' },
+            'Sound': { emoji: '🎵', color: 'text-red-400', rarity: 'legendary' },
+            'Phoenix': { emoji: '🐦', color: 'text-blue-400', rarity: 'legendary' },
+            'Portal': { emoji: '🚪', color: 'text-indigo-400', rarity: 'legendary' },
+            'Rumble': { emoji: '⚡', color: 'text-blue-200', rarity: 'legendary' },
+            'Pain': { emoji: '🐾', color: 'text-pink-800', rarity: 'legendary' },
+            'Blizzard': { emoji: '❄️', color: 'text-white', rarity: 'legendary' },
+            'Gravity': { emoji: '🌌', color: 'text-purple-600', rarity: 'mythical' },
+            'Mammoth': { emoji: '🦣', color: 'text-orange-800', rarity: 'mythical' },
+            'T-Rex': { emoji: '🦖', color: 'text-green-800', rarity: 'mythical' },
+            'Dough': { emoji: '🍩', color: 'text-yellow-100', rarity: 'mythical' },
+            'Shadow': { emoji: '👥', color: 'text-black', rarity: 'mythical' },
+            'Venom': { emoji: '☠️', color: 'text-purple-500', rarity: 'mythical' },
+            'Control': { emoji: '🎮', color: 'text-blue-500', rarity: 'mythical' },
+            'Spirit': { emoji: '👻', color: 'text-blue-200', rarity: 'mythical' },
+            'Dragon': { emoji: '🐉', color: 'text-orange-600', rarity: 'mythical' },
+            'Leopard': { emoji: '🐆', color: 'text-yellow-600', rarity: 'mythical' },
+            'Kitsune': { emoji: '🦊', color: 'text-blue-400', rarity: 'mythical' }
+        };
+
+        const formatMoney = (amount) => {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount);
+        };
+
+        function parseFruitName(fullName) {
+            const parts = fullName.split('-');
+            return parts[0];
+        }
+
+        function showNotification(title, message, type = 'success') {
+            const notifContainer = document.getElementById('notification-container');
+            
+            const notif = document.createElement('div');
+            notif.className = `notification ${type} transform translate-x-full transition-all duration-500 ease-out`;
+            
+            const icon = type === 'new' ? '🆕' : type === 'removed' ? '📦' : '🔄';
+            const bgColor = type === 'new' ? 'bg-green-900/90' : type === 'removed' ? 'bg-red-900/90' : 'bg-blue-900/90';
+            const borderColor = type === 'new' ? 'border-green-500' : type === 'removed' ? 'border-red-500' : 'border-blue-500';
+            
+            notif.innerHTML = `
+                <div class="${bgColor} ${borderColor} border-l-4 p-4 rounded-lg shadow-2xl backdrop-blur-sm flex items-start gap-3 min-w-[300px] max-w-[400px]">
+                    <span class="text-3xl">${icon}</span>
+                    <div class="flex-1">
+                        <h4 class="font-display font-bold text-white text-sm mb-1">${title}</h4>
+                        <p class="text-gray-300 text-xs">${message}</p>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-gray-400 hover:text-white transition">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            notifContainer.appendChild(notif);
+            
+            setTimeout(() => {
+                notif.classList.remove('translate-x-full');
+            }, 100);
+            
+            setTimeout(() => {
+                notif.classList.add('translate-x-full');
+                setTimeout(() => notif.remove(), 500);
+            }, 5000);
+            
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification(title, {
+                    body: message,
+                    icon: '🍎',
+                    badge: '🍎'
+                });
+            }
+        }
+
+        function requestNotificationPermission() {
+            if ('Notification' in window) {
+                if (Notification.permission === 'default') {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            setTimeout(() => {
+                                new Notification('🎉 ¡Bienvenido a FloppHub Team!', {
+                                    body: 'Te has suscrito a la API Stock de FloppHub Team | ¡Disfruta!',
+                                    icon: 'https://cdn-icons-png.flaticon.com/512/2965/2965358.png',
+                                    requireInteraction: false,
+                                    silent: false
+                                });
+                            }, 1000);
+                            
+                            showNotification(
+                                '🔔 Notificaciones activadas',
+                                'Recibirás alertas cuando el stock cambie',
+                                'new'
+                            );
+                        }
+                    });
+                } else if (Notification.permission === 'granted') {
+                    setTimeout(() => {
+                        new Notification('🎉 ¡Bienvenido de vuelta!', {
+                            body: 'Te has suscrito a la API Stock de FloppHub Team | ¡Disfruta!',
+                            icon: 'https://cdn-icons-png.flaticon.com/512/2965/2965358.png',
+                            requireInteraction: false,
+                            silent: false
+                        });
+                    }, 1000);
+                }
+            } else {
+                showNotification(
+                    '⚠️ Notificaciones no disponibles',
+                    'Tu navegador no soporta notificaciones push',
+                    'removed'
+                );
+            }
+        }
+
+        function compareStock(newData) {
+            if (!previousStock) {
+                previousStock = newData;
+                return;
+            }
+
+            const oldNormal = previousStock.normal || [];
+            const oldMirage = previousStock.mirage || [];
+            const newNormal = newData.normal || [];
+            const newMirage = newData.mirage || [];
+
+            const oldNormalNames = oldNormal.map(f => f.name);
+            const oldMirageNames = oldMirage.map(f => f.name);
+            const newNormalNames = newNormal.map(f => f.name);
+            const newMirageNames = newMirage.map(f => f.name);
+
+            const addedNormal = newNormal.filter(f => !oldNormalNames.includes(f.name));
+            const removedNormal = oldNormal.filter(f => !newNormalNames.includes(f.name));
+            const addedMirage = newMirage.filter(f => !oldMirageNames.includes(f.name));
+            const removedMirage = oldMirage.filter(f => !newMirageNames.includes(f.name));
+
+            addedNormal.forEach(fruit => {
+                const fruitName = parseFruitName(fruit.name);
+                showNotification(
+                    '🆕 Nueva fruta en stock!',
+                    `${fruitName} (Normal) - ${formatMoney(fruit.price)}`,
+                    'new'
+                );
+            });
+
+            addedMirage.forEach(fruit => {
+                const fruitName = parseFruitName(fruit.name);
+                showNotification(
+                    '✨ Nueva fruta MIRAGE!',
+                    `${fruitName} (Mirage) - ${formatMoney(fruit.price)}`,
+                    'new'
+                );
+            });
+
+            removedNormal.forEach(fruit => {
+                const fruitName = parseFruitName(fruit.name);
+                showNotification(
+                    '📦 Fruta agotada',
+                    `${fruitName} (Normal) ya no está disponible`,
+                    'removed'
+                );
+            });
+
+            removedMirage.forEach(fruit => {
+                const fruitName = parseFruitName(fruit.name);
+                showNotification(
+                    '📦 Fruta MIRAGE agotada',
+                    `${fruitName} (Mirage) ya no está disponible`,
+                    'removed'
+                );
+            });
+
+            previousStock = newData;
+        }
+
+        async function fetchStock() {
+            const errorBox = document.getElementById('error-box');
+            const statusIndicator = document.getElementById('status-indicator');
+            const loadingState = document.getElementById('loading-state');
+            
+            try {
+                statusIndicator.classList.remove('bg-green-500', 'bg-red-500');
+                statusIndicator.classList.add('bg-yellow-500');
+
+                const response = await fetch(PROXY_URL);
+                if (!response.ok) throw new Error('Error en la red');
+                
+                const proxyData = await response.json();
+                const realData = JSON.parse(proxyData.contents);
+
+                errorBox.classList.add('hidden');
+                loadingState.classList.add('hidden');
+                statusIndicator.classList.remove('bg-yellow-500');
+                statusIndicator.classList.add('bg-green-500');
+
+                compareStock(realData);
+                renderData(realData);
+                countdown = REFRESH_RATE;
+
+            } catch (error) {
+                console.error("Error fetching stock:", error);
+                statusIndicator.classList.remove('bg-yellow-500');
+                statusIndicator.classList.add('bg-red-500');
+                errorBox.classList.remove('hidden');
+                loadingState.classList.add('hidden');
+                document.getElementById('error-msg').textContent = 'Error conectando al servidor. Reintentando...';
+            }
+        }
+
+        function createFruitCard(item, isMirage = false) {
+            const fullName = item.name || item.Name || "Unknown";
+            const fruitName = parseFruitName(fullName);
+            const price = item.price || item.Price || item.Value || 0;
+            const meta = fruitDb[fruitName] || { emoji: '🍎', color: 'text-gray-400', rarity: 'common' };
+            
+            const card = document.createElement('div');
+            card.className = `fruit-card ${isMirage ? 'mirage' : ''} p-4 rounded-xl relative overflow-hidden group rarity-${meta.rarity}`;
+            
+            card.innerHTML = `
+                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-gradient-to-br ${isMirage ? 'from-mirage-purple' : 'from-bf-orange'} to-transparent opacity-10 rounded-full blur-xl group-hover:opacity-20 transition"></div>
+                ${isMirage ? '<div class="absolute top-2 right-2 z-20"><span class="mirage-badge text-white px-2 py-1 rounded text-xs font-bold">MIRAGE</span></div>' : ''}
+                <div class="flex items-start justify-between relative z-10 ${isMirage ? 'mt-8' : ''}">
+                    <div>
+                        <h3 class="font-display font-bold text-lg text-white group-hover:${isMirage ? 'text-mirage-purple' : 'text-bf-orange'} transition">${fruitName}</h3>
+                        <span class="text-xs uppercase tracking-wide text-gray-500 font-bold">${meta.rarity}</span>
+                    </div>
+                    <div class="text-4xl ${meta.color} drop-shadow-md transform group-hover:scale-110 transition duration-300 animate-float">
+                        ${meta.emoji}
+                    </div>
+                </div>
+                <div class="mt-6 flex items-end justify-between">
+                    <div>
+                        <p class="text-gray-400 text-xs mb-1">PRECIO</p>
+                        <p class="font-mono text-green-400 font-bold text-lg">
+                            ${typeof price === 'number' ? formatMoney(price) : price}
+                        </p>
+                    </div>
+                    <button class="${isMirage ? 'bg-mirage-purple/10 hover:bg-mirage-purple/20 text-mirage-purple border-mirage-purple/50' : 'bg-bf-orange/10 hover:bg-bf-orange/20 text-bf-orange border-bf-orange/50'} border rounded-lg px-3 py-1 text-xs transition">
+                        <i class="fa-solid fa-cart-shopping mr-1"></i> STOCK
+                    </button>
+                </div>
+            `;
+            return card;
+        }
+
+        function renderData(data) {
+            const normalContainer = document.getElementById('normal-container');
+            const mirageContainer = document.getElementById('mirage-container');
+            const normalSection = document.getElementById('normal-section');
+            const mirageSection = document.getElementById('mirage-section');
+            const noStock = document.getElementById('no-stock');
+            
+            normalContainer.innerHTML = '';
+            mirageContainer.innerHTML = '';
+            
+            const normalFruits = data.normal || [];
+            const mirageFruits = data.mirage || [];
+
+            if (normalFruits.length === 0 && mirageFruits.length === 0) {
+                noStock.classList.remove('hidden');
+                normalSection.classList.add('hidden');
+                mirageSection.classList.add('hidden');
+                return;
+            }
+
+            noStock.classList.add('hidden');
+
+            if (normalFruits.length > 0) {
+                normalSection.classList.remove('hidden');
+                document.getElementById('normal-count').textContent = normalFruits.length;
+                normalFruits.forEach(item => {
+                    normalContainer.appendChild(createFruitCard(item, false));
+                });
+            } else {
+                normalSection.classList.add('hidden');
+            }
+
+            if (mirageFruits.length > 0) {
+                mirageSection.classList.remove('hidden');
+                document.getElementById('mirage-count').textContent = mirageFruits.length;
+                mirageFruits.forEach(item => {
+                    mirageContainer.appendChild(createFruitCard(item, true));
+                });
+            } else {
+                mirageSection.classList.add('hidden');
+            }
+        }
+
+        setInterval(() => {
+            const timerEl = document.getElementById('timer');
+            countdown--;
+            if (countdown <= 0) {
+                fetchStock();
+                timerEl.textContent = "Actualizando...";
+            } else {
+                timerEl.textContent = `Actualiza en ${countdown}s`;
+            }
+        }, 1000);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            requestNotificationPermission();
+            fetchStock();
+        });
+    </script>
+</body>
+</html>
