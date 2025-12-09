@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jordan | Tech Creator & Founder</title>
+  <link rel="icon" href="https://i.postimg.cc/NMdT27RK/FloppHub_favicon.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --neon-orange: #ff7700;
+      --neon-orange-glow: rgba(255, 119, 0, 0.6);
+      --dark-bg: #0a0a0a;
+      --card-bg: rgba(15, 15, 15, 0.85);
+      --text-primary: #ffffff;
+      --text-secondary: #d0d0d0;
+      --border-glow: rgba(255, 119, 0, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark-bg);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><circle cx="10" cy="10" r="8" fill="%23ff7700" opacity="0.8"/></svg>') 10 10, auto;
+    }
+
+    /* Animated background particles */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(255, 119, 0, 0.03) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(255, 119, 0, 0.02) 0%, transparent 40%);
+      z-index: -2;
+      animation: particleFloat 25s infinite ease-in-out;
+    }
+
+    @keyframes particleFloat {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(-20px, -20px) rotate(180deg); }
+    }
+
+    /* Neon grid background */
+    .neon-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(255, 119, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 119, 0, 0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: -1;
+      opacity: 0.3;
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 20px 50px;
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      border-bottom: 1px solid var(--border-glow);
+      transition: all 0.3s ease;
+    }
+
+    nav.scrolled {
+      padding: 15px 50px;
+      box-shadow: 0 5px 30px rgba(255, 119, 0, 0.2);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+    }
+
+    nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 500;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      position: relative;
+      text-transform: uppercase;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--neon-orange);
+      box-shadow: 0 0 10px var(--neon-orange-glow);
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover {
+      color: var(--neon-orange);
+      text-shadow: 0 0 10px var(--neon-orange-glow);
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    /* Main container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 120px 20px 60px;
+    }
+
+    /* Hero Section */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      min-height: 80vh;
+    }
+
+    .hero-content h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(3rem, 8vw, 5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--neon-orange) 0%, #ffaa44 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .hero-content .tagline {
+      font-size: 1.3rem;
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+      font-weight: 300;
+    }
+
+    .hero-content .bio {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+
+    .hero-content .bio strong {
+      color: var(--neon-orange);
+      font-weight: 600;
+    }
+
+    .hero-image {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .hero-image img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 20px;
+      border: 2px solid var(--border-glow);
+      box-shadow: 
+        0 0 40px var(--neon-orange-glow),
+        inset 0 0 40px rgba(255, 119, 0, 0.1);
+      transition: all 0.4s ease;
+      filter: brightness(0.9) contrast(1.1);
+    }
+
+    .hero-image:hover img {
+      transform: scale(1.05);
+      box-shadow: 
+        0 0 60px var(--neon-orange-glow),
+        inset 0 0 60px rgba(255, 119, 0, 0.15);
+      filter: brightness(1) contrast(1.1);
+    }
+
+    /* Section styles */
+    section {
+      margin: 100px 0;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: sectionFade 0.8s ease forwards;
+    }
+
+    section:nth-child(2) { animation-delay: 0.2s; }
+    section:nth-child(3) { animation-delay: 0.4s; }
+    section:nth-child(4) { animation-delay: 0.6s; }
+
+    @keyframes sectionFade {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 50px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .section-title::before,
+    .section-title::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 60px;
+      height: 2px;
+      background: var(--neon-orange);
+      box-shadow: 0 0 10px var(--neon-orange-glow);
+    }
+
+    .section-title::before { left: -80px; }
+    .section-title::after { right: -80px; }
+
+    /* Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 119, 0, 0.2);
+      border-radius: 16px;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(5px);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(135deg, var(--neon-orange), transparent);
+      border-radius: 16px;
+      opacity: 0;
+      z-index: -1;
+      transition: opacity 0.4s ease;
+      filter: blur(10px);
+    }
+
+    .card:hover::before {
+      opacity: 0.7;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 50px rgba(255, 119, 0, 0.2);
+      border-color: var(--neon-orange);
+    }
+
+    .card h3 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.8rem;
+      color: var(--neon-orange);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .card p {
+      color: var(--text-secondary);
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    /* Stats */
+    .stats-container {
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      text-align: center;
+      padding: 30px 40px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-glow);
+      border-radius: 12px;
+      min-width: 180px;
+      transition: all 0.3s ease;
+    }
+
+    .stat-box:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px var(--neon-orange-glow);
+    }
+
+    .stat-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: var(--neon-orange);
+      text-shadow: 0 0 20px var(--neon-orange-glow);
+    }
+
+    .stat-label {
+      font-family: 'Oswald', sans-serif;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 10px;
+    }
+
+    /* Discord CTA */
+    .discord-cta {
+      background: linear-gradient(135deg, rgba(114, 137, 218, 0.15) 0%, rgba(255, 119, 0, 0.1) 100%);
+      border: 1px solid rgba(114, 137, 218, 0.3);
+      border-radius: 20px;
+      padding: 60px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .discord-cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(114, 137, 218, 0.1), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .discord-cta:hover::before {
+      left: 100%;
+    }
+
+    .discord-logo {
+      max-width: 200px;
+      margin: 30px auto;
+      transition: all 0.4s ease;
+      filter: brightness(0.8);
+    }
+
+    .discord-logo:hover {
+      transform: scale(1.1);
+      filter: brightness(1) drop-shadow(0 0 20px rgba(114, 137, 218, 0.5));
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px 40px;
+      background: linear-gradient(135deg, var(--neon-orange) 0%, #ffaa44 100%);
+      color: var(--dark-bg);
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-radius: 50px;
+      text-decoration: none;
+      margin-top: 30px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transition: all 0.4s ease;
+      transform: translate(-50%, -50%);
+    }
+
+    .cta-button:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px var(--neon-orange-glow);
+    }
+
+    /* Gaming section */
+    .game-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .game-tag {
+      padding: 8px 20px;
+      background: rgba(255, 119, 0, 0.1);
+      border: 1px solid var(--border-glow);
+      border-radius: 25px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .game-tag:hover {
+      background: var(--neon-orange);
+      color: var(--dark-bg);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px var(--neon-orange-glow);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid var(--border-glow);
+      color: var(--text-secondary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+    }
+
+    /* Animated gradient border */
+    .gradient-border {
+      position: relative;
+    }
+
+    .gradient-border::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: inherit;
+      border: 1px solid transparent;
+      background: linear-gradient(135deg, var(--neon-orange), #ffaa44, var(--neon-orange)) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .gradient-border:hover::after {
+      opacity: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav { padding: 15px 20px; }
+      nav ul { gap: 20px; }
+      .hero { grid-template-columns: 1fr; text-align: center; }
+      .section-title::before,
+      .section-title::after { display: none; }
+      .stats-container { gap: 20px; }
+      .stat-box { min-width: 140px; padding: 20px 30px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#community">Community</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="neon-grid"></div>
+
+  <div class="container">
+    <section class="hero" id="about">
+      <div class="hero-content">
+        <h1>Jordan</h1>
+        <p class="tagline">Founder & Developer</p>
+        <p class="bio">
+          28-year-old tech creator from Germany, now building in Los Angeles. Founder of <strong>FloppHub Team</strong>, where I blend programming innovation with community-driven development. My background spans from mechatronics engineering to creating Roblox tools used by thousands. When I'm not coding, you'll find me exploring digital worlds with my partner <strong>Non.Time</strong>, or engineering solutions that bridge hardware and software.
+        </p>
+      </div>
+      <div class="hero-image">
+        <img src="https://i.postimg.cc/kXNP45Th/Idk.png" alt="Jordan - FloppHub Founder">
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2 class="section-title">Featured Projects</h2>
+      <div class="card-grid">
+        <div class="card gradient-border">
+          <h3>FloppHub Executor</h3>
+          <p>A custom Roblox execution platform built with performance and security in mind. Designed to provide scripters with a reliable tool that bypasses modern detection systems while maintaining a clean, intuitive interface.</p>
+          <div class="game-tags">
+            <span class="game-tag">Lua</span>
+            <span class="game-tag">C++</span>
+            <span class="game-tag">Security</span>
+          </div>
+        </div>
+        <div class="card gradient-border">
+          <h3>Script Hub</h3>
+          <p>Curated library of 200+ scripts with auto-update functionality. Features collaborative testing environment and real-time script validation. Powering creativity for over 800 developers worldwide.</p>
+          <div class="game-tags">
+            <span class="game-tag">React</span>
+            <span class="game-tag">Node.js</span>
+            <span class="game-tag">API</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <h2 class="section-title">Core Skills</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3>Software Engineering</h3>
+          <p>Full-stack development with specialization in systems programming. Experienced in building robust tools that handle high concurrency and complex logic.</p>
+        </div>
+        <div class="card">
+          <h3>Mechatronics</h3>
+          <p>Where code meets hardware. I design intelligent systems that integrate sensors, actuators, and embedded software for real-world applications.</p>
+        </div>
+        <div class="card">
+          <h3>Community Architecture</h3>
+          <p>Built and scaled Discord communities from zero to 800+ active members. Focus on engagement, security, and sustainable growth strategies.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="community">
+      <h2 class="section-title">Join the Network</h2>
+      <div class="discord-cta">
+        <h3 style="font-family: 'Oswald', sans-serif; font-size: 2rem; margin-bottom: 20px; color: #7289da; text-shadow: 0 0 20px rgba(114, 137, 218, 0.4);">
+          FloppHub Discord
+        </h3>
+        <p style="color: var(--text-secondary); margin-bottom: 30px;">
+          An elite bypass-focused community where developers collaborate, innovate, and push boundaries. Access premium scripts, beta tools, and direct support.
+        </p>
+        <div class="stats-container">
+          <div class="stat-box">
+            <div class="stat-number" data-target="800">0</div>
+            <div class="stat-label">Members</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number" data-target="200">0</div>
+            <div class="stat-label">Scripts</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number" data-target="99">0</div>
+            <div class="stat-label">Uptime %</div>
+          </div>
+        </div>
+        <a href="https://discord.gg/J9dSv7hq55" target="_blank" class="cta-button">
+          <i class="fab fa-discord" style="font-size: 1.5rem;"></i>
+          Enter the Hub
+        </a>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2 class="section-title">Digital Presence</h2>
+      <div class="card-grid">
+        <div class="card" style="text-align: center;">
+          <i class="fas fa-gamepad" style="font-size: 3rem; color: var(--neon-orange); margin-bottom: 20px;"></i>
+          <h3>Gaming</h3>
+          <p>Active in Blox Fruits, Steal a Brainrot, Grow a Garden. Always analyzing game mechanics and building optimization tools.</p>
+        </div>
+        <div class="card" style="text-align: center;">
+          <i class="fas fa-heart" style="font-size: 3rem; color: #ff6b9c; margin-bottom: 20px;"></i>
+          <h3>Personal</h3>
+          <p>Rabbit enthusiast. Based in LA after traveling through Mexico. Building the future with Non.Time by my side.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <p>Built with precision & passion | FloppHub Team © 2024</p>
+  </footer>
+
+  <script>
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('nav');
+      if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+
+    // Counter animation
+    const counters = document.querySelectorAll('.stat-number');
+    const speed = 200;
+
+    const countUp = () => {
+      counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        const count = +counter.innerText;
+        const increment = target / speed;
+
+        if (count < target) {
+          counter.innerText = Math.ceil(count + increment);
+          setTimeout(countUp, 10);
+        } else {
+          counter.innerText = target + '+';
+        }
+      });
+    };
+
+    // Intersection Observer for counter
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          countUp();
+          observer.unobserve(entry.target);
+        }
+      });
+    });
+
+    const statsContainer = document.querySelector('.stats-container');
+    if (statsContainer) observer.observe(statsContainer);
+
+    // Mouse trail effect
+    const mouseTrail = document.createElement('div');
+    mouseTrail.style.cssText = `
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, var(--neon-orange) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0.5;
+      z-index: 9999;
+      transition: transform 0.1s ease;
+    `;
+    document.body.appendChild(mouseTrail);
+
+    document.addEventListener('mousemove', (e) => {
+      mouseTrail.style.left = e.clientX - 10 + 'px';
+      mouseTrail.style.top = e.clientY - 10 + 'px';
+    });
+  </script>
+
+</body>
+</html>
+ 
