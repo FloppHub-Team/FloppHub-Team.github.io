@@ -1,20 +1,32 @@
 // ==UserScript==
-// @name         Pandadev Bypass
-// @namespace    pandadev-bypass-exclusive
+// @name         PunkX & Pandadev Bypass
+// @namespace    punkX-bypass-exclusive
+
+
 // @version      1.0
-// @description  Bypass exclusivo para Pandadev (pandadevelopment.net) con soporte completo para Linkvertise, Short Jambo y Loot-link variants
-// @author       Cloned & Adapted from Bypass Key System
+// @description  Exklusive Umgehung für PunkX (Pandadev) 
+// @author       Mw_Anonymous | TheRealBanHammer
+
+
+// @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
+// @updateURL    https://flopphub-team.github.io/UserScript/PunkX%20Bypass.js
+// @downloadURL  https://flopphub-team.github.io/UserScript/PunkX%20Bypass.js
+
+
 // @match        https://pandadevelopment.net/getkey?*
 // @match        https://linkvertise.com/*
-// @match        https://linkvertise.com/376138/arceus-x-neo-key-system-1?o=sharing*
 // @match        https://short-jambo.com/*
 // @match        https://loot-link.com/s?*
 // @match        https://loot-links.com/s?*
 // @match        https://lootlink.org/s?*
 // @match        https://lootlinks.co/s?*
+
+
 // @grant        GM_xmlhttpRequest
 // @grant        GM_notification
 // @grant        GM_openInTab
+
+
 // @connect      pandadevelopment.net
 // @connect      linkvertise.com
 // @connect      short-jambo.com
@@ -22,6 +34,8 @@
 // @connect      loot-links.com
 // @connect      lootlink.org
 // @connect      lootlinks.co
+
+
 // @run-at       document-end
 // ==/UserScript==
 
