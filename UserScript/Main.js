@@ -3,6 +3,7 @@
 // @namespace    PandadevBypass
 // @version      1.0
 // @description  Exklusiver Bypass für PandaDevelopment.net & PunkX Executor
+// @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
 // @author       Mw_Anonymous | Non.time
 // @match        https://pandadevelopment.net/*
 // @grant        GM_xmlhttpRequest
