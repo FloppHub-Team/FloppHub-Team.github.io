@@ -93,7 +93,7 @@ function InitializeHub()
     
     -- Botón de minimizar
     Window:AddMinimizeButton({
-        Image = "rbxassetid://10734966248",
+        Image = "rbxassetid://112586798808707",
         Corner = true,
         CornerRadius = UDim.new(0, 10)
     })
