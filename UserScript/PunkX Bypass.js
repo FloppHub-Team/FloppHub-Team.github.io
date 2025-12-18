@@ -3,7 +3,7 @@
 // @namespace    punkX-bypass-exclusive
 
 
-// @version      1.0
+// @version      1.1
 // @description  Automatische Key-Kopierung ohne Klick-System
 // @author       Mw_Anonymous | TheRealBanHammer
 
@@ -33,193 +33,110 @@
 // @run-at       document-start
 // ==/UserScript==
 
-console.log('[Pandadev Bypass] AutoCopy-Only-Version geladen auf:', window.location.href);
+console.log('[Pangdev Bypass] Korrigierte Version geladen auf:', window.location.href);
 
-// === POLLING-SYSTEM FÜR AUTOMATISCHE KEY-ERKENNUNG ===
+// === KORRIGIERTES SYSTEM FÜR AUTOMATISCHE KEY-ERKENNUNG ===
 
-class PandadevKeyAutoCopier {
+class PunkXKeyExtractor {
     constructor() {
-        this.isRunning = false;
-        this.hasExecuted = false;
-        this.pollingInterval = null;
-        this.MAX_WAIT_TIME = 120000; // 2 Minuten Timeout
-        this.startTime = Date.now();
+        this.hasCopied = false;
+        this.keyPattern = /^PunkX-[a-zA-Z0-9-_]+$/; // PRÄZISER REGEX!
+        this.minLength = 25; // Echter Key ist länger als Fake-Keys
     }
 
-    start() {
-        if (this.isRunning || this.hasExecuted) return;
-        this.isRunning = true;
-        this.startTime = Date.now();
+    async start() {
+        if (this.hasCopied) return;
         
-        console.log('[Pandadev Bypass] Starte intelligentes Key-Polling...');
-        notification('AutoCopy aktiv', 2000);
+        console.log('[Pangdev Bypass] Suche nach echtem PunkX-Key...');
         
-        // Sofortige Überprüfung und dann alle 500ms
-        this.checkForKey();
-        this.pollingInterval = setInterval(() => this.checkForKey(), 500);
+        // WARTE bis das Key-Element garantiert geladen ist
+        await this.waitForKeyElement();
         
-        // Sicherheits-Timeout
-        setTimeout(() => {
-            if (this.isRunning) {
-                console.warn('[Pandadev Bypass] Maximale Wartezeit erreicht');
-                this.stop();
-            }
-        }, this.MAX_WAIT_TIME);
-    }
-
-    stop() {
-        if (this.pollingInterval) {
-            clearInterval(this.pollingInterval);
-            this.isRunning = false;
-            this.hasExecuted = true;
-            console.log('[Pandadev Bypass] Polling gestoppt');
+        const key = this.extractRealKey();
+        
+        if (key) {
+            await GM_setClipboard(key);
+            this.hasCopied = true;
+            GM_notification({
+                text: `Key kopiert: ${key}`,
+                title: "PunkX Bypass",
+                timeout: 5000
+            });
+            console.log('[Pangdev Bypass] ECHTER Key erfolgreich kopiert:', key);
+        } else {
+            console.warn('[Pangdev Bypass] Kein gültiger Key gefunden');
         }
     }
 
-    checkForKey() {
-        if (!window.location.hostname.includes('pandadev') || this.hasExecuted) {
-            this.stop();
-            return;
-        }
-
-        try {
-            // PRIO 1: Prüfen, ob wir auf der finalen Key-Seite sind
-            if (this.isFinalPageWithKey()) {
-                this.handleFinalPage();
-                return;
-            }
-
-            // Timeout nach 2 Minuten
-            if (Date.now() - this.startTime > this.MAX_WAIT_TIME) {
-                console.error('[Pandadev Bypass] Wartezeit abgelaufen');
-                this.stop();
-            }
-        } catch (e) {
-            console.error('[Pandadev Bypass] Fehler beim Polling:', e);
-            this.stop();
-        }
-    }
-
-    isFinalPageWithKey() {
-        // Indikatoren für die finale Key-Seite
-        const indicators = [
-            'you got the key', 'key generated', 'success', 'Copy Key', 
-            'copy key', 'key copied', 'Ihr Key wurde generiert'
-        ];
-        
-        const pageText = document.body.textContent.toLowerCase();
-        return indicators.some(indicator => pageText.includes(indicator.toLowerCase()));
-    }
-
-    async handleFinalPage() {
-        if (this.hasExecuted) return;
-        this.hasExecuted = true;
-        
-        console.log('[Pandadev Bypass] Finale Seite erkannt, versuche Key zu kopieren...');
-        
-        // Sofort kopieren versuchen
-        await this.copyKeyAutomatically();
-        
-        this.stop();
-    }
-
-    async copyKeyAutomatically() {
-        try {
-            // Methode 1: Suche nach sichtbaren Input-Feldern
-            const inputSelectors = [
-                'input[type="text"]', 'input[type="password"]', 
-                'input[name*="key"]', 'input[id*="key"]', 'textarea'
-            ];
-            
-            for (let selector of inputSelectors) {
-                const elements = document.querySelectorAll(selector);
-                for (let el of elements) {
-                    const key = (el.value || el.textContent || '').trim();
-                    if (this.isValidKey(key)) {
-                        await GM_setClipboard(key);
-                        notification(`Key kopiert: ${key.substring(0, 20)}...`, 6000);
-                        console.log('[Pandadev Bypass] Key erfolgreich kopiert');
-                        return true;
-                    }
-                }
-            }
-            
-            // Methode 2: Suche nach Code/Pre-Elementen
-            const codeElements = document.querySelectorAll('code, pre, .key, #key, [class*="key"]');
-            for (let el of codeElements) {
-                const key = el.textContent.trim();
-                if (this.isValidKey(key)) {
-                    await GM_setClipboard(key);
-                    notification('Key automatisch kopiert!', 6000);
-                    console.log('[Pandadev Bypass] Key aus Code-Element kopiert');
-                    return true;
-                }
-            }
-            
-            // Methode 3: Fallback - Suche im gesamten Text nach Key-Pattern
-            const allText = document.body.innerText;
-            const words = allText.split(/\s+/);
-            for (let word of words) {
-                if (this.isValidKey(word)) {
-                    await GM_setClipboard(word);
-                    notification('Key gefunden und kopiert!', 6000);
-                    console.log('[Pandadev Bypass] Key aus Text extrahiert');
-                    return true;
-                }
-            }
-            
-            // Letzter Versuch: Klicke auf "Copy Key"-Button und prüfe dann das Clipboard
-            const copyButtonClicked = this.clickCopyButton();
-            if (copyButtonClicked) {
-                console.log('[Pandadev Bypass] Klick auf Copy-Button ausgeführt');
-                // Warte kurz und prüfe dann erneut
-                setTimeout(() => this.copyKeyAutomatically(), 500);
-                return true;
-            }
-            
-        } catch (e) {
-            console.error('[Pandadev Bypass] Fehler beim Kopieren:', e);
-        }
-        return false;
-    }
-
-    clickCopyButton() {
-        // Versuche, auf einen "Copy Key"-Button zu klicken
-        const selectors = ['button', 'input[type="button"]', '.btn', '.button', '[role="button"]'];
-        const elements = document.querySelectorAll(selectors.join(', '));
-        
-        for (let el of elements) {
-            const buttonText = (el.textContent || el.value || '').trim();
-            if (buttonText.toLowerCase().includes('copy key')) {
-                const style = window.getComputedStyle(el);
-                const isVisible = style.display !== 'none' && 
-                                 style.visibility !== 'hidden' && 
-                                 style.opacity !== '0';
+    waitForKeyElement() {
+        return new Promise(resolve => {
+            const check = () => {
+                // Prüfe auf spezifische Key-Elemente
+                const keyElement = document.querySelector('input[name="key"]') || 
+                                 document.querySelector('#key') ||
+                                 document.querySelector('.key-display') ||
+                                 document.querySelector('code') ||
+                                 document.querySelector('pre');
                 
-                if (isVisible && !el.disabled) {
-                    console.log(`[Pandadev Bypass] Klicke auf: "${buttonText}"`);
-                    el.click();
-                    return true;
+                if (keyElement || document.body.textContent.includes('PunkX-')) {
+                    setTimeout(resolve, 500); // Zusätzliche Sicherheitswartezeit
+                } else {
+                    setTimeout(check, 100);
                 }
+            };
+            check();
+        });
+    }
+
+    extractRealKey() {
+        // METHODE 1: Spezifische Input-Felder (HÖCHSTE ZUVERLÄSSIGKEIT)
+        const keyInput = document.querySelector('input[name="key"]') || 
+                        document.querySelector('#key') ||
+                        document.querySelector('input[type="text"][value^="PunkX-"]');
+        
+        if (keyInput && this.isValidKey(keyInput.value)) {
+            return keyInput.value.trim();
+        }
+
+        // METHODE 2: Code/Pre-Elemente mit exaktem Text
+        const textSelectors = ['code', 'pre', '.key', '#key-display', '.key-text'];
+        for (let selector of textSelectors) {
+            const element = document.querySelector(selector);
+            if (element && this.isValidKey(element.textContent)) {
+                return element.textContent.trim();
             }
         }
-        return false;
+
+        // METHODE 3: Fallback - durchsuche gesamten Text aber INTELLIGENT GEFILTERT
+        const allText = document.body.innerText;
+        const potentialKeys = allText.match(/PunkX-[a-zA-Z0-9-_]+/g) || [];
+        
+        // Filtere nach Länge und wähle den längsten Key (der echte ist normalerweise der längste)
+        const validKeys = potentialKeys.filter(key => key.length > this.minLength);
+        
+        if (validKeys.length > 0) {
+            // Sortiere absteigend nach Länge und nimm den ersten (längsten)
+            return validKeys.sort((a, b) => b.length - a.length)[0];
+        }
+
+        return null;
     }
 
     isValidKey(text) {
-        // Validiert, ob es sich um einen Key handelt: >10 Zeichen, alphanumerisch mit Bindestrichen
-        return text && text.length > 10 && /^[a-zA-Z0-9-_]+$/.test(text);
+        if (!text || typeof text !== 'string') return false;
+        const trimmed = text.trim();
+        return this.keyPattern.test(trimmed) && trimmed.length > this.minLength;
     }
 }
 
-// === HELPER-FUNKTIONEN (UNVERÄNDERT) ===
+// === HELFER-FUNKTIONEN (UNVERÄNDERT) ===
 
 function handleError(error) {
     const errorText = error.message || error;
-    console.error('[Pandadev Bypass] FEHLER:', errorText);
+    console.error('[Pangdev Bypass] FEHLER:', errorText);
     GM_notification({
         text: errorText,
-        title: "Pandadev Bypass FEHLER",
+        title: "Pangdev Bypass FEHLER",
         silent: true,
         timeout: 5000
     });
@@ -228,12 +145,12 @@ function handleError(error) {
 function notification(message, timeout = 3000) {
     const config = {
         text: message,
-        title: "Pandadev Bypass",
+        title: "Pangdev Bypass",
         silent: true
     };
     if (timeout) config.timeout = timeout;
     GM_notification(config);
-    console.log('[Pandadev Bypass] BENACHRICHTIGUNG:', message);
+    console.log('[Pangdev Bypass] BENACHRICHTIGUNG:', message);
 }
 
 function sleep(ms) {
@@ -244,7 +161,7 @@ function sleep(ms) {
 
 function adSpoof(url, referrer) {
     return new Promise((resolve, reject) => {
-        console.log('[Pandadev Bypass] adSpoof() leitet weiter zu:', url);
+        console.log('[Pangdev Bypass] adSpoof() leitet weiter zu:', url);
         GM_xmlhttpRequest({
             method: "GET",
             url: url,
@@ -290,24 +207,24 @@ async function lvdl() {
     return false;
 }
 
-// === HAUPTFUNKTION ===
+// === HAUPTFUNKTION MIT VOLLSTÄNDIGEM BYPASS-LOGIK ===
 
 async function pandadevelopment() {
-    // AutoCopy-System sofort starten
-    const keyCopier = new PandadevKeyAutoCopier();
+    // Starte das korrigierte AutoCopy-System sofort
+    const keyCopier = new PunkXKeyExtractor();
     keyCopier.start();
 
-    // Anti-Adblock-Entferner
+    // Entferne Anti-Adblock-Overlays
     let antiAdblockRemover = setInterval(() => {
         const antiAdblock = document.querySelector('.adblock_title');
         if (antiAdblock) {
             antiAdblock.closest('body > *')?.remove();
             clearInterval(antiAdblockRemover);
-            console.log('[Pangdev Bypass] Anti-Adblock entfernt');
+            console.log('[Pangdev Bypass] Anti-Adblock erfolgreich entfernt');
         }
     }, 500);
 
-    // Restliche Logik...
+    // Interne Funktion zum Abrufen des Ad-Links
     function getAdLink() {
         const form = document.querySelector('form');
         if (!form) return Promise.reject('Kein Formular gefunden');
@@ -328,6 +245,7 @@ async function pandadevelopment() {
         });
     }
 
+    // Interne Funktion zum Dekodieren der Ziel-URL
     function getDestUrl(link) {
         const url = new URL(encodeURI(link));
         switch (url.hostname) {
@@ -347,6 +265,7 @@ async function pandadevelopment() {
         }
     }
 
+    // Service-spezifische Wartezeiten (in Millisekunden)
     const customSleepTimes = {
         'vegax': 11000,
         'laziumtools': 11000,
@@ -361,7 +280,7 @@ async function pandadevelopment() {
         const token = currentUrl.searchParams.get('sessiontoken');
         const provider = currentUrl.searchParams.get('provider');
 
-        console.log('[Pangdev Bypass] Parameter:', { hwid, service, token, provider });
+        console.log('[Pangdev Bypass] URL-Parameter:', { hwid, service, token, provider });
 
         const adUrl = await getAdLink();
         const dest = getDestUrl(adUrl);
@@ -371,6 +290,7 @@ async function pandadevelopment() {
             return;
         }
 
+        // Warte service-spezifische Zeit
         await sleep(customSleepTimes[service] || 3000);
         
         console.log('[Pangdev Bypass] Simuliere Ad-Ansicht...');
@@ -378,6 +298,7 @@ async function pandadevelopment() {
         
         await sleep(3000);
 
+        // Konstruiere nächsten Checkpoint-URL
         let nextCheckpoint = `https://pangdev.net/getkey?hwid=${hwid}&service=${service}`;
         if (token) nextCheckpoint += `&sessiontoken=${token}`;
         if (provider) nextCheckpoint += `&provider=${provider}`;
@@ -389,16 +310,18 @@ async function pandadevelopment() {
     }
 }
 
-// === AUTOMATISCHE AUSFÜHRUNG ===
+// === AUTOMATISCHE INITIALISIERUNG BEI SEITENLADUNG ===
 
 (async function() {
-    console.log('[Pangdev Bypass] STARTE auf:', window.location.hostname);
+    console.log('[Pangdev Bypass] INITIALISIERUNG auf:', window.location.hostname);
     
+    // Versuche zuerst LVDL-Weiterleitung
     const handledByLvdl = await lvdl();
     if (handledByLvdl) return;
     
     const hostname = window.location.hostname;
     
+    // Prüfe ob wir auf der Key-Seite sind
     if (hostname.includes('pandadev')) {
         notification('AutoCopy-System aktiviert', 3000);
         await pandadevelopment();
@@ -408,4 +331,4 @@ async function pandadevelopment() {
         notification('Verarbeite Ad-Link...', 2000);
     }
 })();
-        
+            
