@@ -3,7 +3,7 @@
 // @namespace    punkX-bypass-exclusive
 
 
-// @version      1.1
+// @version      1.2
 // @description  Automatische Key-Kopierung ohne Klick-System
 // @author       Mw_Anonymous | TheRealBanHammer
 
@@ -33,23 +33,24 @@
 // @run-at       document-start
 // ==/UserScript==
 
-console.log('[Pangdev Bypass] Korrigierte Version geladen auf:', window.location.href);
+console.log('[Pangdev ULTRA] Extrem präzise Key-Extraktion geladen');
 
-// === KORRIGIERTES SYSTEM FÜR AUTOMATISCHE KEY-ERKENNUNG ===
+// === ULTRA PRAZISES SYSTEM ZUR AUTOMATISCHEN KEY-ERKENNUNG ===
 
-class PunkXKeyExtractor {
+class PunkXUltraExtractor {
     constructor() {
         this.hasCopied = false;
-        this.keyPattern = /^PunkX-[a-zA-Z0-9-_]+$/; // PRÄZISER REGEX!
-        this.minLength = 25; // Echter Key ist länger als Fake-Keys
+        // FLEXIBLER REGEX: Erlaubt "Punkx", "PunkX", Leerzeichen und Bindestrich
+        this.keyPattern = /punkx\s*-\s*([a-z0-9]+)/i;
+        this.fullKeyPattern = /punkx\s*-\s*[a-z0-9]+/i;
     }
 
     async start() {
         if (this.hasCopied) return;
         
-        console.log('[Pangdev Bypass] Suche nach echtem PunkX-Key...');
+        console.log('[Pangdev ULTRA] Suche nach Key im "Punkx - XXXXXX" Format...');
         
-        // WARTE bis das Key-Element garantiert geladen ist
+        // EXTREME WARTEZEIT für langsam ladende Seiten
         await this.waitForKeyElement();
         
         const key = this.extractRealKey();
@@ -58,28 +59,37 @@ class PunkXKeyExtractor {
             await GM_setClipboard(key);
             this.hasCopied = true;
             GM_notification({
-                text: `Key kopiert: ${key}`,
-                title: "PunkX Bypass",
-                timeout: 5000
+                text: `KEY KOPIERT: ${key}`,
+                title: "PunkX ULTRA",
+                timeout: 6000
             });
-            console.log('[Pangdev Bypass] ECHTER Key erfolgreich kopiert:', key);
+            console.log('[Pangdev ULTRA] ECHTER Key gefunden und kopiert:', key);
         } else {
-            console.warn('[Pangdev Bypass] Kein gültiger Key gefunden');
+            console.warn('[Pangdev ULTRA] KEIN gültiger Key im erwarteten Format gefunden');
+            // Debug-Ausgabe: Zeigt gefundenen Text zur Fehlersuche
+            console.log('[Pangdev ULTRA] Seitentext:', document.body.innerText.substring(0, 500));
         }
     }
 
     waitForKeyElement() {
         return new Promise(resolve => {
+            let attempts = 0;
             const check = () => {
-                // Prüfe auf spezifische Key-Elemente
-                const keyElement = document.querySelector('input[name="key"]') || 
-                                 document.querySelector('#key') ||
-                                 document.querySelector('.key-display') ||
-                                 document.querySelector('code') ||
-                                 document.querySelector('pre');
+                attempts++;
+                // Suche nach dem visuellen KEY-Container
+                const keyContainer = document.querySelector('.key-box') || 
+                                   document.querySelector('[class*="key"]') ||
+                                   document.querySelector('code') ||
+                                   document.querySelector('pre') ||
+                                   document.querySelector('div[style*="border"]') ||
+                                   document.querySelector('input[name="key"]');
                 
-                if (keyElement || document.body.textContent.includes('PunkX-')) {
-                    setTimeout(resolve, 500); // Zusätzliche Sicherheitswartezeit
+                if (keyContainer || document.body.textContent.match(/punkx\s*-\s*[a-z0-9]+/i)) {
+                    console.log('[Pangdev ULTRA] Key-Container gefunden nach', attempts, 'Versuchen');
+                    setTimeout(resolve, 800); // Zusätzliche Wartezeit für Rendering
+                } else if (attempts > 50) { // Maximal 5 Sekunden Timeout
+                    console.error('[Pangdev ULTRA] Timeout: Key-Container nicht gefunden');
+                    resolve();
                 } else {
                     setTimeout(check, 100);
                 }
@@ -89,79 +99,79 @@ class PunkXKeyExtractor {
     }
 
     extractRealKey() {
-        // METHODE 1: Spezifische Input-Felder (HÖCHSTE ZUVERLÄSSIGKEIT)
-        const keyInput = document.querySelector('input[name="key"]') || 
-                        document.querySelector('#key') ||
-                        document.querySelector('input[type="text"][value^="PunkX-"]');
+        console.log('[Pangdev ULTRA] Extraktion gestartet...');
         
-        if (keyInput && this.isValidKey(keyInput.value)) {
-            return keyInput.value.trim();
-        }
-
-        // METHODE 2: Code/Pre-Elemente mit exaktem Text
-        const textSelectors = ['code', 'pre', '.key', '#key-display', '.key-text'];
-        for (let selector of textSelectors) {
-            const element = document.querySelector(selector);
-            if (element && this.isValidKey(element.textContent)) {
-                return element.textContent.trim();
+        // METHODE 1: Durchsuche alle Elemente nach dem vollständigen Text "Punkx - ..."
+        const elementsWithText = document.querySelectorAll('div, span, p, code, pre, input, textarea');
+        for (let el of elementsWithText) {
+            const text = el.textContent || el.value;
+            if (text && this.fullKeyPattern.test(text)) {
+                const match = text.match(this.fullKeyPattern);
+                if (match) {
+                    console.log('[Pangdev ULTRA] Key gefunden in Element:', el.tagName, el.className);
+                    return match[0].trim();
+                }
             }
         }
 
-        // METHODE 3: Fallback - durchsuche gesamten Text aber INTELLIGENT GEFILTERT
-        const allText = document.body.innerText;
-        const potentialKeys = allText.match(/PunkX-[a-zA-Z0-9-_]+/g) || [];
+        // METHODE 2: Prüfe data-clipboard-text Attribute (Copy-Button)
+        const copyButton = document.querySelector('button') || 
+                          document.querySelector('[class*="copy"]') ||
+                          document.querySelector('[id*="copy"]');
         
-        // Filtere nach Länge und wähle den längsten Key (der echte ist normalerweise der längste)
-        const validKeys = potentialKeys.filter(key => key.length > this.minLength);
-        
-        if (validKeys.length > 0) {
-            // Sortiere absteigend nach Länge und nimm den ersten (längsten)
-            return validKeys.sort((a, b) => b.length - a.length)[0];
+        if (copyButton) {
+            const dataKey = copyButton.getAttribute('data-clipboard-text') || 
+                           copyButton.getAttribute('data-key');
+            if (dataKey && this.fullKeyPattern.test(dataKey)) {
+                console.log('[Pangdev ULTRA] Key extrahiert aus Button data-attribute');
+                return dataKey.trim();
+            }
+        }
+
+        // METHODE 3: Letzter Ausweg - Suche im gesamten Body mit flexiblem Regex
+        const bodyText = document.body.innerText;
+        const match = bodyText.match(this.fullKeyPattern);
+        if (match) {
+            console.log('[Pangdev ULTRA] Key gefunden im Body-Text');
+            return match[0].trim();
         }
 
         return null;
     }
-
-    isValidKey(text) {
-        if (!text || typeof text !== 'string') return false;
-        const trimmed = text.trim();
-        return this.keyPattern.test(trimmed) && trimmed.length > this.minLength;
-    }
 }
 
-// === HELFER-FUNKTIONEN (UNVERÄNDERT) ===
+// === HELFER-FUNKTIONEN (OPTIMIERT) ===
 
 function handleError(error) {
     const errorText = error.message || error;
-    console.error('[Pangdev Bypass] FEHLER:', errorText);
+    console.error('[Pangdev ULTRA] FEHLER:', errorText);
     GM_notification({
-        text: errorText,
-        title: "Pangdev Bypass FEHLER",
+        text: `FEHLER: ${errorText}`,
+        title: "PunkX ULTRA FEHLER",
         silent: true,
         timeout: 5000
     });
 }
 
 function notification(message, timeout = 3000) {
-    const config = {
+    GM_notification({
         text: message,
-        title: "Pangdev Bypass",
-        silent: true
-    };
-    if (timeout) config.timeout = timeout;
-    GM_notification(config);
-    console.log('[Pangdev Bypass] BENACHRICHTIGUNG:', message);
+        title: "Pangdev ULTRA",
+        silent: true,
+        timeout: timeout
+    });
+    console.log('[Pangdev ULTRA] BENACHRICHTIGUNG:', message);
 }
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// === ADSPOOF UND LVDL FUNKTIONEN ===
+// === ADSPOOF UND LVDL FUNKTIONEN (UNVERÄNDERT) ===
 
 function adSpoof(url, referrer) {
     return new Promise((resolve, reject) => {
-        console.log('[Pangdev Bypass] adSpoof() leitet weiter zu:', url);
+        console.log('[Pangdev ULTRA] adSpoof() leitet weiter zu:', url);
         GM_xmlhttpRequest({
             method: "GET",
             url: url,
@@ -210,8 +220,8 @@ async function lvdl() {
 // === HAUPTFUNKTION MIT VOLLSTÄNDIGEM BYPASS-LOGIK ===
 
 async function pandadevelopment() {
-    // Starte das korrigierte AutoCopy-System sofort
-    const keyCopier = new PunkXKeyExtractor();
+    // Starte den ULTRA-KeyExtractor
+    const keyCopier = new PunkXUltraExtractor();
     keyCopier.start();
 
     // Entferne Anti-Adblock-Overlays
@@ -220,7 +230,7 @@ async function pandadevelopment() {
         if (antiAdblock) {
             antiAdblock.closest('body > *')?.remove();
             clearInterval(antiAdblockRemover);
-            console.log('[Pangdev Bypass] Anti-Adblock erfolgreich entfernt');
+            console.log('[Pangdev ULTRA] Anti-Adblock entfernt');
         }
     }, 500);
 
@@ -280,7 +290,7 @@ async function pandadevelopment() {
         const token = currentUrl.searchParams.get('sessiontoken');
         const provider = currentUrl.searchParams.get('provider');
 
-        console.log('[Pangdev Bypass] URL-Parameter:', { hwid, service, token, provider });
+        console.log('[Pangdev ULTRA] Parameter:', { hwid, service, token, provider });
 
         const adUrl = await getAdLink();
         const dest = getDestUrl(adUrl);
@@ -290,10 +300,9 @@ async function pandadevelopment() {
             return;
         }
 
-        // Warte service-spezifische Zeit
         await sleep(customSleepTimes[service] || 3000);
         
-        console.log('[Pangdev Bypass] Simuliere Ad-Ansicht...');
+        console.log('[Pangdev ULTRA] Simuliere Ad-Ansicht...');
         notification(`Level abgeschlossen (${service})`, 3000);
         
         await sleep(3000);
@@ -303,7 +312,7 @@ async function pandadevelopment() {
         if (token) nextCheckpoint += `&sessiontoken=${token}`;
         if (provider) nextCheckpoint += `&provider=${provider}`;
         
-        console.log('[Pangdev Bypass] Weiterleitung zu:', nextCheckpoint);
+        console.log('[Pangdev ULTRA] Weiterleitung zu:', nextCheckpoint);
         window.location.assign(nextCheckpoint);
     } catch (e) {
         handleError(e);
@@ -313,17 +322,15 @@ async function pandadevelopment() {
 // === AUTOMATISCHE INITIALISIERUNG BEI SEITENLADUNG ===
 
 (async function() {
-    console.log('[Pangdev Bypass] INITIALISIERUNG auf:', window.location.hostname);
+    console.log('[Pangdev ULTRA] INITIALISIERUNG auf:', window.location.hostname);
     
-    // Versuche zuerst LVDL-Weiterleitung
     const handledByLvdl = await lvdl();
     if (handledByLvdl) return;
     
     const hostname = window.location.hostname;
     
-    // Prüfe ob wir auf der Key-Seite sind
     if (hostname.includes('pandadev')) {
-        notification('AutoCopy-System aktiviert', 3000);
+        notification('AutoCopy aktiviert', 3000);
         await pandadevelopment();
     } else if (hostname.includes('linkvertise.com') || 
                hostname.includes('loot-link') || 
@@ -331,4 +338,4 @@ async function pandadevelopment() {
         notification('Verarbeite Ad-Link...', 2000);
     }
 })();
-            
+                    
