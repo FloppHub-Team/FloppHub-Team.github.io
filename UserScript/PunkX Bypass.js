@@ -3,14 +3,14 @@
 // @namespace    punkX-bypass-exclusive
 
 
-// @version      2.0.1
+// @version      2.0.2
 // @description  Automatische Key-Kopierung ohne Klick-System
 // @author       Mw_Anonymous | TheRealBanHammer
 
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
 // @updateURL    https://flopphub-team.github.io/UserScript/PunkX%20Bypass.js
 // @downloadURL  https://flopphub-team.github.io/UserScript/PunkX%20Bypass.js
-// @require      
+// @require      https://flopphub-team.github.io/UserScript/WorkInk%20Bypass.js 
 
 
 // @match        https://pandadevelopment.net/getkey?*
