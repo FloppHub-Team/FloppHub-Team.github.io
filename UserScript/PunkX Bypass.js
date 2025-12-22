@@ -13,13 +13,7 @@
 
 
 // @match        https://pandadevelopment.net/getkey?*
-// @match        https://pandadev.net/getkey?*
 // @match        https://linkvertise.com/*
-// @match        https://short-jambo.com/*
-// @match        https://loot-link.com/s?*
-// @match        https://loot-links.com/s?*
-// @match        https://lootlink.org/s?*
-// @match        https://lootlinks.co/s?*
 
 
 // @grant        GM_xmlhttpRequest
