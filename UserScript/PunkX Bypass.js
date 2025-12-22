@@ -10,10 +10,12 @@
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
 // @updateURL    https://flopphub-team.github.io/UserScript/PunkX%20Bypass.js
 // @downloadURL  https://flopphub-team.github.io/UserScript/PunkX%20Bypass.js
+// @require      
 
 
 // @match        https://pandadevelopment.net/getkey?*
 // @match        https://linkvertise.com/*
+// @match        https://work.ink/*
 
 
 // @grant        GM_xmlhttpRequest
