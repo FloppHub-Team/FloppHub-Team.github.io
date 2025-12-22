@@ -3,7 +3,7 @@
 // @namespace    punkX-bypass-exclusive
 
 
-// @version      2.0
+// @version      2.1
 // @description  Automatische Key-Kopierung ohne Klick-System
 // @author       Mw_Anonymous | TheRealBanHammer
 
