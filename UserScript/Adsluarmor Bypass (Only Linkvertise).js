@@ -12,7 +12,15 @@
 // @downloadURL  https://flopphub-team.github.io/UserScript/Adsluarmor%20Bypass%20(Only%20Linkvertise).js 
 
 
-// @match        https://linkvertise.com/*
+// @match        *://direct-link.net/*
+// @match        *://link-target.net/*
+// @match        *://link-to.net/*
+// @match        *://link-center.net/*
+// @match        *://link-hub.net/*
+// @match        *://linkvertise.com/*
+// @match        *://link-target.net/*
+// @match        *://link-center.net/*
+// @match        *://link-to.net/*
 
 
 // @grant        GM_xmlhttpRequest
