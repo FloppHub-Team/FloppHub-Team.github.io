@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bypass.vip + PandaDev AutoCopy
 // @namespace    bypass-pandadev-combined
-// @version      1.5.2
+// @version      1.5.3
 // @description  Bypass ad-links + auto-copy keys on pandadevelopment.net
 // @author       bypass.vip | Mw_Anonymous (Adapted)
 // @match        *://loot-link.com/*
@@ -22,7 +22,7 @@
 // @match        *://lootlink.org/*
 // @match        *://linkvertise.com/*/*
 // @match        https://pandadevelopment.net/getkey?*
-// @updateURL    https://flopphub-team.github.io/UserScript/Bypassvip.js 
+// @updateURL    https://flopphub-team.github.io/UserScript/Bypassvip.js
 // @downloadURL  https://flopphub-team.github.io/UserScript/Bypassvip.js
 // @grant        GM_setClipboard
 // @grant        GM_notification
@@ -243,10 +243,10 @@
                 if (isValidUrl(decoded)) {
                     redirectUrl = decoded;
                 } else {
-                    throw new Error('Invalid redirect URL after decoding');
+                    window.location.href = rawRedirect;
+                    return;
                 }
             } catch (err) {
-                console.error('Error: Invalid redirect URL. Attempting direct redirect...', err);
                 window.location.href = rawRedirect;
                 return;
             }
@@ -266,4 +266,3 @@
         console.error('Userscript error:', err);
     }
 })();
- 
