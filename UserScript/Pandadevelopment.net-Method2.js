@@ -3,7 +3,7 @@
 // @namespace    pandadevelopment.net-bypass-exclusive
 
 
-// @version      1.6
+// @version      1.7
 // @description  Automatische Key-Kopierung ohne Klick-System
 // @author       Mw_Anonymous | Bypass.vip
 
