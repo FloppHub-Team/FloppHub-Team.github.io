@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bypass.vip + PandaDev AutoCopy
 // @namespace    bypass-pandadev-combined
-// @version      1.5.3
+// @version      1.5.4
 // @description  Bypass ad-links + auto-copy keys on pandadevelopment.net
 // @author       bypass.vip | Mw_Anonymous (Adapted)
 // @match        *://loot-link.com/*
@@ -211,7 +211,7 @@
     }
 
     const config = {
-        time: 1,
+        time: 5,
         key: '',
         safeMode: true
     };
