@@ -44,3 +44,76 @@
 
 // @run-at       document-start
 // ==/UserScript==
+
+
+(function() {
+    'use strict';
+    
+    class AutoContinue {
+        constructor() {
+            this.targetText = 'Continue to Next Step';
+        }
+
+        async start() {
+            const button = await this.waitForButton();
+            if (button) {
+                this.clickButton(button);
+            }
+        }
+
+        waitForButton() {
+            return new Promise(resolve => {
+                let attempts = 0;
+                const maxAttempts = 50;
+                
+                const check = () => {
+                    attempts++;
+                    const button = this.findButton();
+                    
+                    if (button) {
+                        resolve(button);
+                    } else if (attempts >= maxAttempts) {
+                        resolve(null);
+                    } else {
+                        setTimeout(check, 100);
+                    }
+                };
+                
+                check();
+            });
+        }
+
+        findButton() {
+            const selectors = ['button', 'input[type="button"]', 'a.btn', 'a.button'];
+            
+            for (let selector of selectors) {
+                const elements = document.querySelectorAll(selector);
+                for (let el of elements) {
+                    if (el.textContent.trim() === this.targetText || el.value === this.targetText) {
+                        return el;
+                    }
+                }
+            }
+            return null;
+        }
+
+        clickButton(button) {
+            const clickEvent = new MouseEvent('click', {
+                view: window,
+                bubbles: true,
+                cancelable: true,
+                button: 0
+            });
+            button.dispatchEvent(clickEvent);
+        }
+    }
+
+    const autoContinue = new AutoContinue();
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => autoContinue.start());
+    } else {
+        autoContinue.start();
+    }
+})();
+
