@@ -251,3 +251,5 @@ function notification(message, timeout = 3000) {
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+})();
+
