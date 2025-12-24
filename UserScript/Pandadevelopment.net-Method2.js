@@ -3,7 +3,7 @@
 // @namespace    pandadevelopment.net-bypass-exclusive
 
 
-// @version      1.0.3
+// @version      1.0.4
 // @description  Automatische Key-Kopierung ohne Klick-System
 // @author       Mw_Anonymous | Bypass.vip
 
@@ -48,90 +48,23 @@
 
 (function() {
     'use strict';
-    
-    class AutoContinue {
-        constructor() {
-            this.targetTextPattern = /continue to next step/i;
-            this.maxTotalAttempts = 20;
-            this.attemptsPerButton = 5;
-            this.delayBetweenAttempts = 150;
-            this.totalAttempts = 0;
-        }
 
-        start() {
-            this.scanAndClick();
-            this.setupObserver();
-        }
-
-        setupObserver() {
-            const observer = new MutationObserver(() => {
-                this.scanAndClick();
-            });
-            
-            observer.observe(document.body, {
-                childList: true,
-                subtree: true
-            });
-        }
-
-        scanAndClick() {
-            if (this.totalAttempts >= this.maxTotalAttempts) return;
-            
-            const button = this.findButton();
-            if (button) {
-                this.clickMultipleTimes(button);
-            }
-        }
-
-        findButton() {
-            const selectors = ['button', 'input[type="button"]', 'a', '[role="button"]', '.btn', '.button'];
-            
-            for (let selector of selectors) {
-                try {
-                    const elements = document.querySelectorAll(selector);
-                    for (let el of elements) {
-                        const text = (el.textContent || el.value || '').trim();
-                        if (this.targetTextPattern.test(text)) {
-                            return el;
-                        }
-                    }
-                } catch (e) {}
-            }
-            return null;
-        }
-
-        clickMultipleTimes(button) {
-            let clickCount = 0;
-            const interval = setInterval(() => {
-                if (clickCount >= this.attemptsPerButton || this.totalAttempts >= this.maxTotalAttempts) {
-                    clearInterval(interval);
-                    return;
-                }
-                
-                this.simulateRealClick(button);
-                clickCount++;
-                this.totalAttempts++;
-            }, this.delayBetweenAttempts);
-        }
-
-        simulateRealClick(button) {
-            const events = [
-                new MouseEvent('mouseover', { bubbles: true, cancelable: true, view: window }),
-                new MouseEvent('mousedown', { bubbles: true, cancelable: true, view: window, button: 0 }),
-                new MouseEvent('mouseup', { bubbles: true, cancelable: true, view: window, button: 0 }),
-                new MouseEvent('click', { bubbles: true, cancelable: true, view: window, button: 0 })
-            ];
-            
-            events.forEach(event => button.dispatchEvent(event));
+    function clickNextStepButton() {
+        const button = document.querySelector('button');
+        if (button && button.textContent.trim() === 'Continue to Next Step') {
+            button.click();
         }
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            new AutoContinue().start();
-        });
-    } else {
-        new AutoContinue().start();
+    function waitForButton() {
+        const interval = setInterval(function() {
+            const button = document.querySelector('button');
+            if (button && button.textContent.trim() === 'Continue to Next Step') {
+                clearInterval(interval);
+                clickNextStepButton();
+            }
+        }, 1000); // Check every second
     }
+
+    waitForButton();
 })();
- 
