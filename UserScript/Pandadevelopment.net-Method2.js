@@ -45,26 +45,3 @@
 // @run-at       document-start
 // ==/UserScript==
 
-
-(function() {
-    'use strict';
-
-    function clickNextStepButton() {
-        const button = document.querySelector('button');
-        if (button && button.textContent.trim() === 'Continue to Next Step') {
-            button.click();
-        }
-    }
-
-    function waitForButton() {
-        const interval = setInterval(function() {
-            const button = document.querySelector('button');
-            if (button && button.textContent.trim() === 'Continue to Next Step') {
-                clearInterval(interval);
-                clickNextStepButton();
-            }
-        }, 1000); // Check every second
-    }
-
-    waitForButton();
-})();
