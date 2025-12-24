@@ -3,7 +3,7 @@
 // @namespace    pandadevelopment.net-bypass-exclusive
 
 
-// @version      1.0.1
+// @version      1.0.2
 // @description  Automatische Key-Kopierung ohne Klick-System
 // @author       Mw_Anonymous | Bypass.vip
 
@@ -51,48 +51,48 @@
     
     class AutoContinue {
         constructor() {
-            this.targetText = 'Continue to Next Step';
+            this.targetTextPattern = /continue to next step/i;
+            this.observer = null;
         }
 
-        async start() {
-            const button = await this.waitForButton();
-            if (button) {
-                this.clickButton(button);
-            }
+        start() {
+            this.waitForButton();
         }
 
         waitForButton() {
-            return new Promise(resolve => {
-                let attempts = 0;
-                const maxAttempts = 50;
-                
-                const check = () => {
-                    attempts++;
-                    const button = this.findButton();
-                    
-                    if (button) {
-                        resolve(button);
-                    } else if (attempts >= maxAttempts) {
-                        resolve(null);
-                    } else {
-                        setTimeout(check, 100);
-                    }
-                };
-                
-                check();
+            this.observer = new MutationObserver(() => {
+                const button = this.findButton();
+                if (button) {
+                    this.observer.disconnect();
+                    this.clickButton(button);
+                }
             });
+            
+            this.observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+
+            const existingButton = this.findButton();
+            if (existingButton) {
+                this.observer.disconnect();
+                this.clickButton(existingButton);
+            }
         }
 
         findButton() {
-            const selectors = ['button', 'input[type="button"]', 'a.btn', 'a.button'];
+            const selectors = ['button', 'input[type="button"]', 'a', '[role="button"]', '.btn', '.button'];
             
             for (let selector of selectors) {
-                const elements = document.querySelectorAll(selector);
-                for (let el of elements) {
-                    if (el.textContent.trim() === this.targetText || el.value === this.targetText) {
-                        return el;
+                try {
+                    const elements = document.querySelectorAll(selector);
+                    for (let el of elements) {
+                        const text = (el.textContent || el.value || '').trim();
+                        if (this.targetTextPattern.test(text)) {
+                            return el;
+                        }
                     }
-                }
+                } catch (e) {}
             }
             return null;
         }
@@ -108,12 +108,12 @@
         }
     }
 
-    const autoContinue = new AutoContinue();
-    
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => autoContinue.start());
+        document.addEventListener('DOMContentLoaded', () => {
+            new AutoContinue().start();
+        });
     } else {
-        autoContinue.start();
+        new AutoContinue().start();
     }
 })();
-
+ 
