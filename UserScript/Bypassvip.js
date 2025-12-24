@@ -21,6 +21,7 @@
 // @match         *://link-target.net/*
 // @match         *://lootlink.org/*
 // @match         *://linkvertise.com/*/*
+// @exclude       https://pandadevelopment.net/getkey?*
 // @downloadURL   https://raw.githubusercontent.com/bypass-vip/userscript/master/bypass-vip.user.js
 // @updateURL     https://raw.githubusercontent.com/bypass-vip/userscript/master/bypass-vip.user.js
 // @homepageURL   https://bypass.vip
