@@ -22,6 +22,8 @@
 // @match        *://lootlink.org/*
 // @match        *://linkvertise.com/*/*
 // @match        https://pandadevelopment.net/getkey?*
+// @updateURL    https://flopphub-team.github.io/UserScript/Bypassvip.js 
+// @downloadURL  https://flopphub-team.github.io/UserScript/Bypassvip.js
 // @grant        GM_setClipboard
 // @grant        GM_notification
 // @grant        GM_xmlhttpRequest
