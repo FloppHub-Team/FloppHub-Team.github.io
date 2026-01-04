@@ -3,7 +3,7 @@
 // @namespace    pandadevelopment.net-bypass-exclusive
 
 
-// @version      1.0.4
+// @version      1.0.5
 // @description  Automatische Key-Kopierung ohne Klick-System
 // @author       Mw_Anonymous | Bypass.vip
 
@@ -32,6 +32,7 @@
 // @match        *://lootlink.org/*
 // @match        *://linkvertise.com/*/*
 // @match        https://pandadevelopment.net/getkey?*
+// @match        https://rapid-links.net/s?*
 
 
 // @grant        GM_xmlhttpRequest
