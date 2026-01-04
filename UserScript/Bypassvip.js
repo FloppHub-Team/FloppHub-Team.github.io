@@ -211,7 +211,7 @@
     }
 
     const config = {
-        time: 5,
+        time: 1,
         key: '',
         safeMode: true
     };
