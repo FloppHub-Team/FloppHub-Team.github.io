@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FloppBlox - Ultimate Blox Fruits Script</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-orange: #ff6b00;
+            --dark-orange: #e05a00;
+            --light-orange: #ffa366;
+            --bg-black: #0a0a0a;
+            --card-black: #0f0f0f;
+            --glow-orange: 0 0 10px #ff6b00, 0 0 20px #ff6b00, 0 0 30px #ff6b00;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: radial-gradient(circle at top left, #1a0f00 0%, var(--bg-black) 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 40px 0;
+            text-align: center;
+            background: linear-gradient(135deg, var(--card-black) 0%, #0d0d0d 100%);
+            border-bottom: 2px solid var(--neon-orange);
+            box-shadow: var(--glow-orange);
+            animation: headerGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes headerGlow {
+            0% { box-shadow: 0 0 10px var(--neon-orange), 0 0 20px var(--neon-orange); }
+            100% { box-shadow: 0 0 20px var(--neon-orange), 0 0 40px var(--neon-orange); }
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--neon-orange);
+            box-shadow: var(--glow-orange);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-top: 20px;
+            background: linear-gradient(45deg, var(--neon-orange), var(--light-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--glow-orange);
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from { text-shadow: var(--glow-orange); }
+            to { text-shadow: 0 0 15px var(--neon-orange), 0 0 30px var(--neon-orange), 0 0 45px var(--neon-orange); }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--light-orange);
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        .section {
+            padding: 60px 0;
+            margin: 40px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--neon-orange);
+            text-shadow: var(--glow-orange);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: var(--neon-orange);
+            margin: 10px auto;
+            box-shadow: var(--glow-orange);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: var(--card-black);
+            border: 2px solid var(--neon-orange);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--neon-orange) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--glow-orange);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+            text-shadow: var(--glow-orange);
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            color: var(--neon-orange);
+            margin-bottom: 10px;
+        }
+
+        .feature-description {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .about-text {
+            background: var(--card-black);
+            border-left: 5px solid var(--neon-orange);
+            padding: 40px;
+            border-radius: 10px;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.2);
+        }
+
+        .about-text h3 {
+            color: var(--neon-orange);
+            margin: 20px 0 10px 0;
+            font-size: 1.5rem;
+        }
+
+        .about-text strong {
+            color: var(--light-orange);
+        }
+
+        .status-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .status-card {
+            background: var(--card-black);
+            border: 2px solid var(--neon-orange);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .status-card:hover {
+            box-shadow: var(--glow-orange);
+            transform: scale(1.05);
+        }
+
+        .status-label {
+            font-size: 0.9rem;
+            color: var(--light-orange);
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+
+        .status-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .status-value.yes { color: #00ff88; text-shadow: 0 0 10px #00ff88; }
+        .status-value.no { color: var(--neon-orange); text-shadow: 0 0 10px var(--neon-orange); }
+
+        .download-section {
+            background: linear-gradient(135deg, #1a0f00 0%, var(--card-black) 100%);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            border: 2px solid var(--neon-orange);
+            box-shadow: var(--glow-orange);
+        }
+
+        .script-box {
+            background: #000;
+            border: 2px solid var(--neon-orange);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--light-orange);
+            word-break: break-all;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .script-box:hover {
+            background: #050505;
+            box-shadow: 0 0 15px var(--neon-orange);
+        }
+
+        .copy-hint {
+            position: absolute;
+            top: -30px;
+            right: 10px;
+            background: var(--neon-orange);
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-weight: bold;
+        }
+
+        .script-box:hover .copy-hint {
+            opacity: 1;
+        }
+
+        .download-btn {
+            background: linear-gradient(45deg, var(--neon-orange), var(--dark-orange));
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .download-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow-orange);
+        }
+
+        .community-section {
+            background: var(--card-black);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            border: 2px solid var(--neon-orange);
+        }
+
+        .discord-stats {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            color: var(--neon-orange);
+            font-weight: bold;
+            text-shadow: var(--glow-orange);
+        }
+
+        .stat-label {
+            color: #ccc;
+            margin-top: 5px;
+        }
+
+        .discord-btn {
+            display: inline-block;
+            background: #7289da;
+            color: #fff;
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .discord-btn:hover {
+            background: #5a73bc;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #7289da;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 2px solid var(--neon-orange);
+            margin-top: 60px;
+            background: var(--card-black);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--light-orange);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .footer-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-orange);
+            transition: width 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--neon-orange);
+        }
+
+        .footer-links a:hover::after {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .about-text {
+                padding: 25px;
+            }
+
+            .download-section, .community-section {
+                padding: 30px 20px;
+            }
+
+            .discord-stats {
+                gap: 30px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <img src="https://i.postimg.cc/brq86RKj/loc-phub-jpg.png" alt="FloppHub Logo" class="logo">
+            <h1>FloppBlox</h1>
+            <p class="subtitle">The Ultimate Script for Blox Fruits on Roblox</p>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Premium Features</h2>
+            <div class="features-grid fade-in">
+                <div class="feature-card">
+                    <span class="feature-icon">🔓</span>
+                    <h3 class="feature-title">No Key System</h3>
+                    <p class="feature-description">True unrestricted access. No keys, no subscriptions, no limitations. Completely free.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🛡️</span>
+                    <h3 class="feature-title">No Resets</h3>
+                    <p class="feature-description">100% bug-free with flawless execution. Your progress remains safe and stable.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <h3 class="feature-title">Smooth & Lag-Free</h3>
+                    <p class="feature-description">Fluid performance optimized for maximum speed. Experience seamless gameplay without interruptions.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🐛</span>
+                    <h3 class="feature-title">Bug-Free</h3>
+                    <p class="feature-description">Meticulously tested and maintained. Guaranteed compatibility with latest game versions.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">⚙️</span>
+                    <h3 class="feature-title">100+ Options</h3>
+                    <p class="feature-description">Over 100 advanced features covering every aspect of Blox Fruits. Complete customization at your fingertips.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🌐</span>
+                    <h3 class="feature-title">Universal Compatibility</h3>
+                    <p class="feature-description">Works perfectly with all major executors on PC, Android, iOS, and Mac.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">About FloppBlox</h2>
+            <div class="about-text fade-in">
+                <p>FloppBlox – The Ultimate Script for Blox Fruits on Roblox</p><br>
+                
+                <p>Dear Roblox players and Blox Fruits enthusiasts,</p><br>
+                
+                <p>We are proud to introduce FloppBlox, the premium script meticulously crafted to take your Blox Fruits experience to an entirely new level. Developed by the highly skilled FloppHub Team and led by Mw_Anonymous, FloppBlox was born with one clear mission: to compete with — and surpass — the major paid scripts that rely on restrictive key systems.</p><br>
+                
+                <p>FloppBlox stands out as an extremely complete and overpowered (OP) solution, packed with over 100 advanced features covering every aspect of the game — from strategic optimizations to high-performance mechanics. The script is 100% bug-free, delivers flawless execution with no resets, and provides a smooth, stable experience so you can focus purely on progress and enjoyment.</p><br>
+                
+                <p>One of its greatest strengths is true unrestricted access: <strong>no key, no subscription, no limitations</strong>. FloppBlox brings elite-level power to the entire community completely free of charge.</p><br>
+                
+                <p>Fully up-to-date with the latest game versions, it guarantees continuous compatibility and seamless performance even after updates. Moreover, FloppBlox offers universal compatibility, working perfectly with all major executors on PC, Android, iOS, and Mac.</p><br>
+                
+                <p>Whether you're a casual player or a serious competitor, FloppBlox represents the next evolution of Blox Fruits scripting — combining cutting-edge technology with complete accessibility.</p><br>
+                
+                <p>Join the FloppHub revolution and experience why FloppBlox is not just another script — it's a game-changer.</p><br>
+                
+                <p>For more information and downloads, visit our official channels.</p><br>
+                
+                <p>Regards,<br>
+                FloppHub Team<br>
+                Led by Mw_Anonymous</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Script Status</h2>
+            <div class="status-container fade-in">
+                <div class="status-card">
+                    <div class="status-label">Key System Required</div>
+                    <div class="status-value no">No</div>
+                </div>
+                <div class="status-card">
+                    <div class="status-label">Working Status</div>
+                    <div class="status-value yes">Yes</div>
+                </div>
+                <div class="status-card">
+                    <div class="status-label">Discontinued</div>
+                    <div class="status-value no">No</div>
+                </div>
+                <div class="status-card">
+                    <div class="status-label">Last Updated</div>
+                    <div class="status-value">01/05/2026</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">How to Use</h2>
+            <div class="download-section fade-in">
+                <p style="font-size: 1.2rem; margin-bottom: 20px;">Execute this script in your Roblox executor:</p>
+                <div class="script-box" id="scriptBox">
+                    loadstring(game:HttpGet("https://raw.githubusercontent.com/FloppHub-Team/BloxFruits-Script/refs/heads/main/FloppHubX.lua"))()
+                  <div class="copy-hint">Click to copy</div>
+                </div>
+                <p style="color: var(--light-orange); margin-top: 15px;">Compatible with all major executors</p>
+                <button class="download-btn" onclick="window.open('https://raw.githubusercontent.com/FloppHub-Team/BloxFruits-Script/refs/heads/main/FloppBlox.lua', '_blank')">
+                    Open Raw Script
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Join Our Community</h2>
+            <div class="community-section fade-in">
+                <p style="font-size: 1.3rem; margin-bottom: 30px;">Connect with 800+ members in the FloppHub Discord</p>
+                <div class="discord-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">800+</div>
+                        <div class="stat-label">Members</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">03</div>
+                        <div class="stat-label">Active Projects</div>
+                    </div>
+                </div>
+                <p style="color: #ccc; margin: 20px 0;">Get support, share feedback, and stay updated with latest releases</p>
+                <a href="https://discord.gg/J9dSv7hq55" class="discord-btn" target="_blank">
+                    Join Discord Server
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 FloppHub Team. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="https://flopphub-team.github.io/" target="_blank">Official Website</a>
+                <a href="https://discord.gg/J9dSv7hq55" target="_blank">Discord</a>
+                <a href="https://raw.githubusercontent.com/FloppHub-Team/BloxFruits-Script/refs/heads/main/Raw.lua" target="_blank">Script</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const scriptText = `loadstring(game:HttpGet("https://raw.githubusercontent.com/FloppHub-Team/BloxFruits-Script/refs/heads/main/FloppBlox.lua"))()`;
+        
+        document.getElementById('scriptBox').addEventListener('click', function() {
+            navigator.clipboard.writeText(scriptText).then(() => {
+                const hint = this.querySelector('.copy-hint');
+                hint.textContent = 'Copied!';
+                setTimeout(() => {
+                    hint.textContent = 'Click to copy';
+                }, 2000);
+            });
+        });
+
+        function checkScroll() {
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.85) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', checkScroll);
+        window.addEventListener('load', checkScroll);
+    </script>
+</body>
+</html>
