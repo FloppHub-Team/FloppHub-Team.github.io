@@ -126,6 +126,57 @@ h3 {
     margin-bottom: 1rem;
 }
 
+.download-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.download-card {
+    background: var(--light-gray);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.download-card:hover {
+    background: var(--primary-orange);
+    transform: translateY(-3px);
+}
+
+.download-card h4 {
+    color: var(--accent-orange);
+    margin-bottom: 0.5rem;
+}
+
+.download-card:hover h4 {
+    color: var(--bg-black);
+}
+
+.download-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.download-links a {
+    color: var(--text-white);
+    text-decoration: none;
+    padding: 0.5rem;
+    background: var(--primary-orange);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.download-links a:hover {
+    background: var(--text-white);
+    color: var(--primary-orange);
+}
+
 .extension-list {
     list-style: none;
     margin-top: 1rem;
@@ -302,12 +353,44 @@ footer {
                 <h3>Android</h3>
                 <ul style="list-style: none; margin-top: 1rem;">
                     <li>✅ Firefox</li>
-                    <li>✅ Kiwi Browser</li>
                     <li>✅ Yandex Browser</li>
-                    <li>✅ Lemur Browser<li>
                     <li>✅ Samsung Internet (with add-ons)</li>
+                    <li>✅ Lemur Browser</li>
                     <li>❌ Google Chrome (No extension support)</li>
                 </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="browser-downloads">
+        <h2>⬇️ Browser Download Links</h2>
+        <div class="download-grid">
+            <div class="download-card">
+                <h4>🖥️ Desktop Browsers</h4>
+                <div class="download-links">
+                    <a href="https://www.google.com/chrome/" target="_blank">Google Chrome</a>
+                    <a href="https://www.mozilla.org/firefox/new/" target="_blank">Mozilla Firefox</a>
+                    <a href="https://www.microsoft.com/edge" target="_blank">Microsoft Edge</a>
+                    <a href="https://www.opera.com/download" target="_blank">Opera Browser</a>
+                    <a href="https://brave.com/download/" target="_blank">Brave Browser</a>
+                </div>
+            </div>
+            <div class="download-card">
+                <h4>📱 iOS Browsers</h4>
+                <div class="download-links">
+                    <a href="https://apps.apple.com/app/apple-store/id1146564808" target="_blank">Firefox for iOS</a>
+                    <a href="https://apps.apple.com/app/safari/id1146564808" target="_blank">Safari (Built-in)</a>
+                    <a href="https://apps.apple.com/app/orion-browser/id1484498200" target="_blank">Orion Browser</a>
+                </div>
+            </div>
+            <div class="download-card">
+                <h4>🤖 Android Browsers</h4>
+                <div class="download-links">
+                    <a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox" target="_blank">Firefox for Android</a>
+                    <a href="https://play.google.com/store/apps/details?id=com.yandex.browser" target="_blank">Yandex Browser</a>
+                    <a href="https://play.google.com/store/apps/details?id=com.sec.android.app.sbrowser" target="_blank">Samsung Internet</a>
+                    <a href="https://play.google.com/store/apps/details?id=com.lemurbrowser.exts" target="_blank">Lemur Browser</a>
+                </div>
             </div>
         </div>
     </section>
@@ -338,10 +421,6 @@ footer {
                 <a href="https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/" target="_blank">Firefox Add-ons</a>
             </li>
             <li>
-                <span>📱 Android - Kiwi Browser</span>
-                <a href="https://play.google.com/store/apps/details?id=com.kiwibrowser.browser" target="_blank">Play Store</a>
-            </li>
-            <li>
                 <span>📱 iOS - Userscripts</span>
                 <a href="https://apps.apple.com/us/app/userscripts/id1463298887" target="_blank">App Store</a>
             </li>
@@ -353,7 +432,7 @@ footer {
         <div class="warning-box">
             <strong>Important Notice:</strong> Google Chrome for Android does not support browser extensions, including userscript managers. This is a deliberate limitation set by Google for mobile browsers.
         </div>
-        <p>Android users must install alternative browsers like Firefox, Kiwi Browser, Lemur Browser or Yandex Browser to use UserScripts. These browsers fully support extensions and provide the same functionality as their desktop counterparts.</p>
+        <p>Android users must install alternative browsers like Firefox, Yandex Browser, Samsung Internet, or Lemur Browser to use UserScripts. These browsers fully support extensions and provide the same functionality as their desktop counterparts.</p>
     </section>
 
     <section id="flopphub-script">
@@ -438,3 +517,4 @@ document.head.appendChild(style);
 </script>
 </body>
 </html>
+ 
