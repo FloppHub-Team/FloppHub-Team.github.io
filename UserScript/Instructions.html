@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FloppHub UserScript Installation Guide</title>
+<style>
+:root {
+    --bg-black: #0a0a0a;
+    --primary-orange: #ff6b00;
+    --accent-orange: #ff8c42;
+    --dark-gray: #1a1a1a;
+    --light-gray: #333333;
+    --text-white: #ffffff;
+    --text-gray: #cccccc;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--bg-black);
+    color: var(--text-white);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, var(--bg-black) 0%, var(--dark-gray) 100%);
+    padding: 2rem 0;
+    text-align: center;
+    border-bottom: 3px solid var(--primary-orange);
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.logo-container img {
+    height: 80px;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+.logo-container img:hover {
+    transform: scale(1.1);
+}
+
+h1 {
+    color: var(--primary-orange);
+    font-size: 2.5rem;
+    margin-top: 1rem;
+    text-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+section {
+    background: var(--dark-gray);
+    margin: 2rem 0;
+    padding: 2rem;
+    border-radius: 12px;
+    border-left: 4px solid var(--primary-orange);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(255, 107, 0, 0.3);
+}
+
+h2 {
+    color: var(--primary-orange);
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+h3 {
+    color: var(--accent-orange);
+    font-size: 1.3rem;
+    margin: 1.5rem 0 0.8rem 0;
+}
+
+.browser-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.device-card {
+    background: var(--light-gray);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.device-card:hover {
+    background: var(--primary-orange);
+    color: var(--bg-black);
+}
+
+.device-card h3 {
+    color: inherit;
+    margin-top: 0;
+}
+
+.device-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.extension-list {
+    list-style: none;
+    margin-top: 1rem;
+}
+
+.extension-list li {
+    background: var(--light-gray);
+    margin: 1rem 0;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.3s ease;
+}
+
+.extension-list li:hover {
+    background: var(--primary-orange);
+}
+
+.extension-list a {
+    color: var(--text-white);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    background: var(--primary-orange);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.extension-list a:hover {
+    background: var(--text-white);
+    color: var(--primary-orange);
+}
+
+.warning-box {
+    background: linear-gradient(135deg, #ff6b00, #ff8c42);
+    color: var(--bg-black);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    font-weight: 600;
+}
+
+.warning-box strong {
+    font-size: 1.2rem;
+}
+
+.install-btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, var(--primary-orange), var(--accent-orange));
+    color: var(--text-white);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 1rem 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
+}
+
+.install-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 107, 0, 0.6);
+}
+
+.userscript-info {
+    background: var(--light-gray);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+}
+
+.userscript-info p {
+    margin: 0.8rem 0;
+}
+
+.userscript-info strong {
+    color: var(--accent-orange);
+}
+
+footer {
+    background: var(--dark-gray);
+    text-align: center;
+    padding: 2rem;
+    margin-top: 3rem;
+    border-top: 3px solid var(--primary-orange);
+}
+
+.discord-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    background: #5865F2;
+    color: var(--text-white);
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.discord-btn:hover {
+    background: #4752C4;
+    transform: translateY(-3px);
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .logo-container {
+        flex-direction: column;
+    }
+    
+    .logo-container img {
+        height: 60px;
+    }
+    
+    .container {
+        padding: 1rem;
+    }
+    
+    section {
+        padding: 1.5rem;
+    }
+}
+</style>
+</head>
+<body>
+<header>
+    <div class="logo-container">
+        <img src="https://i.postimg.cc/brq86RKj/loc-phub.jpg.png" alt="FloppHub Logo">
+        <img src="https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg" alt="UserScript Logo">
+    </div>
+    <h1>FloppHub UserScript Installation Guide</h1>
+</header>
+
+<div class="container">
+    <section id="what-is">
+        <h2>🔍 What is a UserScript?</h2>
+        <p>A UserScript is a JavaScript program that modifies web pages to enhance functionality, automate tasks, or customize your browsing experience. Think of it as a mini-extension that runs directly in your browser to improve how websites work for you.</p>
+        <p>UserScripts are lightweight, fast, and highly customizable solutions for power users who want more control over their web experience.</p>
+    </section>
+
+    <section id="browsers">
+        <h2>🌐 Compatible Browsers by Device</h2>
+        <div class="browser-grid">
+            <div class="device-card">
+                <div class="device-icon">💻</div>
+                <h3>Desktop (Windows/macOS/Linux)</h3>
+                <ul style="list-style: none; margin-top: 1rem;">
+                    <li>✅ Google Chrome</li>
+                    <li>✅ Mozilla Firefox</li>
+                    <li>✅ Microsoft Edge</li>
+                    <li>✅ Opera</li>
+                    <li>✅ Brave</li>
+                </ul>
+            </div>
+            <div class="device-card">
+                <div class="device-icon">📱</div>
+                <h3>iOS (iPhone/iPad)</h3>
+                <ul style="list-style: none; margin-top: 1rem;">
+                    <li>✅ Safari (with Userscripts extension)</li>
+                    <li>✅ Firefox</li>
+                    <li>✅ Orion Browser</li>
+                </ul>
+            </div>
+            <div class="device-card">
+                <div class="device-icon">🤖</div>
+                <h3>Android</h3>
+                <ul style="list-style: none; margin-top: 1rem;">
+                    <li>✅ Firefox</li>
+                    <li>✅ Kiwi Browser</li>
+                    <li>✅ Yandex Browser</li>
+                    <li>✅ Samsung Internet (with add-ons)</li>
+                    <li>❌ Google Chrome (No extension support)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="extensions">
+        <h2>🔧 Required Extensions</h2>
+        <p>To run UserScripts, you need a userscript manager extension. Here are the recommended options:</p>
+        <h3>Violentmonkey</h3>
+        <ul class="extension-list">
+            <li>
+                <span>🖥️ Chrome / Edge / Opera</span>
+                <a href="https://chrome.google.com/webstore/detail/violentmonkey/jinjaccalgkejednnccoanngcbfjdicp" target="_blank">Chrome Web Store</a>
+            </li>
+            <li>
+                <span>🦊 Firefox</span>
+                <a href="https://addons.mozilla.org/en-US/firefox/addon/violentmonkey/" target="_blank">Firefox Add-ons</a>
+            </li>
+        </ul>
+        
+        <h3>Tampermonkey</h3>
+        <ul class="extension-list">
+            <li>
+                <span>🖥️ Chrome / Edge / Opera</span>
+                <a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo" target="_blank">Chrome Web Store</a>
+            </li>
+            <li>
+                <span>🦊 Firefox</span>
+                <a href="https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/" target="_blank">Firefox Add-ons</a>
+            </li>
+            <li>
+                <span>📱 Android - Kiwi Browser</span>
+                <a href="https://play.google.com/store/apps/details?id=com.kiwibrowser.browser" target="_blank">Play Store</a>
+            </li>
+            <li>
+                <span>📱 iOS - Userscripts</span>
+                <a href="https://apps.apple.com/us/app/userscripts/id1463298887" target="_blank">App Store</a>
+            </li>
+        </ul>
+    </section>
+
+    <section id="chrome-android">
+        <h2>⚠️ Chrome on Android Limitation</h2>
+        <div class="warning-box">
+            <strong>Important Notice:</strong> Google Chrome for Android does not support browser extensions, including userscript managers. This is a deliberate limitation set by Google for mobile browsers.
+        </div>
+        <p>Android users must install alternative browsers like Firefox, Kiwi Browser, or Yandex Browser to use UserScripts. These browsers fully support extensions and provide the same functionality as their desktop counterparts.</p>
+    </section>
+
+    <section id="flopphub-script">
+        <h2>🎯 FloppHub UserScript Details</h2>
+        <div class="userscript-info">
+            <h3>🔑 PunkX Key Automation Tool</h3>
+            <p>This specialized UserScript was developed to streamline the process of obtaining keys from the PunkX executor by automatically bypassing AdMavenshort URL shorteners and instantly copying the key to your clipboard.</p>
+            
+            <p><strong>✨ Key Features:</strong></p>
+            <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                <li>Automatic bypass of AdMavenshort links</li>
+                <li>Instant key copying to clipboard</li>
+                <li>Seamless integration with PunkX executor</li>
+                <li>Time-saving automation</li>
+            </ul>
+            
+            <p style="margin-top: 1rem;"><strong>⚠️ Important Clarification:</strong> This is not a continuation of the pandadevelopment.net bypass userscript. It is exclusively designed for PunkX key retrieval. The bypass functionality leverages Bypass.City infrastructure (external service) with original implementation by the FloppHub Team.</p>
+            
+            <p><strong>🔗 Official Script Link:</strong></p>
+            <a href="https://flopphub-team.github.io/UserScript/User.js" class="install-btn" target="_blank">📥 Install UserScript</a>
+        </div>
+    </section>
+</div>
+
+<footer>
+    <h2>🔗 Join the FloppHub Community</h2>
+    <p>Connect with fellow users, get support, and stay updated on the latest developments.</p>
+    <a href="https://discord.gg/J9dSv7hq55" class="discord-btn" target="_blank">
+        <span>💬</span>
+        <span>Join FloppHub Team Discord</span>
+    </a>
+    <p style="margin-top: 2rem; color: var(--text-gray);">&copy; 2025 FloppHub Team. All rights reserved.</p>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+
+    sections.forEach(section => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(30px)';
+        section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(section);
+    });
+
+    const links = document.querySelectorAll('a[href^="#"]');
+    links.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                target.style.animation = 'pulse 0.6s';
+                setTimeout(() => target.style.animation = '', 600);
+            }
+        });
+    });
+});
+
+const style = document.createElement('style');
+style.textContent = `
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(255, 107, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 107, 0, 0); }
+}
+`;
+document.head.appendChild(style);
+</script>
+</body>
+</html>
