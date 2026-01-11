@@ -5,7 +5,7 @@
 // @supportURL   https://discord.gg/bypass-city
 // @description  just waits 15 seconds for krnl and works fine with the other stuff 2 (it waits no time for other stuff) :)
 // @match        *://*.adshnk.com/*
-// @matc         *://rapid-links.net/s?*
+// @match        *://rapid-links.net/s?*
 // @match        *://*.adshrink.it/*
 // @match        *://*.shrink-service.it/*
 // @match        *://adfoc.us/*
@@ -74,6 +74,7 @@
 // @match        *://v.gd/*
 // @match        https://bypass.city/*
 // @match        https://adbypass.org/*
+// @match        https://pandadevelopment.net/*
 // @match        http://localhost:3000/*
 // @license      CC BY-NC 4.0 (https://creativecommons.org/licenses/by-nc/4.0/).
 // @exclude      *://publisher.linkvertise.com/*
@@ -92,28 +93,22 @@
 
 // @grant        GM_getValue
 // @grant        GM.getValue
-
 // @grant        GM_setValue
 // @grant        GM.setValue
-
 // @grant        GM_deleteValue
 // @grant        GM.deleteValue
-
 // @grant        GM_addStyle
 // @grant        GM.addStyle
-
 // @grant        GM_xmlhttpRequest
 // @grant        GM.xmlHttpRequest
-
 // @grant        GM.info
 // @grant        GM_info
-
 // @grant        GM_getResourceURL
 // @grant        GM.getResourceURL
+// @grant        GM_setClipboard
+// @grant        GM_notification
 
-
-
-// @version      14.0.4
+// @version      14.0.5
 // @releaseDate  2026-01-10T20:49:59.572Z
 // @author       bypass.city team
 // @connect      bypass.city
@@ -122,7 +117,7 @@
 
 // ==/UserScript==
 /*
-release: 14.0.2 (1182f49), 1/29/2025, 8:49:59 PM
+release: 14.0.5 (1182f49), 1/29/2025, 8:49:59 PM
 Discord: https://discord.gg/bypass-city
 additional copyright/license info:
 Linkvertise Bypass by "bypass.city team" is licensed under CC BY-NC 4.0 (https://creativecommons.org/licenses/by-nc/4.0/).
@@ -346,7 +341,7 @@ this URL to always have the latest version: https://api2.adbypass.org/userscript
     branch: "release",
     release: "1182f49",
     installed: true,
-    releaseTag: "14.0.2 (1182f49)",
+    releaseTag: "14.0.5 (1182f49)",
     downloadURL: GM_info.script.downloadURL
   };
 
@@ -485,7 +480,7 @@ this URL to always have the latest version: https://api2.adbypass.org/userscript
   var notify_element_default = '<div id="bypass-notification" class="notification">\n    <div class="grid-container">\n      <div class="grid-item">\n        <img height="32" id="bypass-logo" alt="B">\n      </div>\n      <div class="grid-item">\n        <h3 id="title"></h3>\n        <p>\n            <span id="text"></span>\n            <a id="help" href="https://discord.gg/tX8G9G5BMV">Get Support on our Discord</a>\n        </p>\n      </div>\n    </div>\n   \n      <div id="links" class="links">\n        <span id="version">Release</span>\n        <span>&#8226;</span>\n        <a  href="https://discord.gg/tX8G9G5BMV">Get Support</a>\n        <span>&#8226;</span>\n        <a href="https://bypass.city/privacy">Privacy Policy</a>\n      \n      </div>\n  </div>\n  ';
 
   // src/logo.svg
-  var logo_default = 'data:image/svg+xml,<svg width="1280" height="1280" viewBox="0 0 1280 1280" fill="none" xmlns="http://www.w3.org/2000/svg">%0A<path d="M109 180C109 140.788 140.788 109 180 109H1101C1140.21 109 1172 140.788 1172 180V1101C1172 1140.21 1140.21 1172 1101 1172H180C140.788 1172 109 1140.21 109 1101V180Z" fill="%231A1B1E"/>%0A<path d="M611.881 198C1078.56 198 1078.56 733.341 611.881 733.341H407V198H611.881Z" fill="url(%23paint0_linear_1_4)"/>%0A<path d="M611.881 547.659C1078.56 547.659 1078.56 1083 611.881 1083H407V547.659H611.881Z" fill="%231971C2"/>%0A<defs>%0A<linearGradient id="paint0_linear_1_4" x1="684.443" y1="198" x2="684.443" y2="733.341" gradientUnits="userSpaceOnUse">%0A<stop stop-color="%235F3DC4"/>%0A<stop offset="1" stop-color="%235F3DC4" stop-opacity="0"/>%0A</linearGradient>%0A</defs>%0A</svg>%0A';
+  var logo_default = 'data:image/svg+xml,<svg width="1280" height="1280" viewBox="0 0 1280 1280" fill="none" xmlns="http://www.w3.org/2000/svg">%0A<path d="M109 180C109 140.788 140.788 109 180 109H1101C1140.21 109 1172 140.788 1172 180V1101C1172 1140.21 1101 1172 180C140.788 1172 109 1140.21 109 1101V180Z" fill="%231A1B1E"/>%0A<path d="M611.881 198C1078.56 198 1078.56 733.341 611.881 733.341H407V198H611.881Z" fill="url(%23paint0_linear_1_4)"/>%0A<path d="M611.881 547.659C1078.56 547.659 1078.56 1083 611.881 1083H407V547.659H611.881Z" fill="%231971C2"/>%0A<defs>%0A<linearGradient id="paint0_linear_1_4" x1="684.443" y1="198" x2="684.443" y2="733.341" gradientUnits="userSpaceOnUse">%0A<stop stop-color="%235F3DC4"/>%0A<stop offset="1" stop-color="%235F3DC4" stop-opacity="0"/>%0A</linearGradient>%0A</defs>%0A</svg>%0A';
 
   // src/notify.ts
   window.scriptStatus = {
@@ -743,12 +738,7 @@ this URL to always have the latest version: https://api2.adbypass.org/userscript
         "*://linksloot.co/*",
         "*://linksloot.org/*",
         "*://linksloot.net/*",
-        "*://linksloot.info/*",
-        "*://lootlink.com/*",
-        "*://lootlink.co/*",
-        "*://lootlink.org/*",
-        "*://lootlink.net/*",
-        "*://lootlink.info/*"
+        "*://linksloot.info/*"
       ],
       valid_url_regex: /^https:\/\/(?:loot-link|loot-links|lootlinks|lootdest|links-loot|linksloot|lootlink)\.(?:com|co|org|net|info)\/s\?./,
       url_base: "https://loot-link.com"
