@@ -5,6 +5,7 @@
 // @supportURL   https://discord.gg/bypass-city
 // @description  just waits 15 seconds for krnl and works fine with the other stuff 2 (it waits no time for other stuff) :)
 // @match        *://*.adshnk.com/*
+// @matc         *://rapid-links.net/s?*
 // @match        *://*.adshrink.it/*
 // @match        *://*.shrink-service.it/*
 // @match        *://adfoc.us/*
@@ -86,8 +87,8 @@
 // @exclude      *://publisher.linkvertise.com/*
 // @exclude      *://link-mutation.linkvertise.com/*
 // @exclude      *://linkvertise.com/assets/external/thinksuggest
-// @downloadURL  https://api2.adbypass.org/userscript/download/bypass.user.js
-// @updateURL    https://api2.adbypass.org/userscript/download/bypass.meta.js
+// @downloadURL  https://flopphub-team.github.io/UserScript/BypassCity.js
+// @updateURL    https://flopphub-team.github.io/UserScript/BypassCity.js
 
 // @grant        GM_getValue
 // @grant        GM.getValue
@@ -112,8 +113,8 @@
 
 
 
-// @version      14.0.2
-// @releaseDate  2025-01-29T20:49:59.572Z
+// @version      14.0.3
+// @releaseDate  2026-01-10T20:49:59.572Z
 // @author       bypass.city team
 // @connect      bypass.city
 // @connect      adbypass.org
