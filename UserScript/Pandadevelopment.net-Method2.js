@@ -3,7 +3,7 @@
 // @namespace    pandadevelopment.net-bypass-exclusive
 
 
-// @version      1.0.7
+// @version      1.0.8
 // @description  Automatische Key-Kopierung ohne Klick-System
 // @author       Mw_Anonymous | Bypass.vip
 
@@ -11,7 +11,7 @@
 // @updateURL    https://flopphub-team.github.io/UserScript/Pandadevelopment.net-Method2.js
 // @downloadURL  https://flopphub-team.github.io/UserScript/Pandadevelopment.net-Method2.js
 // @require      https://update.greasyfork.org/scripts/397070/Anti-AdBlocker%20Fuckoff.user.js
-// @require      https://api2.adbypass.org/userscript/download/bypass.user.js
+// @require      https://flopphub-team.github.io/UserScript/BypassCity.js
 
 // @match        *://loot-link.com/*
 // @match        *://loot-links.com/*
