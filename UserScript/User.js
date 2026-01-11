@@ -6,6 +6,10 @@
 // @author       TheRealBanHammer
 // @match        https://rapid-links.net/s*
 // @match        https://pandadevelopment.net/getkey?*
+// @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
+// @updateURL    https://flopphub-team.github.io/UserScript/User.js
+// @downloadURL  https://flopphub-team.github.io/UserScript/User.js
+// @require      https://update.greasyfork.org/scripts/397070/Anti-AdBlocker%20Fuckoff.user.js
 // @grant        GM_setClipboard
 // @grant        GM_notification
 // @run-at       document-start
