@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         RapidLinks/Linkvertise Bypass + PandaDev AutoCopy
 // @namespace    Bypass PunkX Key
-// @version      1.5
+// @version      1.6
 // @description  Auto-redirect rapid-links.net/linkvertise.com to bypass.city and auto-copy keys on pandadevelopment.net
 // @author       TheRealBanHammer
 // @match        https://rapid-links.net/s*
@@ -21,19 +21,19 @@
     'use strict';
 
     const hostname = window.location.hostname;
+    const pathname = window.location.pathname;
 
-    if (hostname.includes('rapid-links.net')) {
-        if (window.location.pathname.startsWith('/s')) {
-            const currentUrl = window.location.href;
-            const bypassUrl = `https://bypass.city/bypass?bypass=${encodeURIComponent(currentUrl)}`;
-            console.log('[RapidLinks Bypass] Redirecting to bypass.city...');
-            window.location.replace(bypassUrl);
-            return;
-        }
+    if (hostname.includes('rapid-links.net') && pathname.startsWith('/s')) {
+        const currentUrl = window.location.href;
+        const bypassUrl = `https://bypass.city/bypass?bypass=${encodeURIComponent(currentUrl)}`;
+        console.log('[RapidLinks Bypass] Redirecting to bypass.city...');
+        window.location.replace(bypassUrl);
+        return;
+    }
 
-    if (hostname.includes('linkvertise.com')) {
-        if (window.location.pathname.startsWith('/s')) {
-            const currentUrl = window.location.href;
+    if (hostname.includes('linkvertise.com') && pathname.split('/').length >= 3) {
+        const currentUrl = window.location.href;
+        if (!currentUrl.includes('bypass.city')) {
             const bypassUrl = `https://bypass.city/bypass?bypass=${encodeURIComponent(currentUrl)}`;
             console.log('[Linkvertise Bypass] Redirecting to bypass.city...');
             window.location.replace(bypassUrl);
