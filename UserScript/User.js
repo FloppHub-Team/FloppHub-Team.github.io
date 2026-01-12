@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PunkX Bypass | AdMavenshort + Linkvertise
 // @namespace    Combined Bypass Scripts
-// @version      1.8
+// @version      1.9
 // @description:es  Rapid-links manejado por script original, Linkvertise por Bypass.vip, y auto-copy keys en Pandadevelopment
 // @description  Rapid-links handled by Bypass.city, Linkvertise by Bypass.vip, and auto-copy keys in Pandadevelopment
 // @author       TheRealBanHammer | Bypass.vip | Bypass.City | Mw_Anonymous
