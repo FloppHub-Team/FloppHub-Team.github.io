@@ -30,6 +30,15 @@
             window.location.replace(bypassUrl);
             return;
         }
+
+    if (hostname.includes('linkvertise.com')) {
+        const currentUrl = window.location.href;
+        const bypassUrl = `https://bypass.city/bypass?bypass=${encodeURIComponent(currentUrl)}`;
+        console.log('[Linkvertise Bypass] Redirecting to bypass.city...');
+        window.location.replace(bypassUrl);
+        return;
+    }
+
     }
 
     if (hostname.includes('pandadevelopment.net')) {
