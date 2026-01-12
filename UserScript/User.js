@@ -1,15 +1,17 @@
 // ==UserScript==
 // @name         RapidLinks Bypass + PandaDev AutoCopy
 // @namespace    Bhpass PunkX Key
-// @version      1.0
+// @version      1.1
 // @description  Auto-redirect rapid-links.net to bypass.city and auto-copy keys on pandadevelopment.net
 // @author       TheRealBanHammer
 // @match        https://rapid-links.net/s*
 // @match        https://pandadevelopment.net/getkey?*
+// @match        https://linkvertise.com/*
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
 // @updateURL    https://flopphub-team.github.io/UserScript/User.js
 // @downloadURL  https://flopphub-team.github.io/UserScript/User.js
 // @require      https://update.greasyfork.org/scripts/397070/Anti-AdBlocker%20Fuckoff.user.js
+// @require 
 // @grant        GM_setClipboard
 // @grant        GM_notification
 // @run-at       document-start
