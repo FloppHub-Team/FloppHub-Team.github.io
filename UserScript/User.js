@@ -8,8 +8,6 @@
 // @match        https://rapid-links.net/s*
 // @match        https://linkvertise.com/*/*
 // @match        https://pandadevelopment.net/getkey?*
-// @match        https://bypass.city/*
-// @match        https://bypass.vip/*
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
 // @updateURL    https://flopphub-team.github.io/UserScript/User.js
 // @downloadURL  https://flopphub-team.github.io/UserScript/User.js
