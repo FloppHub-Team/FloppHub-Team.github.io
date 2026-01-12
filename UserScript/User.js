@@ -6,7 +6,6 @@
 // @author       TheRealBanHammer
 // @match        https://rapid-links.net/s*
 // @match        https://pandadevelopment.net/getkey?*
-// @match        https://linkvertise.com/*
 // @match        https://bypass.city/*
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
 // @updateURL    https://flopphub-team.github.io/UserScript/User.js
@@ -30,15 +29,6 @@
             window.location.replace(bypassUrl);
             return;
         }
-
-    if (hostname.includes('linkvertise.com')) {
-        const currentUrl = window.location.href;
-        const bypassUrl = `https://bypass.city/bypass?bypass=${encodeURIComponent(currentUrl)}`;
-        console.log('[Linkvertise Bypass] Redirecting to bypass.city...');
-        window.location.replace(bypassUrl);
-        return;
-    }
-
     }
 
     if (hostname.includes('pandadevelopment.net')) {
