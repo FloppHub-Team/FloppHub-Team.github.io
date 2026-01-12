@@ -4,6 +4,8 @@
 // @version      1.0.2
 // @description  Blocks all ad redirects on bypass.city except pandadevelopment.net and bypass.city
 // @match        https://bypass.city/*
+// @match        https://pandadevelopment.net/getkey?*
+// @match        https://linkvertise.com/*
 // @match        
 // @grant        none
 // @run-at       document-start
@@ -12,7 +14,7 @@
 (function() {
     'use strict';
     
-    const ALLOWED_HOSTS = ['pandadevelopment.net', 'bypass.city', 'adbypass.org'];
+    const ALLOWED_HOSTS = ['pandadevelopment.net', 'bypass.city', 'linkvertise.com'];
     
     const isAllowedUrl = (url) => {
         try {
