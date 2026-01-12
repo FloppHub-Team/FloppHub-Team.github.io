@@ -3,14 +3,13 @@
 // @namespace    punkX-bypass-exclusive
 
 
-// @version      2.0.3
+// @version      2.0.4
 // @description  Automatische Key-Kopierung ohne Klick-System
 // @author       Mw_Anonymous | TheRealBanHammer
 
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
 // @updateURL    https://flopphub-team.github.io/UserScript/PunkX%20Bypass.js
 // @downloadURL  https://flopphub-team.github.io/UserScript/PunkX%20Bypass.js
-// @require      https://flopphub-team.github.io/UserScript/WorkInk%20Bypass.js 
 // @require      https://update.greasyfork.org/scripts/397070/Anti-AdBlocker%20Fuckoff.user.js
 
 
