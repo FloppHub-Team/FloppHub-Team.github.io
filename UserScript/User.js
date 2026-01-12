@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         RapidLinks Bypass + PandaDev AutoCopy
 // @namespace    Bypass PunkX Key
-// @version      1.3
+// @version      1.4
 // @description  Auto-redirect rapid-links.net to bypass.city and auto-copy keys on pandadevelopment.net
 // @author       TheRealBanHammer
 // @match        https://rapid-links.net/s*
