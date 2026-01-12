@@ -4,22 +4,6 @@
 // @version      1.5.5
 // @description  Bypass ad-links + auto-copy keys on pandadevelopment.net
 // @author       bypass.vip | Mw_Anonymous (Adapted)
-// @match        *://loot-link.com/*
-// @match        *://loot-links.com/*
-// @match        *://lootdest.com/*
-// @match        *://direct-links.net/*
-// @match        *://lootdest.org/*
-// @match        *://lootlinks.co/*
-// @match        *://direct-link.net/*
-// @match        *://links-loot.com/*
-// @match        *://lootlinks.com/*
-// @match        *://link-target.org/*
-// @match        *://loot-labs.com/*
-// @match        *://lootlabs.com/*
-// @match        *://link-hub.net/*
-// @match        *://lootdest.info/*
-// @match        *://link-target.net/*
-// @match        *://lootlink.org/*
 // @match        *://linkvertise.com/*/*
 // @match        https://pandadevelopment.net/getkey?*
 // @updateURL    https://flopphub-team.github.io/UserScript/Bypassvip.js
