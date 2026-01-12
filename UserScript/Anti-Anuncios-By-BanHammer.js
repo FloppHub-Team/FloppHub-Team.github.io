@@ -5,13 +5,10 @@
 // @version         1.68
 // @description     Protects & Remove Anti-AdBlockers modal windows from web sites
 // @description:es  Protege y elimina las ventanas modales de Anti-AdBlockers de los sitios web
-// @author          Elwyn
+// @author          TheRealBanHammer
 // @license         MIT
-// @homepage        https://github.com/WakeupNeo33/Anti-AdBlocker-Fuckoff-userscript
-// @supportURL      https://github.com/WakeupNeo33/Anti-AdBlocker-Fuckoff-userscript/issues
-// @iconURL         https://github.com/WakeupNeo33/Anti-AdBlocker-Fuckoff-userscript/raw/main/icon.png
 // @include         *
-// @exclude        https://linkvertise.com/*/*
+// @exclude         https://linkvertise.com/*/*
 // @exclude         https://*aliexpress.com/*
 // @exclude         https://*amazon.*/*
 // @exclude         https://*anaconda.org/*
