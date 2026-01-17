@@ -3,20 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wave Executor Cracked - Free Roblox Executor</title>
+    <title>Wave Executor Cracked | FloppHub Team</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="https://flopphub-team.github.io/Files/wave.png">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        :root {
+            --primary: #00f3ff;
+            --secondary: #ff0055;
+            --accent: #9d00ff;
+            --dark: #0a0a12;
+            --darker: #050507;
+            --light: #f0f8ff;
+            --gray: #8a8aa3;
+            --neon-glow: 0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 30px var(--primary);
+            --red-glow: 0 0 10px var(--secondary), 0 0 20px var(--secondary), 0 0 30px var(--secondary);
+            --purple-glow: 0 0 10px var(--accent), 0 0 20px var(--accent);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #0a0e27;
-            color: #fff;
+            background-color: var(--darker);
+            color: var(--light);
             overflow-x: hidden;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at 20% 30%, rgba(157, 0, 255, 0.05) 0%, transparent 20%),
+                              radial-gradient(circle at 80% 70%, rgba(0, 243, 255, 0.05) 0%, transparent 20%);
         }
 
         .intro {
@@ -25,665 +45,489 @@
             left: 0;
             width: 100%;
             height: 100vh;
-            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            background-color: var(--dark);
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             z-index: 9999;
-            transition: opacity 0.5s ease;
-        }
-
-        .intro.hide {
-            opacity: 0;
-            pointer-events: none;
+            transition: opacity 0.8s ease;
         }
 
         .intro-logo {
-            width: 200px;
-            height: 200px;
-            margin-bottom: 20px;
-            animation: fadeIn 0.5s ease;
-            filter: drop-shadow(0 0 30px rgba(99, 102, 241, 0.5));
-            transition: filter 0.3s ease;
+            width: 180px;
+            height: 180px;
+            margin-bottom: 30px;
+            filter: drop-shadow(var(--neon-glow));
+            transition: all 0.5s ease;
         }
 
-        .intro-logo.glitch {
-            filter: drop-shadow(0 0 50px rgba(239, 68, 68, 0.8));
-            animation: glitchEffect 0.3s ease;
-        }
-
-        .intro-text {
-            font-size: 48px;
+        .intro-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: fadeIn 0.5s ease 0.3s both;
-            transition: all 0.3s ease;
+            text-align: center;
+            color: var(--light);
+            text-shadow: var(--neon-glow);
+            letter-spacing: 2px;
+            position: relative;
+            margin-bottom: 10px;
         }
 
-        .intro-text.glitch {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: glitchText 0.3s ease;
+        .intro-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+            letter-spacing: 1px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.8s ease 0.3s;
+        }
+
+        .intro.show-subtitle .intro-subtitle {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glitch {
+            animation: glitch 0.3s linear 1s 3;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); filter: hue-rotate(0deg); }
+            20% { transform: translate(-2px, 2px); filter: hue-rotate(60deg); }
+            40% { transform: translate(-2px, -2px); filter: hue-rotate(120deg); }
+            60% { transform: translate(2px, 2px); filter: hue-rotate(180deg); }
+            80% { transform: translate(2px, -2px); filter: hue-rotate(240deg); }
+            100% { transform: translate(0); filter: hue-rotate(300deg); }
+        }
+
+        .red-logo {
+            filter: drop-shadow(var(--red-glow)) hue-rotate(0deg) !important;
         }
 
         .cracked-text {
-            font-size: 32px;
-            font-weight: 600;
-            color: #ef4444;
-            margin-top: 10px;
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--secondary);
+            text-shadow: var(--red-glow);
             opacity: 0;
-            animation: fadeIn 0.3s ease 1.3s both;
-            text-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+            animation: crackAppear 0.5s ease 2s forwards;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes crackAppear {
+            0% { opacity: 0; transform: translateX(-50%) scale(0.5); }
+            100% { opacity: 1; transform: translateX(-50%) scale(1); }
         }
 
-        @keyframes glitchEffect {
-            0%, 100% { transform: translate(0); }
-            20% { transform: translate(-5px, 5px); }
-            40% { transform: translate(-5px, -5px); }
-            60% { transform: translate(5px, 5px); }
-            80% { transform: translate(5px, -5px); }
-        }
-
-        @keyframes glitchText {
-            0%, 100% { transform: translate(0); }
-            25% { transform: translate(-3px, 3px); }
-            50% { transform: translate(3px, -3px); }
-            75% { transform: translate(-3px, -3px); }
-        }
-
-        .main-content {
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .main-content.show {
-            opacity: 1;
-        }
-
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 20px 0;
-            background: rgba(10, 14, 39, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
-        }
-
-        .nav-container {
+        .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            opacity: 0;
+            animation: fadeIn 1s ease 3s forwards;
         }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        @keyframes fadeIn {
+            to { opacity: 1; }
         }
 
-        .nav-logo {
-            width: 50px;
-            height: 50px;
-            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
+        header {
+            padding: 40px 0;
+            text-align: center;
         }
 
-        .nav-title {
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        .main-logo {
+            width: 120px;
+            height: 120px;
+            filter: drop-shadow(var(--neon-glow));
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px rgba(157, 0, 255, 0.5);
+            margin-bottom: 10px;
+            letter-spacing: 1.5px;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            align-items: center;
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-bottom: 40px;
         }
 
-        .nav-links a {
-            color: #94a3b8;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
         }
 
-        .nav-links a:hover {
-            color: #6366f1;
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 100px 20px 50px;
+        .card {
+            background: rgba(15, 15, 25, 0.7);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(0, 243, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
-        .hero::before {
+        .card::before {
             content: '';
             position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
-            top: 10%;
-            left: 10%;
-            animation: float 8s ease-in-out infinite;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
         }
 
-        .hero::after {
-            content: '';
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
-            bottom: 10%;
-            right: 10%;
-            animation: float 10s ease-in-out infinite reverse;
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), var(--purple-glow);
         }
 
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(30px, 30px); }
-        }
-
-        .hero-content {
-            max-width: 800px;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-logo {
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 30px;
-            filter: drop-shadow(0 0 30px rgba(99, 102, 241, 0.5));
-            animation: pulse 3s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { filter: drop-shadow(0 0 30px rgba(99, 102, 241, 0.5)); }
-            50% { filter: drop-shadow(0 0 50px rgba(99, 102, 241, 0.8)); }
-        }
-
-        .hero h1 {
-            font-size: 56px;
-            font-weight: 800;
+        .card h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
             margin-bottom: 20px;
-            line-height: 1.2;
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .red-text {
-            color: #ef4444;
-            text-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
-        }
-
-        .hero p {
-            font-size: 20px;
-            color: #94a3b8;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        .cta-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
-            padding: 18px 40px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 18px;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
-        }
-
-        .features {
-            padding: 80px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-size: 42px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-        }
-
-        .feature-card {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            border-radius: 16px;
-            padding: 30px;
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(99, 102, 241, 0.5);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            border-radius: 12px;
+            color: var(--primary);
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            font-size: 28px;
+            gap: 10px;
         }
 
-        .feature-card h3 {
-            font-size: 22px;
-            margin-bottom: 12px;
-            color: #fff;
+        .card h2 i {
+            color: var(--accent);
         }
 
-        .feature-card p {
-            color: #94a3b8;
+        .description p {
             line-height: 1.6;
-        }
-
-        .about {
-            padding: 80px 20px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .about-content {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            border-radius: 16px;
-            padding: 40px;
-        }
-
-        .about-content h2 {
-            font-size: 32px;
-            margin-bottom: 20px;
-            color: #6366f1;
-        }
-
-        .about-content p {
-            color: #94a3b8;
-            line-height: 1.8;
             margin-bottom: 15px;
+            color: #ccc;
         }
 
         .highlight {
-            color: #fff;
+            color: var(--primary);
             font-weight: 600;
+        }
+
+        .features ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .features li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .features li:last-child {
+            border-bottom: none;
+        }
+
+        .features li i {
+            color: var(--secondary);
+        }
+
+        .download-section {
+            text-align: center;
+            margin: 50px 0;
+            padding: 40px;
+            background: rgba(10, 10, 20, 0.8);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 0, 85, 0.2);
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.1);
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding: 20px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 0, 85, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 0, 85, 0.6);
+            letter-spacing: 1px;
+        }
+
+        .download-btn i {
+            font-size: 2rem;
         }
 
         .faq {
-            padding: 80px 20px;
-            max-width: 900px;
-            margin: 0 auto;
+            margin-top: 60px;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
         }
 
         .faq-item {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid rgba(99, 102, 241, 0.2);
+            background: rgba(20, 20, 30, 0.7);
             border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
+            padding: 20px;
+            border-left: 4px solid var(--accent);
+            transition: transform 0.3s ease;
         }
 
         .faq-item:hover {
-            border-color: rgba(99, 102, 241, 0.5);
+            transform: translateX(10px);
+            background: rgba(25, 25, 40, 0.9);
         }
 
-        .faq-question {
-            font-size: 20px;
-            font-weight: 600;
-            color: #fff;
+        .faq-item h3 {
+            color: var(--primary);
+            font-size: 1.2rem;
             margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .faq-question i {
-            color: #6366f1;
+        .faq-item p {
+            color: #bbb;
+            line-height: 1.5;
         }
 
-        .faq-answer {
-            color: #94a3b8;
-            line-height: 1.6;
-        }
-
-        .footer {
-            background: rgba(15, 23, 42, 0.8);
-            border-top: 1px solid rgba(99, 102, 241, 0.1);
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-links {
+        .links {
             display: flex;
             justify-content: center;
             gap: 30px;
-            margin-bottom: 20px;
+            margin: 50px 0;
             flex-wrap: wrap;
         }
 
-        .footer-links a {
-            color: #94a3b8;
+        .link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--light);
+            padding: 15px 30px;
+            border-radius: 50px;
             text-decoration: none;
-            font-size: 24px;
+            font-weight: 600;
             transition: all 0.3s ease;
+            border: 1px solid rgba(0, 243, 255, 0.2);
         }
 
-        .footer-links a:hover {
-            color: #6366f1;
-            transform: scale(1.1);
+        .link-btn:hover {
+            background: rgba(0, 243, 255, 0.1);
+            transform: translateY(-5px);
+            box-shadow: var(--neon-glow);
         }
 
-        .footer p {
-            color: #64748b;
-            margin-top: 20px;
+        .credits {
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray);
+            font-size: 0.9rem;
         }
 
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
+        .credits span {
+            color: var(--secondary);
+            font-weight: 700;
+        }
 
-            .hero h1 {
-                font-size: 36px;
-            }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-            .hero p {
-                font-size: 16px;
-            }
-
-            .intro-text {
-                font-size: 32px;
-            }
-
-            .cracked-text {
-                font-size: 24px;
-            }
-
-            .section-title {
-                font-size: 32px;
-            }
-
-            .about-content {
-                padding: 25px;
-            }
+        @media (max-width: 480px) {
+            .intro-title { font-size: 2.5rem; }
+            h1 { font-size: 2.5rem; }
+            .content { gap: 20px; }
+            .card { padding: 20px; }
+            .download-btn { font-size: 1.2rem; padding: 15px 30px; }
         }
     </style>
 </head>
 <body>
     <div class="intro" id="intro">
-        <img src="https://flopphub-team.github.io/Files/wave.png" alt="Wave Logo" class="intro-logo" id="introLogo">
-        <div class="intro-text" id="introText">Wave Executor</div>
-        <div class="cracked-text" id="crackedText">Cracked</div>
+        <img src="https://flopphub-team.github.io/Files/wave.png" class="intro-logo" alt="Wave Logo">
+        <div class="intro-title">Wave Executor</div>
+        <div class="intro-subtitle">Loading unleashed power...</div>
+        <div class="cracked-text">CRACKED</div>
     </div>
 
-    <div class="main-content" id="mainContent">
-        <nav class="navbar">
-            <div class="nav-container">
-                <div class="logo-container">
-                    <img src="https://flopphub-team.github.io/Files/wave.png" alt="Wave Logo" class="nav-logo">
-                    <span class="nav-title">Wave Cracked</span>
-                </div>
-                <div class="nav-links">
-                    <a href="#features"><i class="fas fa-star"></i> Features</a>
-                    <a href="#about"><i class="fas fa-info-circle"></i> About</a>
-                    <a href="#faq"><i class="fas fa-question-circle"></i> FAQ</a>
-                    <a href="https://discord.gg/J9dSv7hq55" target="_blank"><i class="fab fa-discord"></i> Discord</a>
-                </div>
-            </div>
-        </nav>
+    <div class="container">
+        <header>
+            <img src="https://flopphub-team.github.io/Files/wave.png" class="main-logo" alt="Wave Logo">
+            <h1>Wave Executor Cracked</h1>
+            <p class="tagline">The revolution you've been waiting for has arrived! 🔥</p>
+        </header>
 
-        <section class="hero">
-            <div class="hero-content">
-                <img src="https://flopphub-team.github.io/Files/wave.png" alt="Wave Logo" class="hero-logo">
-                <h1><span class="gradient-text">Wave Executor</span> <span class="red-text">Cracked</span></h1>
-                <p>The revolution you've been waiting for has arrived! Experience the full power of Wave Executor completely free, with no keys, no ads, and no limits.</p>
-                <a href="https://flopphub-team.github.io/Files/WaveInjector.exe" class="cta-button" download>
-                    <i class="fas fa-download"></i> Download Now - Free
-                </a>
-            </div>
-        </section>
+        <div class="content">
+            <section class="card description">
+                <h2><i class="fas fa-info-circle"></i> What is Wave Executor?</h2>
+                <p><span class="highlight">Wave Executor</span> is a <span class="highlight">script executor</span> (injection tool) for <span class="highlight">PC</span> (mainly Windows) used in <span class="highlight">Roblox</span> to run <span class="highlight">Lua/LuaU scripts</span>.</p>
+                <p>It enables:</p>
+                <ul style="padding-left: 20px; color: #ccc; line-height: 1.6;">
+                    <li><span class="highlight">Cheats</span> like auto-farms, ESP, speed hacks, teleport, etc.</li>
+                    <li>Custom or hub scripts (e.g., Owl Hub).</li>
+                    <li>Mods for games like Blox Fruits, Pet Simulator, Da Hood.</li>
+                </ul>
+                <p>Free and premium versions (ad-free, extras like decompiler, multi-instance).</p>
+                <p>Developed by <span class="highlight">SPDM</span> and <span class="highlight">CodeX</span> teams; gained popularity in 2024-2026 for stability and updates.</p>
+            </section>
 
-        <section class="features" id="features">
-            <h2 class="section-title"><span class="gradient-text">Why Choose Wave Cracked?</span></h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-unlock"></i></div>
-                    <h3>100% Free & Keyless</h3>
-                    <p>No payment required, no annoying key systems. Just download and start executing.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                    <h3>Virus-Free Guaranteed</h3>
-                    <p>Completely clean and safe. Tested and verified by our team.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-ban"></i></div>
-                    <h3>No Advertisements</h3>
-                    <p>Zero ads, zero interruptions. Pure execution power.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-bolt"></i></div>
-                    <h3>Full Power</h3>
-                    <p>All features from the original Wave Executor, now accessible to everyone.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-code"></i></div>
-                    <h3>Script Execution</h3>
-                    <p>Run Lua/LuaU scripts with perfect compatibility and stability.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"><i class="fas fa-rocket"></i></div>
-                    <h3>Optimized Performance</h3>
-                    <p>Fast, stable, and reliable execution every time.</p>
-                </div>
-            </div>
-        </section>
+            <section class="card features">
+                <h2><i class="fas fa-gem"></i> Why Our Cracked Version?</h2>
+                <p>Introducing <span class="highlight">Wave Executor Cracked</span> by <span class="highlight">FloppHub Team</span> – the completely free, keyless version of the famous Wave Executor.</p>
+                <ul>
+                    <li><i class="fas fa-shield-alt"></i> <strong>100% virus-free</strong> – No malicious code, guaranteed.</li>
+                    <li><i class="fas fa-ad"></i> <strong>No annoying ads</strong> – Clean, uninterrupted experience.</li>
+                    <li><i class="fas fa-key"></i> <strong>No key system, no waiting</strong> – Instant access.</li>
+                    <li><i class="fas fa-bolt"></i> <strong>All the power of the original</strong> – Full features unlocked.</li>
+                </ul>
+                <p><strong>How was this project born?</strong> It all started when a former developer reached out to us looking for revenge. From that insider information, this cracked version was born — made with both love and spite, to let EVERYONE enjoy it without paying a cent.</p>
+            </section>
+        </div>
 
-        <section class="about" id="about">
-            <h2 class="section-title"><span class="gradient-text">What is Wave Executor?</span></h2>
-            <div class="about-content">
-                <h2>Script Executor for Roblox</h2>
-                <p><span class="highlight">Wave Executor</span> is a powerful <span class="highlight">script executor</span> (injection tool) for <span class="highlight">PC</span> (primarily Windows) designed for <span class="highlight">Roblox</span> to run <span class="highlight">Lua/LuaU scripts</span>.</p>
-                
-                <h2 style="margin-top: 30px;">Key Capabilities</h2>
-                <p>• <span class="highlight">Cheats</span> including auto-farms, ESP, speed hacks, teleportation, and more</p>
-                <p>• Custom or hub scripts (e.g., Owl Hub)</p>
-                <p>• Mods for popular games like Blox Fruits, Pet Simulator, Da Hood</p>
-                <p>• Advanced features like decompiler and multi-instance support</p>
-                
-                <h2 style="margin-top: 30px;">The Story Behind Wave Cracked</h2>
-                <p>This project was born from collaboration with a former developer who sought to make Wave's premium features accessible to everyone. Built with both <span class="highlight">passion and purpose</span>, Wave Cracked delivers the full power of the original executor without any cost.</p>
-                
-                <p style="margin-top: 20px;">Originally developed by the <span class="highlight">SPDM</span> and <span class="highlight">CodeX</span> teams, Wave gained popularity for its stability and regular updates. Now, thanks to the <span class="highlight">FloppHub Team</span>, everyone can experience it for free.</p>
-            </div>
-        </section>
+        <div class="download-section">
+            <h2 style="color: var(--secondary); font-size: 2.5rem; margin-bottom: 10px;">Get It Now!</h2>
+            <p style="font-size: 1.2rem; color: #ccc;">Download Wave Executor Cracked and wreck Roblox the way it's meant to be done!</p>
+            <a href="https://flopphub-team.github.io/Files/WaveInjector.exe" class="download-btn" id="downloadBtn">
+                <i class="fas fa-download"></i> DOWNLOAD NOW
+            </a>
+            <p style="margin-top: 20px; color: var(--gray); font-size: 0.9rem;">File: WaveInjector.exe | Size: ~15 MB | Platform: Windows</p>
+        </div>
 
-        <section class="faq" id="faq">
-            <h2 class="section-title"><span class="gradient-text">Frequently Asked Questions</span></h2>
-            
-            <div class="faq-item">
-                <div class="faq-question">
-                    <i class="fas fa-virus"></i>
-                    Is this file safe? Does it contain viruses?
+        <section class="faq">
+            <h2 style="text-align: center; font-size: 2.5rem; color: var(--primary); margin-bottom: 20px;"><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3><i class="fas fa-virus"></i> Is the file safe?</h3>
+                    <p>Yes, the file is 100% virus-free. We have scanned it with multiple antivirus engines and guarantee its safety.</p>
                 </div>
-                <div class="faq-answer">
-                    No, the file is completely safe and virus-free. We guarantee 100% clean software with no malicious code.
+                <div class="faq-item">
+                    <h3><i class="fas fa-mobile-alt"></i> Does it work on Android/iOS?</h3>
+                    <p>No, Wave Executor is designed for Windows PCs only. It does not work on mobile devices or consoles.</p>
                 </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">
-                    <i class="fas fa-mobile-alt"></i>
-                    Does the executor work on Android/iOS?
+                <div class="faq-item">
+                    <h3><i class="fas fa-code"></i> How was this cracked?</h3>
+                    <p>With the help of a former Codex developer who provided insider information to bypass the payment system.</p>
                 </div>
-                <div class="faq-answer">
-                    No, Wave Executor Cracked only works on Windows PC. Mobile versions are not supported.
+                <div class="faq-item">
+                    <h3><i class="fas fa-sync-alt"></i> Will it receive updates?</h3>
+                    <p>Our team will try to keep it updated with the latest Roblox patches, but no official support is guaranteed.</p>
                 </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">
-                    <i class="fas fa-code-branch"></i>
-                    How was this cracked version created?
+                <div class="faq-item">
+                    <h3><i class="fas fa-ban"></i> Can I get banned?</h3>
+                    <p>Using any executor carries a risk of Roblox account termination. Use at your own discretion.</p>
                 </div>
-                <div class="faq-answer">
-                    With the assistance of a former CodeX developer who provided insider knowledge, allowing us to create this free version for the community.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">
-                    <i class="fas fa-key"></i>
-                    Do I need a key or license to use it?
-                </div>
-                <div class="faq-answer">
-                    Absolutely not! Wave Cracked is completely keyless. No registration, no waiting, no hassle.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">
-                    <i class="fas fa-sync-alt"></i>
-                    Will this receive updates?
-                </div>
-                <div class="faq-answer">
-                    Yes! The FloppHub Team is committed to maintaining and updating Wave Cracked to ensure compatibility with Roblox updates.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">
-                    <i class="fas fa-shield-virus"></i>
-                    Can I get banned from Roblox for using this?
-                </div>
-                <div class="faq-answer">
-                    Using any executor carries a risk of account termination. We recommend using alternate accounts and exercising caution.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">
-                    <i class="fas fa-dollar-sign"></i>
-                    Is this really completely free?
-                </div>
-                <div class="faq-answer">
-                    Yes! Wave Cracked is 100% free, forever. No hidden costs, no premium tiers, no subscriptions.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">
-                    <i class="fas fa-users"></i>
-                    Where can I get support or join the community?
-                </div>
-                <div class="faq-answer">
-                    Join our Discord server for support, updates, and to connect with other users. Link available at the bottom of this page!
+                <div class="faq-item">
+                    <h3><i class="fas fa-cogs"></i> What features are included?</h3>
+                    <p>All features of the original paid version: script execution, decompiler, multi-instance, and more.</p>
                 </div>
             </div>
         </section>
 
-        <footer class="footer">
-            <div class="footer-content">
-                <div class="footer-links">
-                    <a href="https://discord.gg/J9dSv7hq55" target="_blank" title="Discord">
-                        <i class="fab fa-discord"></i>
-                    </a>
-                    <a href="https://flopphub-team.github.io/" target="_blank" title="Website">
-                        <i class="fas fa-globe"></i>
-                    </a>
-                    <a href="https://flopphub-team.github.io/Files/WaveInjector.exe" download title="Download">
-                        <i class="fas fa-download"></i>
-                    </a>
-                </div>
-                <p>All credits to <strong>FloppHub Team</strong> • Wave Executor Cracked © 2025</p>
-                <p style="margin-top: 10px; font-size: 14px;">Where quality has no price</p>
-            </div>
+        <div class="links">
+            <a href="https://discord.gg/J9dSv7hq55" class="link-btn" target="_blank">
+                <i class="fab fa-discord"></i> Join Our Discord
+            </a>
+            <a href="https://flopphub-team.github.io/" class="link-btn" target="_blank">
+                <i class="fas fa-globe"></i> Visit Our Website
+            </a>
+        </div>
+
+        <div class="credits">
+            <p>All credits for this cracked version go to the <span>FloppHub Team</span> – Where quality has no price.</p>
+            <p style="margin-top: 10px;">This project is for educational purposes only. We do not condone cheating in online games.</p>
+        </div>
+
+        <footer>
+            <p>© 2024 FloppHub Team. Wave Executor is a trademark of its respective owners. This site is not affiliated with Roblox or Wave Executor.</p>
         </footer>
     </div>
 
     <script>
-        const intro = document.getElementById('intro');
-        const introLogo = document.getElementById('introLogo');
-        const introText = document.getElementById('introText');
-        const crackedText = document.getElementById('crackedText');
-        const mainContent = document.getElementById('mainContent');
+        document.addEventListener('DOMContentLoaded', function() {
+            const intro = document.getElementById('intro');
+            const introLogo = document.querySelector('.intro-logo');
+            const introTitle = document.querySelector('.intro-title');
+            const introSubtitle = document.querySelector('.intro-subtitle');
 
-        setTimeout(() => {
-            introLogo.classList.add('glitch');
-            introText.classList.add('glitch');
-        }, 1000);
+            setTimeout(() => {
+                intro.classList.add('show-subtitle');
+            }, 300);
 
-        setTimeout(() => {
-            intro.classList.add('hide');
+            setTimeout(() => {
+                introTitle.classList.add('glitch');
+                introLogo.classList.add('glitch');
+            }, 1000);
+
+            setTimeout(() => {
+                introLogo.classList.remove('glitch');
+                introLogo.classList.add('red-logo');
+            }, 1900);
+
+            setTimeout(() => {
+                intro.style.opacity = '0';
+            }, 2500);
+
             setTimeout(() => {
                 intro.style.display = 'none';
-                mainContent.classList.add('show');
-            }, 500);
-        }, 2000);
+            }, 3300);
+
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = this.href;
+                const confirmDownload = confirm('Warning: Executing third-party software carries risks. Only proceed if you trust the source.\n\nDo you want to download Wave Executor Cracked?');
+                if (confirmDownload) {
+                    window.open(url, '_blank');
+                }
+            });
+        });
     </script>
 </body>
-                                          </html> 
+    </html>
