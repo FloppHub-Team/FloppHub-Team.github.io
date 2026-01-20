@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bypass.vip + PandaDev AutoCopy
 // @namespace    bypass-pandadev-combined
-// @version      1.5.5
+// @version      1.5.6
 // @description  Bypass ad-links + auto-copy keys on pandadevelopment.net
 // @author       bypass.vip | Mw_Anonymous (Adapted)
 // @match        *://linkvertise.com/*/*
