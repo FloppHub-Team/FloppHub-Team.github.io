@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bypass.vip + PandaDev AutoCopy
 // @namespace    bypass-pandadev-combined
-// @version      1.5.6
+// @version      1.5.7
 // @description  Bypass ad-links + auto-copy keys on pandadevelopment.net
 // @author       bypass.vip | Mw_Anonymous (Adapted)
 // @match        *://linkvertise.com/*/*
@@ -22,7 +22,6 @@
     const hostname = window.location.hostname;
 
     if (hostname.includes('pandadevelopment.net')) {
-        
         class PandaKeyAutoCopy {
             constructor() {
                 this.hasCopied = false;
@@ -195,7 +194,7 @@
     }
 
     const config = {
-        time: 1,
+        time: 5,
         key: '',
         safeMode: true
     };
@@ -236,8 +235,22 @@
             }
         }
 
-        console.log('[Bypass.vip] Auto-redirecting to:', redirectUrl);
-        window.location.assign(redirectUrl);
+        const counter = document.createElement('div');
+        counter.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.8);color:white;padding:20px;border-radius:10px;z-index:9999;font-size:24px;text-align:center;';
+        counter.textContent = 'Redirigiendo en 5 segundos...';
+        document.body.appendChild(counter);
+
+        let secondsLeft = 5;
+        const interval = setInterval(() => {
+            secondsLeft--;
+            counter.textContent = `Redirigiendo en ${secondsLeft} segundos...`;
+            if (secondsLeft <= 0) {
+                clearInterval(interval);
+                counter.remove();
+                console.log('[Bypass.vip] Auto-redirecting to:', redirectUrl);
+                window.location.assign(redirectUrl);
+            }
+        }, 1000);
     }
 
     try {
