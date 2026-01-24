@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bypass.vip + PandaDev AutoCopy
 // @namespace    bypass-pandadev-combined
-// @version      1.5.7
+// @version      1.5.8
 // @description  Bypass ad-links + auto-copy keys on pandadevelopment.net
 // @author       bypass.vip | Mw_Anonymous (Adapted)
 // @match        *://linkvertise.com/*/*
@@ -240,7 +240,7 @@
         counter.textContent = 'Redirigiendo en 5 segundos...';
         document.body.appendChild(counter);
 
-        let secondsLeft = 5;
+        let secondsLeft = 3;
         const interval = setInterval(() => {
             secondsLeft--;
             counter.textContent = `Redirigiendo en ${secondsLeft} segundos...`;
