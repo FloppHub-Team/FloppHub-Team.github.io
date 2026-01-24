@@ -1,35 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FloppBlox - Ultimate Blox Fruits Script</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
+        :root {
+            --primary: #ff6b00;
+            --primary-glow: #ff8c00;
+            --primary-dark: #e05a00;
+            --bg: #050505;
+            --bg-secondary: #0a0a0a;
+            --card-bg: rgba(20, 20, 20, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-muted: #9aa0a6;
+            --success: #00ff9d;
+            --error: #ff4444;
+            --font-head: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            outline: none;
         }
 
-        :root {
-            --primary-orange: #ff6b00;
-            --neon-orange: #ff8c00;
-            --dark-orange: #e05a00;
-            --bg-black: #0a0a0a;
-            --card-black: #1a1a1a;
-            --text-white: #ffffff;
-            --text-gray: #b0b0b0;
-            --success-green: #00ff9d;
-            --error-red: #ff4444;
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-black);
-            color: var(--text-white);
+            font-family: var(--font-body);
+            background-color: var(--bg);
+            color: var(--text-main);
             overflow-x: hidden;
-            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-dark);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-title {
+            font-family: var(--font-head);
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 4rem;
+            font-size: 1.1rem;
         }
 
         .loader {
@@ -38,16 +102,17 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--bg-black);
+            background: var(--bg);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
 
         .loader.hidden {
             opacity: 0;
+            visibility: hidden;
             pointer-events: none;
         }
 
@@ -58,830 +123,857 @@
         .loader-logo {
             width: 120px;
             height: 120px;
-            filter: drop-shadow(0 0 20px var(--neon-orange));
-            animation: pulse 1.5s infinite;
+            filter: drop-shadow(0 0 20px var(--primary-glow));
+            animation: pulse-loader 1.5s infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+        @keyframes pulse-loader {
+
+            0%,
+            100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px var(--primary-glow));
+            }
+
+            50% {
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 40px var(--primary));
+            }
         }
 
         .navbar {
             position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
             padding: 1rem 2rem;
             z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .navbar.scrolled {
-            box-shadow: 0 5px 30px rgba(255, 107, 0, 0.3);
-        }
-
-        .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .navbar.hidden {
+            transform: translate(-50%, -150%);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.8rem;
+            font-family: var(--font-head);
+            font-weight: 800;
             font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--neon-orange);
+            color: var(--text-main);
+            text-shadow: 0 0 10px rgba(255, 107, 0, 0.3);
         }
 
         .logo img {
-            width: 40px;
-            height: 40px;
-            filter: drop-shadow(0 0 10px var(--neon-orange));
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary);
         }
 
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            gap: 5px;
-        }
-
-        .hamburger span {
-            width: 30px;
-            height: 3px;
-            background: var(--neon-orange);
-            transition: all 0.3s ease;
-            box-shadow: 0 0 5px var(--neon-orange);
-        }
-
-        .nav-menu {
+        .nav-links {
             display: flex;
             gap: 2rem;
             list-style: none;
         }
 
-        .nav-menu a {
-            color: var(--text-white);
+        .nav-links a {
+            color: var(--text-muted);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s ease;
+            transition: 0.3s;
             position: relative;
         }
 
-        .nav-menu a:hover {
-            color: var(--neon-orange);
-            text-shadow: 0 0 10px var(--neon-orange);
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(255, 107, 0, 0.6);
         }
 
-        .nav-menu a::after {
+        .nav-links a::after {
             content: '';
             position: absolute;
-            bottom: -5px;
-            left: 0;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
             width: 0;
             height: 2px;
-            background: var(--neon-orange);
-            transition: width 0.3s ease;
+            background: var(--primary);
+            transition: 0.3s;
+            box-shadow: 0 0 8px var(--primary);
         }
 
-        .nav-menu a:hover::after {
+        .nav-links a:hover::after {
             width: 100%;
         }
 
-        .section {
-            min-height: 100vh;
-            padding: 6rem 2rem 4rem;
-            display: flex;
+        .hamburger {
+            display: none;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 2px;
+            background: var(--text-main);
+            transition: 0.3s;
         }
 
         .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 5rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 107, 0, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            filter: blur(80px);
+            animation: orb-float 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes orb-float {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        .hero-content {
             text-align: center;
-            background: linear-gradient(180deg, rgba(255,107,0,0.1) 0%, rgba(10,10,10,1) 100%);
+            z-index: 1;
+            max-width: 800px;
         }
 
-        .hero-logo {
-            width: 150px;
-            height: 150px;
-            filter: drop-shadow(0 0 30px var(--neon-orange));
-            animation: float 3s ease-in-out infinite;
+        .hero-logo-large {
+            width: 180px;
             margin-bottom: 2rem;
+            filter: drop-shadow(0 0 40px rgba(255, 107, 0, 0.4));
+            animation: float-logo 4s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        @keyframes float-logo {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-family: var(--font-head);
+            font-size: 5rem;
             font-weight: 900;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, var(--neon-orange), var(--primary-orange));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 40px var(--neon-orange);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: -2px;
         }
 
         .hero p {
-            font-size: 1.2rem;
-            color: var(--text-gray);
-            max-width: 700px;
-            line-height: 1.6;
-            margin-bottom: 2rem;
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .cta-buttons {
+        .btn-group {
             display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
+            gap: 1.5rem;
             justify-content: center;
         }
 
         .btn {
-            padding: 1rem 2rem;
-            border: none;
+            padding: 1rem 2.5rem;
             border-radius: 50px;
+            font-weight: 700;
             font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
             text-decoration: none;
+            transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.8rem;
+            position: relative;
+            overflow: hidden;
+            font-family: var(--font-head);
+            letter-spacing: 0.5px;
         }
 
         .btn-primary {
-            background: linear-gradient(45deg, var(--primary-orange), var(--dark-orange));
-            color: white;
-            box-shadow: 0 5px 20px rgba(255, 107, 0, 0.4);
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.3);
+            border: 1px solid transparent;
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(255, 107, 0, 0.6);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(255, 107, 0, 0.5);
+            background: #fff;
         }
 
         .btn-secondary {
             background: transparent;
-            color: var(--neon-orange);
-            border: 2px solid var(--neon-orange);
-            box-shadow: 0 0 15px rgba(255, 140, 0, 0.3);
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
         }
 
         .btn-secondary:hover {
-            background: var(--neon-orange);
-            color: var(--bg-black);
-            box-shadow: 0 0 25px var(--neon-orange);
-        }
-
-        .about {
-            background: var(--card-black);
-            border-radius: 20px;
-            padding: 3rem;
-            margin: 2rem 0;
-            box-shadow: 0 10px 40px rgba(255, 107, 0, 0.1);
-            border: 1px solid rgba(255, 107, 0, 0.2);
-        }
-
-        .about h2 {
-            color: var(--neon-orange);
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
-        }
-
-        .about-content {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: var(--text-gray);
-            text-align: justify;
-        }
-
-        .about-content strong {
-            color: var(--neon-orange);
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(255, 107, 0, 0.1);
+            transform: translateY(-5px);
         }
 
         .features {
+            padding: 8rem 0;
+            position: relative;
+        }
+
+        .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            width: 100%;
-            margin: 3rem 0;
         }
 
-        .feature-card {
-            background: var(--card-black);
-            padding: 2rem;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 107, 0, 0.3);
-            transition: all 0.3s ease;
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
 
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 107, 0, 0.1) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255, 107, 0, 0.1);
         }
 
-        .feature-card:hover::before {
-            opacity: 1;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(255, 107, 0, 0.3);
-            border-color: var(--neon-orange);
-        }
-
-        .feature-icon {
+        .card-icon {
             font-size: 2.5rem;
-            color: var(--neon-orange);
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 0 10px var(--neon-orange));
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0  0 15px rgba(255, 107, 0, 0.4));
         }
 
-        .feature-card h3 {
-            color: var(--neon-orange);
+        .card h3 {
+            font-family: var(--font-head);
+            font-size: 1.5rem;
             margin-bottom: 1rem;
-            font-size: 1.3rem;
+            color: var(--text-main);
         }
 
-        .status-grid {
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .stats-section {
+            padding: 4rem 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
-            width: 100%;
-            margin: 3rem 0;
+            text-align: center;
         }
 
-        .status-card {
-            background: var(--card-black);
+        .stat-item h3 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            font-family: var(--font-head);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(255, 107, 0, 0.3);
+        }
+
+        .stat-item p {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .script-section {
+            padding: 8rem 0;
+        }
+
+        .script-box {
+            background: #0f0f0f;
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
             padding: 2rem;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 107, 0, 0.3);
-            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
             transition: all 0.3s ease;
         }
 
-        .status-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(255, 107, 0, 0.3);
-        }
-
-        .status-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .status-card h3 {
-            color: var(--neon-orange);
-            margin-bottom: 0.5rem;
-        }
-
-        .status-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--text-white);
-        }
-
-        .executors {
+        .script-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            margin: 3rem 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), transparent);
         }
 
-        .executor-category {
-            background: var(--card-black);
-            padding: 2rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255, 107, 0, 0.3);
+        .script-box.kaitun-box {
+            border-color: rgba(255, 107, 0, 0.5);
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.95), rgba(10, 10, 10, 1));
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.1);
         }
 
-        .executor-category h3 {
-            color: var(--neon-orange);
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .executor-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-
-        .executor-item {
+        .script-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.8rem;
-            background: rgba(255, 107, 0, 0.1);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 107, 0, 0.2);
-            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
-        .executor-item:hover {
+        .script-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .script-title h3 {
+            font-family: var(--font-head);
+            font-size: 1.8rem;
+        }
+
+        .badge {
             background: rgba(255, 107, 0, 0.2);
-            transform: translateX(5px);
+            color: var(--primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 107, 0, 0.3);
         }
 
-        .executor-name {
-            font-weight: 600;
-            color: var(--text-white);
-        }
-
-        .checkmark {
-            color: var(--success-green);
-            text-shadow: 0 0 10px var(--success-green);
-        }
-
-        .crossmark {
-            color: var(--error-red);
-            text-shadow: 0 0 10px var(--error-red);
-        }
-
-        .download-section {
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.1) 0%, rgba(26, 26, 26, 1) 100%);
-            border-radius: 20px;
-            padding: 3rem;
-            text-align: center;
-            border: 2px solid var(--neon-orange);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .download-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 140, 0, 0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .download-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .script-code {
-            background: rgba(0, 0, 0, 0.8);
+        .code-container {
+            background: #000;
             padding: 1.5rem;
-            border-radius: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 1rem;
-            color: var(--neon-orange);
-            margin: 2rem 0;
-            border: 1px solid var(--neon-orange);
-            word-break: break-all;
+            border-radius: 8px;
+            border: 1px solid #333;
+            font-family: 'Fira Code', monospace;
+            color: #d4d4d4;
             position: relative;
-            box-shadow: inset 0 0 20px rgba(255, 107, 0, 0.2);
+            word-break: break-all;
+            font-size: 0.9rem;
         }
 
         .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--neon-orange);
-            color: var(--bg-black);
+            background: var(--primary);
+            color: #000;
             border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .copy-btn:hover {
-            background: var(--primary-orange);
-            transform: scale(1.05);
-        }
-
-        .footer {
-            background: var(--card-black);
-            padding: 3rem 2rem;
-            text-align: center;
-            border-top: 1px solid rgba(255, 107, 0, 0.3);
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: var(--neon-orange);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            font-weight: 700;
+            font-family: var(--font-body);
+            transition: 0.3s;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .footer-links a:hover {
-            text-shadow: 0 0 10px var(--neon-orange);
-            transform: translateY(-2px);
+        .copy-btn:hover {
+            background: #fff;
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        footer {
+            background: #020202;
+            padding: 4rem 0 2rem;
+            border-top: 1px solid #111;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: var(--font-head);
+            font-size: 1.5rem;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            display: inline-block;
         }
 
         .footer p {
-            color: var(--text-gray);
-            margin-top: 1rem;
+            color: #555;
+            font-size: 0.9rem;
         }
 
-        .warning {
-            background: rgba(255, 68, 68, 0.1);
-            border: 1px solid var(--error-red);
-            border-radius: 10px;
-            padding: 1rem;
-            margin: 2rem 0;
+        .social-links {
             display: flex;
-            align-items: center;
-            gap: 1rem;
-            color: var(--error-red);
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
-        .warning i {
+        .social-links a {
+            color: var(--text-muted);
             font-size: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .navbar {
+                top: 1rem;
+                width: 95%;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: inherit;
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+                border-radius: 20px;
+                border: 1px solid var(--glass-border);
+                margin-top: 1rem;
+                opacity: 0;
+                transform: translateY(-10px);
+                pointer-events: none;
+                transition: 0.3s;
+            }
+
+            .nav-links.active {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: all;
+            }
+
             .hamburger {
                 display: flex;
             }
 
-            .nav-menu {
-                position: fixed;
-                left: -100%;
-                top: 70px;
+            .btn-group {
                 flex-direction: column;
-                background: rgba(10, 10, 10, 0.98);
-                backdrop-filter: blur(10px);
                 width: 100%;
-                text-align: center;
-                transition: 0.3s;
-                padding: 2rem 0;
-                gap: 1.5rem;
             }
 
-            .nav-menu.active {
-                left: 0;
+            .btn {
+                width: 100%;
+                justify-content: center;
             }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .about {
-                padding: 2rem;
-            }
-
-            .features {
-                grid-template-columns: 1fr;
-            }
-
-            .status-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .executor-list {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
         }
     </style>
 </head>
+
 <body>
     <div class="loader" id="loader">
         <div class="loader-content">
             <img src="https://flopphub-team.github.io/BF/FloppBlox.png" alt="FloppHub Logo" class="loader-logo">
-            <p style="color: var(--neon-orange); margin-top: 1rem;">Loading FloppBlox...</p>
+            <p
+                style="color: var(--primary); margin-top: 1.5rem; font-family: var(--font-head); font-weight: 600; letter-spacing: 2px;">
+                LOADING HUB...</p>
         </div>
     </div>
 
     <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                <img src="https://i.postimg.cc/brq86RKj/loc-phub-jpg.png" alt="FloppHub Logo">
-                FloppBlox
-            </div>
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#status">Status</a></li>
-                <li><a href="#executors">Executors</a></li>
-                <li><a href="#download">Download</a></li>
-            </ul>
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+        <div class="logo">
+            <img src="https://i.postimg.cc/brq86RKj/loc-phub-jpg.png" alt="Logo">
+            FLOPPBLOX
         </div>
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#executors">Status</a></li>
+            <li><a href="#scripts" style="color: var(--primary);">Get Script</a></li>
+        </ul>
     </nav>
 
-    <section class="section hero" id="home">
-        <img src="https://flopphub-team.github.io/BF/FloppBlox.png" alt="FloppBlox Logo" class="hero-logo">
-        <h1>FloppBlox</h1>
-        <p>The Ultimate Script for Blox Fruits on Roblox. 100+ Features, Zero Limitations, Pure Performance.</p>
-        <div class="cta-buttons">
-            <a href="#download" class="btn btn-primary">
-                <i class="fas fa-download"></i> Get Script Now
-            </a>
-            <a href="https://discord.gg/J9dSv7hq55" target="_blank" class="btn btn-secondary">
-                <i class="fab fa-discord"></i> Join Discord
-            </a>
-        </div>
-    </section>
-
-    <section class="section" id="about">
-        <div class="about fade-in">
-            <h2>About FloppBlox</h2>
-            <div class="about-content">
-                <p><strong>FloppBlox – The Ultimate Script for Blox Fruits on Roblox</strong></p>
-                <br>
-                <p>Dear Roblox players and Blox Fruits enthusiasts,</p>
-                <br>
-                <p>We are proud to introduce FloppBlox, the premium script meticulously crafted to take your Blox Fruits experience to an entirely new level. Developed by the highly skilled FloppHub Team and led by Mw_Anonymous, FloppBlox was born with one clear mission: to compete with — and surpass — the major paid scripts that rely on restrictive key systems.</p>
-                <br>
-                <p>FloppBlox stands out as an extremely complete and overpowered (OP) solution, packed with over 100 advanced features covering every aspect of the game — from strategic optimizations to high-performance mechanics. The script is 100% bug-free, delivers flawless execution with no resets, and provides a smooth, stable experience so you can focus purely on progress and enjoyment.</p>
-                <br>
-                <p>One of its greatest strengths is true unrestricted access: no key, no subscription, no limitations. FloppBlox brings elite-level power to the entire community completely free of charge.</p>
-                <br>
-                <p>Fully up-to-date with the latest game versions, it guarantees continuous compatibility and seamless performance even after updates. Moreover, FloppBlox offers universal compatibility, working perfectly with all major executors on PC, Android, iOS, and Mac.</p>
-                <br>
-                <p>Whether you're a casual player or a serious competitor, FloppBlox represents the next evolution of Blox Fruits scripting — combining cutting-edge technology with complete accessibility.</p>
-                <br>
-                <p>Join the FloppHub revolution and experience why FloppBlox is not just another script — it's a game-changer.</p>
-                <br>
-                <p>For more information and downloads, visit our official channels.</p>
-                <br>
-                <p><strong>Regards,</strong><br>
-                FloppHub Team<br>
-                Led by Mw_Anonymous</p>
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <img src="https://flopphub-team.github.io/BF/FloppBlox.png" alt="Logo" class="hero-logo-large fade-up">
+            <h1 class="fade-up" style="transition-delay: 0.1s;">Level Up Your <span class="gradient-text">Game</span>
+            </h1>
+            <p class="fade-up" style="transition-delay: 0.2s;">The most advanced, bug-free, and keyless script for Blox
+                Fruits. Dominate the seas with over 100+ automated features.</p>
+            <div class="btn-group fade-up" style="transition-delay: 0.3s;">
+                <a href="#scripts" class="btn btn-primary">
+                    <i class="fas fa-code"></i> Get Scripts
+                </a>
+                <a href="https://discord.gg/J9dSv7hq55" target="_blank" class="btn btn-secondary">
+                    <i class="fab fa-discord"></i> Join Discord
+                </a>
             </div>
         </div>
     </section>
 
-    <section class="section" id="features">
-        <h2 class="fade-in" style="font-size: 2.5rem; margin-bottom: 3rem; color: var(--neon-orange); text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);">Script Features</h2>
-        <div class="features">
-            <div class="feature-card fade-in">
-                <div class="feature-icon"><i class="fas fa-key"></i></div>
-                <h3>No Key System</h3>
-                <p>True unrestricted access. No keys, no subscriptions, no limitations. Just pure performance from the moment you execute.</p>
-            </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
-                <h3>No Reset</h3>
-                <p>Flawless execution with no character resets. Your progress remains intact while you enjoy all features seamlessly.</p>
-            </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon"><i class="fas fa-tachometer-alt"></i></div>
-                <h3>Smooth & Lag-Free</h3>
-                <p>Optimized code ensures fluid performance. Experience zero lag with our lightweight, efficient scripting engine.</p>
-            </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon"><i class="fas fa-bug"></i></div>
-                <h3>Bug-Free Experience</h3>
-                <p>100% bug-free guarantee. Our team rigorously tests every feature to ensure stability and reliability.</p>
-            </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon"><i class="fas fa-layer-group"></i></div>
-                <h3>100+ Options</h3>
-                <p>Extensive feature set covering every game aspect. From farming to PvP, we have it all covered and then some.</p>
-            </div>
-            <div class="feature-card fade-in">
-                <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
-                <h3>Auto-Updated</h3>
-                <p>Stays compatible with the latest Blox Fruits version. Automatic updates ensure continuous functionality.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" id="status">
-        <h2 class="fade-in" style="font-size: 2.5rem; margin-bottom: 3rem; color: var(--neon-orange); text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);">Current Status</h2>
-        <div class="status-grid">
-            <div class="status-card fade-in">
-                <div class="status-icon"><i class="fas fa-key"></i></div>
-                <h3>Key Required?</h3>
-                <div class="status-value" style="color: var(--error-red);">No</div>
-            </div>
-            <div class="status-card fade-in">
-                <div class="status-icon"><i class="fas fa-power-off"></i></div>
-                <h3>Working Status</h3>
-                <div class="status-value" style="color: var(--success-green);">Yes</div>
-            </div>
-            <div class="status-card fade-in">
-                <div class="status-icon"><i class="fas fa-times-circle"></i></div>
-                <h3>Discontinued?</h3>
-                <div class="status-value" style="color: var(--error-red);">No</div>
-            </div>
-            <div class="status-card fade-in">
-                <div class="status-icon"><i class="fas fa-calendar-alt"></i></div>
-                <h3>Last Updated</h3>
-                <div class="status-value">01/05/2026</div>
-            </div>
-            <div class="status-card fade-in">
-                <div class="status-icon"><i class="fab fa-discord"></i></div>
-                <h3>Discord Members</h3>
-                <div class="status-value" style="color: var(--success-green);">800+</div>
-            </div>
-            <div class="status-card fade-in">
-                <div class="status-icon"><i class="fas fa-project-diagram"></i></div>
-                <h3>Active Projects</h3>
-                <div class="status-value">3</div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" id="executors">
-        <h2 class="fade-in" style="font-size: 2.5rem; margin-bottom: 3rem; color: var(--neon-orange); text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);">Compatible Executors</h2>
-        <div class="executors">
-            <div class="executor-category fade-in">
-                <h3><i class="fab fa-android"></i> Android</h3>
-                <div class="executor-list">
-                    <div class="executor-item"><span class="executor-name">PunkX</span><span class="checkmark">✅</span></div>
-                    <div class="executor-item"><span class="executor-name">Fluxus Z</span><span class="crossmark">❌</span></div>
-                    <div class="executor-item"><span class="executor-name">CodeX</span><span class="checkmark">✅</span></div>
-                    <div class="executor-item"><span class="executor-name">Arceus X</span><span class="checkmark">✅</span></div>
-                    <div class="executor-item"><span class="executor-name">Delta</span><span class="checkmark">✅</span></div>
-                    <div class="executor-item"><span class="executor-name">Ronix</span><span class="checkmark">✅</span></div>
-                    <div class="executor-item"><span class="executor-name">Trigon</span><span class="checkmark">✅</span></div>
-                    <div class="executor-item"><span class="executor-name">ALL...</span><span class="checkmark">✅</span></div>
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item fade-up">
+                    <h3>100%</h3>
+                    <p>Keyless</p>
                 </div>
-            </div>
-
-            <div class="executor-category fade-in">
-                <h3><i class="fab fa-apple"></i> iOS</h3>
-                <div class="executor-list">
-                    <div class="executor-item"><span class="executor-name">Delta</span><span class="crossmark">❌</span></div>
-                    <div class="executor-item"><span class="executor-name">Arceus X</span><span class="checkmark">✅</span></div>
-                    <div class="executor-item"><span class="executor-name">Codex</span><span class="checkmark">✅</span></div>
-                    <div class="executor-item"><span class="executor-name">Cryptic</span><span class="checkmark">✅</span></div>
+                <div class="stat-item fade-up" style="transition-delay: 0.1s;">
+                    <h3>24/7</h3>
+                    <p>Support</p>
                 </div>
-            </div>
-
-            <div class="executor-category fade-in">
-                <h3><i class="fas fa-desktop"></i> PC/Mac</h3>
-                <div class="executor-list">
-                    <div class="executor-item"><span class="executor-name">Bunny.lol</span><span class="crossmark">❌</span></div>
-                    <div class="executor-item"><span class="executor-name">Wave</span><span class="checkmark">✅</span></div>
-                    <div class="executor-item"><span class="executor-name">Valex</span><span class="checkmark">✅</span></div>
-                    <div class="executor-item"><span class="executor-name">Solara</span><span class="checkmark">✅</span></div>
-                    <div class="executor-item"><span class="executor-name">Xeno</span><span class="checkmark">✅</span></div>
-                    <div class="executor-item"><span class="executor-name">ALL...</span><span class="checkmark">✅</span></div>
+                <div class="stat-item fade-up" style="transition-delay: 0.2s;">
+                    <h3>0%</h3>
+                    <p>Lag</p>
+                </div>
+                <div class="stat-item fade-up" style="transition-delay: 0.3s;">
+                    <h3>SAFE</h3>
+                    <p>Anti-Ban</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="section" id="download">
-        <div class="download-section fade-in">
-            <h2 style="font-size: 2.5rem; margin-bottom: 2rem; color: var(--neon-orange); text-shadow: 0 0 20px rgba(255, 140, 0, 0.5);">Download FloppBlox</h2>
-            <div class="download-content">
-                <p style="font-size: 1.2rem; margin-bottom: 2rem; color: var(--text-gray);">Copy the script below and paste it into your executor</p>
-                
-                <div class="warning">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <p>Always download scripts from official sources. We are not responsible for any issues caused by unofficial copies.</p>
-                </div>
+    <section class="section-padding" id="features" style="padding: 8rem 0;">
+        <div class="container">
+            <h2 class="section-title fade-up">Why Choose <span class="gradient-text">FloppBlox</span>?</h2>
+            <p class="section-subtitle fade-up">Engineered for perfection, designed for domination.</p>
 
-                <div class="script-code">
-                    <button class="copy-btn" onclick="copyScript()"><i class="fas fa-copy"></i> Copy</button>
-                    loadstring(game:HttpGet("https://raw.githubusercontent.com/FloppHub-Team/BloxFruits-Script/refs/heads/main/FloppHubX.lua"))()
+            <div class="features-grid">
+                <div class="card fade-up">
+                    <i class="fas fa-bolt card-icon"></i>
+                    <h3>Lightning Fast</h3>
+                    <p>Optimized Lua Code ensuring 0 ping lag and maximum FPS during raids and farming sessions.</p>
                 </div>
-
-                <div class="cta-buttons">
-                    <a href="https://discord.gg/J9dSv7hq55" target="_blank" class="btn btn-secondary">
-                        <i class="fab fa-discord"></i> Need Help? Join Discord
-                    </a>
-                    <a href="https://flopphub-team.github.io/" target="_blank" class="btn btn-primary">
-                        <i class="fas fa-info-circle"></i> More Info
-                    </a>
+                <div class="card fade-up" style="transition-delay: 0.1s;">
+                    <i class="fas fa-shield-alt card-icon"></i>
+                    <h3>Anti-Ban Secure</h3>
+                    <p>Built-in protection systems to keep your account safe while using high-risk features.</p>
+                </div>
+                <div class="card fade-up" style="transition-delay: 0.2s;">
+                    <i class="fas fa-mobile-alt card-icon"></i>
+                    <h3>Mobile Ready</h3>
+                    <p>Fully compatible with Arceus X, CodeX, Delta, and all major verified mobile executors.</p>
+                </div>
+                <div class="card fade-up" style="transition-delay: 0.3s;">
+                    <i class="fas fa-sync card-icon"></i>
+                    <h3>Auto Updates</h3>
+                    <p>The script automatically fetches the latest version from our cloud servers. No redownloads
+                        needed.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="footer">
-        <div class="footer-links">
-            <a href="https://discord.gg/J9dSv7hq55" target="_blank">
-                <i class="fab fa-discord"></i> Discord
-            </a>
-            <a href="https://flopphub-team.github.io/" target="_blank">
-                <i class="fas fa-globe"></i> Official Site
-            </a>
-            <a href="#download">
-                <i class="fas fa-download"></i> Download
-            </a>
+    <section id="executors" style="padding: 6rem 0; background: #080808;">
+        <div class="container">
+            <h2 class="section-title fade-up" style="font-size: 2.5rem;">Compatible <span
+                    style="color: var(--primary);">Executors</span></h2>
+            <p class="section-subtitle fade-up">Verified status for all platforms.</p>
+
+            <div class="executors-wrapper fade-up"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
+
+                <div class="executor-category"
+                    style="background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem;">
+                    <h3
+                        style="color: var(--primary); font-family: var(--font-head); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fab fa-android"></i> Android
+                    </h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>PunkX</span> <span style="color: var(--success);">✅ Working</span>
+                        </div>
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>Fluxus Z</span> <span style="color: var(--error);">❌ Not Working</span>
+                        </div>
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>CodeX</span> <span style="color: var(--success);">✅ Working</span>
+                        </div>
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>Arceus X</span> <span style="color: var(--success);">✅ Working</span>
+                        </div>
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>Delta</span> <span style="color: var(--success);">✅ Working</span>
+                        </div>
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>Ronix</span> <span style="color: var(--success);">✅ Working</span>
+                        </div>
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>Trigon</span> <span style="color: var(--success);">✅ Working</span>
+                        </div>
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>ALL...</span> <span style="color: var(--success);">✅ Working</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="executor-category"
+                    style="background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem;">
+                    <h3
+                        style="color: var(--primary); font-family: var(--font-head); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fab fa-apple"></i> iOS
+                    </h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>Delta</span> <span style="color: var(--error);">❌ Not Working</span>
+                        </div>
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>Arceus X</span> <span style="color: var(--success);">✅ Working</span>
+                        </div>
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>Codex</span> <span style="color: var(--success);">✅ Working</span>
+                        </div>
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>Cryptic</span> <span style="color: var(--success);">✅ Working</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="executor-category"
+                    style="background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem;">
+                    <h3
+                        style="color: var(--primary); font-family: var(--font-head); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-desktop"></i> PC/Mac
+                    </h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>Bunny.lol</span> <span style="color: var(--error);">❌ Not Working</span>
+                        </div>
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>Wave</span> <span style="color: var(--success);">✅ Working</span>
+                        </div>
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>Valex</span> <span style="color: var(--success);">✅ Working</span>
+                        </div>
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>Solara</span> <span style="color: var(--success);">✅ Working</span>
+                        </div>
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>Xeno</span> <span style="color: var(--success);">✅ Working</span>
+                        </div>
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>Ronix</span> <span style="color: var(--success);">✅ Working</span>
+                        </div>
+                        <div class="exec-item"
+                            style="display: flex; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                            <span>Velocity</span> <span style="color: var(--success);">✅ Working</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-        <p>&copy; 2026 FloppHub Team. Led by Mw_Anonymous. All rights reserved.</p>
-        <p style="margin-top: 0.5rem; color: var(--text-gray);">FloppBlox is not affiliated with Roblox Corporation or Blox Fruits</p>
+    </section>
+
+    <section class="script-section" id="scripts">
+        <div class="container">
+            <h2 class="section-title fade-up">Get The <span class="gradient-text">Script</span></h2>
+            <p class="section-subtitle fade-up">Copy the loadstring and paste it into your executor.</p>
+
+            <div class="script-box fade-up">
+                <div class="script-header">
+                    <div class="script-title">
+                        <i class="fas fa-star" style="color: #ffd700; font-size: 1.5rem;"></i>
+                        <div>
+                            <h3>FloppBlox Main</h3>
+                            <span style="color: #666; font-size: 0.9rem;">The standard stable version for farming &
+                                raids.</span>
+                        </div>
+                    </div>
+                    <button class="copy-btn" onclick="copyScript('main')">
+                        <i class="fas fa-copy"></i> Copy Script
+                    </button>
+                </div>
+                <div class="code-container">
+                    loadstring(game:HttpGet("https://raw.githubusercontent.com/FloppHub-Team/BloxFruits-Script/refs/heads/main/FloppHubX-Main.lua"))()
+                </div>
+            </div>
+
+            <div class="script-box kaitun-box fade-up" style="transition-delay: 0.2s;">
+                <div class="script-header">
+                    <div class="script-title">
+                        <i class="fas fa-rocket" style="color: var(--primary); font-size: 1.5rem;"></i>
+                        <div>
+                            <h3>FloppBlox Kaitun <span class="badge">NEW</span></h3>
+                            <span style="color: #aaa; font-size: 0.9rem;">Specialized for auto-leveling alt accounts
+                                purely.</span>
+                        </div>
+                    </div>
+                    <button class="copy-btn" onclick="copyScript('kaitun')">
+                        <i class="fas fa-copy"></i> Copy Script
+                    </button>
+                </div>
+                <div class="code-container" id="kaitun-code">
+                    loadstring(game:HttpGet("https://raw.githubusercontent.com/FloppHub-Team/BloxFruits-Script/refs/heads/main/FloppHubX-Kaitun.lua"))()
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">FloppBlox</div>
+            <div class="social-links">
+                <a href="https://discord.gg/J9dSv7hq55" target="_blank"><i class="fab fa-discord"></i></a>
+                <a href="https://discord.gg/J9dSv7hq55" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://flopphub-team.github.io/" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+            <p>&copy; 2026 FloppHub Team. All Rights Reserved.</p>
+            <p style="margin-top: 0.5rem; opacity: 0.5; font-size: 0.8rem;">Developed by Mw_Anonymous</p>
+        </div>
     </footer>
 
     <script>
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.getElementById('loader').classList.add('hidden');
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.classList.add('hidden');
+                initAnimations();
             }, 1000);
         });
 
         const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('navMenu');
-        const navbar = document.getElementById('navbar');
+        const navLinks = document.getElementById('navLinks');
 
-        hamburger.addEventListener('click', function() {
-            navMenu.classList.toggle('active');
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
         });
 
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        function initAnimations() {
+            document.querySelectorAll('.fade-up').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        function copyScript(type) {
+            let text = "";
+            if (type === 'kaitun') {
+                text = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/FloppHub-Team/BloxFruits-Script/refs/heads/main/FloppHubX-Kaitun.lua"))()';
             } else {
-                navbar.classList.remove('scrolled');
+                text = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/FloppHub-Team/BloxFruits-Script/refs/heads/main/FloppHubX-Main.lua"))()';
             }
 
-            const fadeElements = document.querySelectorAll('.fade-in');
-            fadeElements.forEach(element => {
-                const rect = element.getBoundingClientRect();
-                if (rect.top < window.innerHeight - 100) {
-                    element.classList.add('visible');
-                }
-            });
-        });
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    navMenu.classList.remove('active');
-                }
-            });
-        });
-
-        function copyScript() {
-            const scriptText = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/FloppHub-Team/BloxFruits-Script/refs/heads/main/FloppHubX.lua"))()';
-            navigator.clipboard.writeText(scriptText).then(function() {
-                const copyBtn = document.querySelector('.copy-btn');
-                const originalText = copyBtn.innerHTML;
-                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                setTimeout(() => {
-                    copyBtn.innerHTML = originalText;
-                }, 2000);
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Script copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
             });
         }
     </script>
 </body>
+
 </html>
- 
