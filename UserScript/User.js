@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         PunkX Bypass | AdMavenshort + Linkvertise
 // @namespace    Combined Bypass Scripts
-// @version      2.0
-// @description:es  Rapid-links manejado por script original, Linkvertise por Bypass.vip, y auto-copy keys en Pandadevelopment
-// @description  Rapid-links handled by Bypass.city, Linkvertise by Bypass.vip, and auto-copy keys in Pandadevelopment
-// @author       TheRealBanHammer | Bypass.vip | Bypass.City | Mw_Anonymous
+// @version      2.1
+// @description:es  Bypass.vip modificado y auto-copy keys en Pandadevelopment
+// @description  Rapid-links handled by Bypass.vip and auto-copy keys in Pandadevelopment
+// @author       TheRealBanHammer | Bypass.vip | Mw_Anonymous
 // @match        https://rapid-links.net/s*
+// @match        https://rapid-links.com/s* 
 // @match        https://linkvertise.com/*/*
 // @match        https://pandadevelopment.net/getkey?*
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
@@ -21,17 +22,6 @@
 
 (function() {
     'use strict';
-
-    const hostname = window.location.hostname;
-    const pathname = window.location.pathname;
-
-    if (hostname.includes('rapid-links.net') && pathname.startsWith('/s')) {
-        const currentUrl = window.location.href;
-        const bypassUrl = `https://bypass.city/bypass?bypass=${encodeURIComponent(currentUrl)}`;
-        console.log('[RapidLinks Bypass] Redireccionando a bypass.city...');
-        window.location.replace(bypassUrl);
-        return;
-    }
 
     if (hostname.includes('pandadevelopment.net')) {
         
