@@ -1,10 +1,12 @@
 // ==UserScript==
 // @name         Bypass.vip + PandaDev AutoCopy
 // @namespace    bypass-pandadev-combined
-// @version      1.5.8
+// @version      1.5.9
 // @description  Bypass ad-links + auto-copy keys on pandadevelopment.net
 // @author       bypass.vip | Mw_Anonymous (Adapted)
 // @match        *://linkvertise.com/*/*
+// @match        https://rapid-links.com/s*
+// @match        https://rapid-links.net/s*
 // @match        https://pandadevelopment.net/getkey?*
 // @updateURL    https://flopphub-team.github.io/UserScript/Bypassvip.js
 // @downloadURL  https://flopphub-team.github.io/UserScript/Bypassvip.js
