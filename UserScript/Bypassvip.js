@@ -239,7 +239,7 @@
 
         const counter = document.createElement('div');
         counter.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.8);color:white;padding:20px;border-radius:10px;z-index:9999;font-size:24px;text-align:center;';
-        counter.textContent = 'Redirigiendo en 5 segundos...';
+        counter.textContent = 'Redirigiendo en 3 segundos...';
         document.body.appendChild(counter);
 
         let secondsLeft = 3;
