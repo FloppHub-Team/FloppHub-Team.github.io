@@ -1,53 +1,35 @@
 // ==UserScript==
-// @name         PunkX & Pandadev Bypass - AutoCopy Key
+// @name         PunkX & Pandadev Bypass - AutoCopy Key (New Domain)
 // @namespace    punkX-bypass-exclusive
-
-
-// @version      2.0.5
-// @description  Automatische Key-Kopierung ohne Klick-System
-// @author       Mw_Anonymous | TheRealBanHammer
-
+// @version      2.1.0
+// @description  Automatische Key-Kopierung für new.pandadevelopment.net
+// @author       Mw_Anonymous | TheRealBanHammer (Updated)
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
 // @updateURL    https://flopphub-team.github.io/UserScript/PunkX%20Bypass.js
 // @downloadURL  https://flopphub-team.github.io/UserScript/PunkX%20Bypass.js
 // @require      https://update.greasyfork.org/scripts/397070/Anti-AdBlocker%20Fuckoff.user.js
-
-
-// @match        https://pandadevelopment.net/getkey?*
+// @match        https://new.pandadevelopment.net/getkey/*
+// @match        https://pandadevelopment.net/getkey*
 // @match        https://linkvertise.com/*
-// @match        https://work.ink/*
-
-
 // @grant        GM_xmlhttpRequest
 // @grant        GM_notification
 // @grant        GM_setClipboard
-
-
 // @connect      *
-
-
 // @run-at       document-start
 // ==/UserScript==
 
 console.log('[Pangdev ULTRA] Automatischer Copy-Button-Klick geladen');
 
-// === SYSTEM ZUR ERKENNUNG UND AUTOMATISCHEM KLICK AUF COPY BUTTON ===
-
 class PunkXUltraExtractor {
     constructor() {
         this.hasCopied = false;
-        // Prueft auf das spezifische Format "Punkx - XXXXXX"
-        this.keyPattern = /punkx\s*-\s*[a-z0-9]+/i;
+        this.keyPattern = /PUNKX--[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}/i;
     }
 
     async start() {
         if (this.hasCopied) return;
-        
         console.log('[Pangdev ULTRA] Suche nach Copy-Button...');
-        
-        // Warte bis der Copy-Button garantiert geladen ist
         const copyButton = await this.waitForCopyButton();
-        
         if (copyButton) {
             await this.clickCopyButton(copyButton);
         } else {
@@ -56,18 +38,13 @@ class PunkXUltraExtractor {
         }
     }
 
-    // Wartet bis der Copy-Button im DOM erscheint
     waitForCopyButton() {
         return new Promise(resolve => {
             let attempts = 0;
-            const maxAttempts = 50; // 5 Sekunden Timeout
-            
+            const maxAttempts = 50;
             const check = () => {
                 attempts++;
-                
-                // Versucht den Button ueber verschiedene Selektoren zu finden
                 const button = this.findCopyButton();
-                
                 if (button) {
                     console.log('[Pangdev ULTRA] Copy-Button gefunden nach', attempts, 'Versuchen');
                     resolve(button);
@@ -78,106 +55,123 @@ class PunkXUltraExtractor {
                     setTimeout(check, 100);
                 }
             };
-            
             check();
         });
     }
 
-    // Findet den Copy-Button durch mehrere Selektoren
     findCopyButton() {
         const selectors = [
+            'button[class*="bg-[#38B2AC]"]',
+            'button[class*="rounded-lg"]',
+            'button:has-text("Copy Key")',
             'button:contains("Copy Key")',
             'button:contains("copy key")',
             'button:contains("Copy")',
-            'input[type="button"]:contains("Copy")',
             '.copy-key-btn',
             '#copy-key-btn',
             '.btn-copy',
             '.copy-button',
             '[class*="copy"]',
             '[id*="copy"]',
-            'button[data-clipboard-text]'
+            'button[data-clipboard-text]',
+            'button.w-full',
+            'button.bg-gradient-to-r',
+            'button'
         ];
 
         for (let selector of selectors) {
             try {
-                // Spezielle Behandlung fuer :contains da es nicht standard ist
                 if (selector.includes(':contains')) {
                     const parts = selector.split(':contains');
-                    const baseSelector = parts[0];
-                    const text = parts[1].replace(/[()]/g, '');
+                    const baseSelector = parts[0] || '*';
+                    const text = parts[1].replace(/[()]/g, '').replace(/"/g, '');
                     const elements = document.querySelectorAll(baseSelector);
                     for (let el of elements) {
                         if (el.textContent.toLowerCase().includes(text.toLowerCase())) {
                             return el;
                         }
                     }
+                } else if (selector.includes(':has-text')) {
+                    const baseSelector = selector.split(':has-text')[0] || 'button';
+                    const text = selector.match(/:has-text\(["'](.+?)["']\)/)?.[1] || 'Copy';
+                    const elements = document.querySelectorAll(baseSelector);
+                    for (let el of elements) {
+                        if (el.textContent.includes(text)) return el;
+                    }
                 } else {
                     const element = document.querySelector(selector);
                     if (element) {
-                        // Pruefe ob das Element sichtbar und aktiviert ist
                         const style = window.getComputedStyle(element);
                         if (style.display !== 'none' && 
                             style.visibility !== 'hidden' && 
                             !element.disabled) {
-                            return element;
+                            if (element.tagName === 'BUTTON' || 
+                                element.onclick || 
+                                element.getAttribute('role') === 'button' ||
+                                element.classList.contains('cursor-pointer')) {
+                                return element;
+                            }
                         }
                     }
                 }
-            } catch (e) {
-                // Ignoriere Selektor-Fehler
+            } catch (e) {}
+        }
+
+        const buttons = document.querySelectorAll('button');
+        for (let btn of buttons) {
+            const text = btn.textContent.toLowerCase();
+            if (text.includes('copy') && text.includes('key')) {
+                const style = window.getComputedStyle(btn);
+                if (style.display !== 'none' && style.visibility !== 'hidden') {
+                    return btn;
+                }
             }
         }
 
         return null;
     }
 
-    // Fuehrt einen natuerlichen Klick auf den Button aus
     async clickCopyButton(button) {
         try {
             console.log('[Pangdev ULTRA] Klicke auf Copy-Button:', button.tagName, button.className);
-            
-            // Erstelle natuerliches Klick-Event
             const clickEvent = new MouseEvent('click', {
                 view: window,
                 bubbles: true,
                 cancelable: true,
                 button: 0
             });
-            
             button.dispatchEvent(clickEvent);
             
-            // Warte kurz und pruefe ob Key wirklich kopiert wurde
             setTimeout(async () => {
-                const clipboardText = await navigator.clipboard.readText().catch(() => '');
-                if (clipboardText && this.keyPattern.test(clipboardText)) {
-                    this.hasCopied = true;
-                    GM_notification({
-                        text: `Key automatisch kopiert: ${clipboardText}`,
-                        title: "Pangdev ULTRA",
-                        timeout: 4000
-                    });
-                    console.log('[Pangdev ULTRA] Key erfolgreich ueber Button-Klick kopiert');
-                    
-                    // Sicherheitskopie mit GM_setClipboard
-                    await GM_setClipboard(clipboardText);
-                } else {
-                    // Wenn Klick nicht funktioniert hat, nutze Fallback
-                    console.warn('[Pangdev ULTRA] Klick hat nicht funktioniert, nutze Fallback');
+                try {
+                    const clipboardText = await navigator.clipboard.readText().catch(() => '');
+                    if (clipboardText && this.keyPattern.test(clipboardText)) {
+                        this.hasCopied = true;
+                        GM_notification({
+                            text: `Key automatisch kopiert: ${clipboardText}`,
+                            title: "Pangdev ULTRA",
+                            timeout: 4000
+                        });
+                        console.log('[Pangdev ULTRA] Key erfolgreich ueber Button-Klick kopiert');
+                        await GM_setClipboard(clipboardText);
+                    } else {
+                        console.warn('[Pangdev ULTRA] Klick hat nicht funktioniert, nutze Fallback');
+                        this.fallbackExtractFromButton(button);
+                    }
+                } catch (e) {
                     this.fallbackExtractFromButton(button);
                 }
-            }, 300);
-            
+            }, 500);
         } catch (e) {
             console.error('[Pangdev ULTRA] Fehler beim Klicken:', e);
             this.fallbackManualExtract();
         }
     }
 
-    // Fallback: Extrahiert Key direkt aus data-clipboard-text Attribut
     fallbackExtractFromButton(button) {
         const dataKey = button.getAttribute('data-clipboard-text') || 
-                       button.getAttribute('data-key');
+                       button.getAttribute('data-key') ||
+                       button.getAttribute('data-text');
         
         if (dataKey && this.keyPattern.test(dataKey)) {
             GM_setClipboard(dataKey);
@@ -193,25 +187,40 @@ class PunkXUltraExtractor {
         }
     }
 
-    // Letzter Fallback: Manuelle Extraktion aus dem DOM
     fallbackManualExtract() {
         console.log('[Pangdev ULTRA] Starte manuelle Extraktion...');
+        const elements = document.querySelectorAll('div, span, p, code, pre, input, textarea, h1, h2, h3, h4, h5, h6, [class*="key"], [id*="key"]');
         
-        const elements = document.querySelectorAll('div, span, p, code, pre, input, textarea');
         for (let el of elements) {
-            const text = (el.textContent || el.value || '').trim();
+            const text = (el.textContent || el.value || el.getAttribute('data-key') || '').trim();
             const match = text.match(this.keyPattern);
             if (match) {
-                GM_setClipboard(match[0]);
+                const key = match[0].toUpperCase();
+                GM_setClipboard(key);
                 this.hasCopied = true;
                 GM_notification({
-                    text: `Key manuell kopiert: ${match[0]}`,
+                    text: `Key manuell kopiert: ${key}`,
                     title: "Pangdev ULTRA",
                     timeout: 4000
                 });
                 console.log('[Pangdev ULTRA] Key ueber manuelle Extraktion gefunden');
                 return;
             }
+        }
+        
+        const bodyText = document.body.innerText || document.body.textContent;
+        const matches = bodyText.match(this.keyPattern);
+        if (matches && matches[0]) {
+            const key = matches[0].toUpperCase();
+            GM_setClipboard(key);
+            this.hasCopied = true;
+            GM_notification({
+                text: `Key aus Seitentext kopiert: ${key}`,
+                title: "Pangdev ULTRA",
+                timeout: 4000
+            });
+            console.log('[Pangdev ULTRA] Key aus body text extrahiert');
+            return;
         }
         
         console.error('[Pangdev ULTRA] Alle Extraktionsmethoden fehlgeschlagen');
@@ -222,8 +231,6 @@ class PunkXUltraExtractor {
         });
     }
 }
-
-// === HELPER-FUNKTIONEN (OPTIMIERT) ===
 
 function handleError(error) {
     const errorText = error.message || error;
@@ -249,8 +256,6 @@ function notification(message, timeout = 3000) {
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-// === ADSPOOF UND LVDL FUNKTIONEN (VOLLSTAENDIG) ===
 
 function adSpoof(url, referrer) {
     return new Promise((resolve, reject) => {
@@ -300,14 +305,10 @@ async function lvdl() {
     return false;
 }
 
-// === HAUPTFUNKTION MIT VOLLSTAENDIGEM BYPASS-LOGIK ===
-
 async function pandadevelopment() {
-    // Starte den ULTRA-KeyExtractor (Klick-Methode)
     const keyCopier = new PunkXUltraExtractor();
     keyCopier.start();
 
-    // Entferne Anti-Adblock-Overlays
     let antiAdblockRemover = setInterval(() => {
         const antiAdblock = document.querySelector('.adblock_title');
         if (antiAdblock) {
@@ -317,7 +318,6 @@ async function pandadevelopment() {
         }
     }, 500);
 
-    // Interne Funktion zum Abrufen des Ad-Links aus Formular
     function getAdLink() {
         const form = document.querySelector('form');
         if (!form) return Promise.reject('Kein Formular gefunden');
@@ -338,7 +338,6 @@ async function pandadevelopment() {
         });
     }
 
-    // Interne Funktion zum Dekodieren der Ziel-URL aus Ad-Links
     function getDestUrl(link) {
         const url = new URL(encodeURI(link));
         switch (url.hostname) {
@@ -358,7 +357,6 @@ async function pandadevelopment() {
         }
     }
 
-    // Service-spezifische Wartezeiten fuer Ad-Simulation (in Millisekunden)
     const customSleepTimes = {
         'vegax': 11000,
         'laziumtools': 11000,
@@ -379,21 +377,18 @@ async function pandadevelopment() {
         const dest = getDestUrl(adUrl);
         
         if (!dest) {
-            // Kein Ziel gefunden, direkt zur Key-Seite
-            window.location.assign(`https://pangdev.net/getkey?hwid=${hwid}&service=${service}`);
+            const newDomain = window.location.hostname.includes('new.') ? 'new.pandadevelopment.net' : 'pandadevelopment.net';
+            window.location.assign(`https://${newDomain}/getkey?hwid=${hwid}&service=${service}`);
             return;
         }
 
-        // Simuliere Ad-Wartezeit je nach Service
         await sleep(customSleepTimes[service] || 3000);
-        
         console.log('[Pangdev ULTRA] Simuliere Ad-Ansicht...');
         notification(`Level abgeschlossen (${service})`, 3000);
-        
         await sleep(3000);
 
-        // Konstruiere naechsten Checkpoint-URL
-        let nextCheckpoint = `https://pangdev.net/getkey?hwid=${hwid}&service=${service}`;
+        const newDomain = window.location.hostname.includes('new.') ? 'new.pandadevelopment.net' : 'pandadevelopment.net';
+        let nextCheckpoint = `https://${newDomain}/getkey?hwid=${hwid}&service=${service}`;
         if (token) nextCheckpoint += `&sessiontoken=${token}`;
         if (provider) nextCheckpoint += `&provider=${provider}`;
         
@@ -404,19 +399,15 @@ async function pandadevelopment() {
     }
 }
 
-// === AUTOMATISCHE INITIALISIERUNG BEI SEITENLADUNG ===
-
 (async function() {
     console.log('[Pangdev ULTRA] INITIALISIERUNG auf:', window.location.hostname);
-    
-    // Versuche zuerst LVDL-Weiterleitung fuer Ad-Links
     const handledByLvdl = await lvdl();
     if (handledByLvdl) return;
     
     const hostname = window.location.hostname;
     
-    if (hostname.includes('pandadev')) {
-        notification('ULTRA AutoCopy aktiviert', 3000);
+    if (hostname.includes('pandadev') || hostname.includes('new.pandadevelopment')) {
+        notification('ULTRA AutoCopy aktiviert (v2.1)', 3000);
         await pandadevelopment();
     } else if (hostname.includes('linkvertise.com') || 
                hostname.includes('loot-link') || 
@@ -424,4 +415,3 @@ async function pandadevelopment() {
         notification('Verarbeite Ad-Link...', 2000);
     }
 })();
-    
