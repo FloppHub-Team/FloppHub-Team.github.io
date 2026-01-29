@@ -7,7 +7,7 @@
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
 // @updateURL    https://flopphub-team.github.io/UserScript/PunkX%20Bypass.js
 // @downloadURL  https://flopphub-team.github.io/UserScript/PunkX%20Bypass.js
-// @require     https://flopphub-team.github.io/UserScript/Anti-Anuncios-By-BanHammer.js 
+// @require      https://flopphub-team.github.io/UserScript/Anti-Anuncios-By-BanHammer.js 
 // @match        https://new.pandadevelopment.net/getkey/*
 // @match        https://pandadevelopment.net/getkey*
 // @match        https://linkvertise.com/*
