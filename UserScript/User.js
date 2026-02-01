@@ -1,8 +1,7 @@
-
 // ==UserScript==
 // @name         PunkX Bypass | AdMavenshort + Linkvertise
 // @namespace    Combined Bypass Scripts
-// @version      2.3
+// @version      2.4
 // @description:es  Bypass.vip modificado y auto-copy keys en Pandadevelopment
 // @description  Rapid-links handled by Bypass.vip and auto-copy keys in Pandadevelopment
 // @author       TheRealBanHammer | Bypass.vip | Mw_Anonymous
@@ -11,15 +10,16 @@
 // @match        https://rapid-links.net/s*
 // @match        https://rapid-links.com/s* 
 // @match        https://linkvertise.com/*/*
-// @match        https://pandadevelopment.net/getkey?*
-// @match        https://new.pandadevelopment.net/getkey/punkxreleasekey?*
+// @match        https://pandadevelopment.net/getkey*
+// @match        https://*.pandadevelopment.net/getkey*
+// @match        https://new.pandadevelopment.net/getkey*
 
 
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
 // @updateURL    https://flopphub-team.github.io/UserScript/User.js
 // @downloadURL  https://flopphub-team.github.io/UserScript/User.js
 // @require      https://flopphub-team.github.io/UserScript/Bypassvip.js
-// @require      https://flopphub-team.github.io/UserScript/Anti-Anuncios-By-BanHammer.js
+// @require      https://flopphub-team.github.io/UserScript/Anti-Anuncios-By-BanHammer.js 
 
 
 // @grant        GM_setClipboard
@@ -39,195 +39,203 @@
             constructor() {
                 this.hasCopied = false;
                 this.keyPattern = /punkx\s*-+\s*[a-z0-9]+/i;
-                this.observer = null;
+                this.attempts = 0;
+                this.maxAttempts = 60;
             }
 
             start() {
                 if (this.hasCopied) return;
                 
-                this.setupObserver();
-                this.attemptCopy();
-            }
-
-            setupObserver() {
-                this.observer = new MutationObserver((mutations) => {
-                    if (!this.hasCopied) {
-                        this.attemptCopy();
-                    }
-                });
+                console.log('[PandaDev AutoCopy] Iniciado en ' + hostname);
                 
-                this.observer.observe(document.body, {
-                    childList: true,
-                    subtree: true,
-                    attributes: true,
-                    attributeFilter: ['class', 'style']
-                });
+                this.pollForButton();
                 
-                setTimeout(() => {
-                    if (this.observer && !this.hasCopied) {
-                        this.observer.disconnect();
-                        this.fallbackManualExtract();
-                    }
-                }, 30000);
-            }
-
-            attemptCopy() {
-                const button = this.findCopyButton();
-                if (button) {
-                    this.observer.disconnect();
-                    this.clickButtonRobust(button);
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', () => this.pollForButton());
                 }
+            }
+
+            pollForButton() {
+                const interval = setInterval(() => {
+                    if (this.hasCopied || this.attempts >= this.maxAttempts) {
+                        clearInterval(interval);
+                        if (!this.hasCopied) this.fallbackExtract();
+                        return;
+                    }
+                    
+                    this.attempts++;
+                    const button = this.findCopyButton();
+                    
+                    if (button) {
+                        clearInterval(interval);
+                        console.log('[PandaDev AutoCopy] Botón encontrado, intentando click');
+                        this.simulateHumanClick(button);
+                    }
+                }, 500);
             }
 
             findCopyButton() {
-                const xpath = "//button[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'copy key')] | //div[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'copy key')] | //span[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'copy key')]";
-                const result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-                if (result.singleNodeValue) return result.singleNodeValue;
-
-                const cssSelectors = [
+                const candidates = [];
+                
+                const allElements = document.querySelectorAll('button, div, span, a, input');
+                for (const el of allElements) {
+                    const text = el.textContent.toLowerCase().trim();
+                    const hasCopyText = text.includes('copy') && (text.includes('key') || text.length < 20);
+                    const isVisible = this.isVisible(el);
+                    const isClickable = el.tagName === 'BUTTON' || 
+                                       el.onclick || 
+                                       el.getAttribute('role') === 'button' ||
+                                       el.style.cursor === 'pointer' ||
+                                       window.getComputedStyle(el).cursor === 'pointer';
+                    
+                    if (hasCopyText && isVisible) {
+                        candidates.push({el, priority: 10});
+                    } else if (text === 'copy' && isVisible) {
+                        candidates.push({el, priority: 8});
+                    } else if (el.getAttribute('data-clipboard-text') && isVisible) {
+                        candidates.push({el, priority: 9});
+                    }
+                }
+                
+                if (candidates.length > 0) {
+                    candidates.sort((a, b) => b.priority - a.priority);
+                    return candidates[0].el;
+                }
+                
+                const specificSelectors = [
                     'button[class*="copy"]',
                     'button[id*="copy"]',
-                    'button[data-clipboard-text]',
-                    'button[data-key]',
-                    '.copy-key-btn',
+                    '[data-clipboard-text]',
+                    '[data-key]',
+                    '.copy-btn',
                     '.btn-copy',
                     'button:has(svg)',
-                    '[class*="copy-key"]',
-                    '[class*="Copy"]'
+                    '.MuiButton-root',
+                    '[class*="MuiButton"]'
                 ];
                 
-                for (const selector of cssSelectors) {
+                for (const selector of specificSelectors) {
                     try {
                         const el = document.querySelector(selector);
                         if (el && this.isVisible(el)) return el;
-                    } catch(e {}
+                    } catch(e) {}
                 }
-
-                const elements = document.querySelectorAll('button, div[role="button"], a, span');
-                for (const el of elements) {
-                    const text = el.textContent.toLowerCase();
-                    if ((text.includes('copy') && text.includes('key')) || text === 'copy') {
-                        if (this.isVisible(el)) return el;
-                    }
-                }
-
+                
                 return null;
             }
 
             isVisible(el) {
-                return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length) && 
-                       window.getComputedStyle(el).visibility !== 'hidden' &&
-                       window.getComputedStyle(el).display !== 'none';
+                if (!el) return false;
+                const rect = el.getBoundingClientRect();
+                const style = window.getComputedStyle(el);
+                return !!(rect.width && rect.height && 
+                         style.display !== 'none' && 
+                         style.visibility !== 'hidden' &&
+                         rect.top >= 0 &&
+                         rect.left >= 0);
             }
 
-            clickButtonRobust(button) {
-                button.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            simulateHumanClick(element) {
+                const rect = element.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+                
+                const events = [
+                    new MouseEvent('mousemove', { bubbles: true, cancelable: true, clientX: x, clientY: y }),
+                    new MouseEvent('mouseenter', { bubbles: true, cancelable: true, clientX: x, clientY: y }),
+                    new MouseEvent('mouseover', { bubbles: true, cancelable: true, clientX: x, clientY: y }),
+                    new MouseEvent('mousedown', { bubbles: true, cancelable: true, button: 0, clientX: x, clientY: y }),
+                    new MouseEvent('mouseup', { bubbles: true, cancelable: true, button: 0, clientX: x, clientY: y }),
+                    new MouseEvent('click', { bubbles: true, cancelable: true, button: 0, clientX: x, clientY: y })
+                ];
+                
+                let delay = 0;
+                events.forEach((event, index) => {
+                    setTimeout(() => {
+                        element.dispatchEvent(event);
+                    }, delay);
+                    delay += 50 + Math.random() * 50;
+                });
                 
                 setTimeout(() => {
-                    try {
-                        const events = [
-                            new MouseEvent('mouseover', { bubbles: true, cancelable: true, view: window }),
-                            new MouseEvent('mousedown', { bubbles: true, cancelable: true, view: window, button: 0 }),
-                            new MouseEvent('mouseup', { bubbles: true, cancelable: true, view: window, button: 0 }),
-                            new MouseEvent('click', { bubbles: true, cancelable: true, view: window, button: 0 })
-                        ];
-                        
-                        events.forEach((event, index) => {
-                            setTimeout(() => {
-                                button.dispatchEvent(event);
-                            }, index * 50);
-                        });
-
-                        setTimeout(() => {
-                            button.click();
-                            setTimeout(() => this.verifyAndExtract(button), 500);
-                        }, 200);
-
-                    } catch (e) {
-                        this.fallbackManualExtract();
+                    element.click();
+                    
+                    const dataKey = element.getAttribute('data-clipboard-text') || 
+                                   element.getAttribute('data-key');
+                    if (dataKey) {
+                        GM_setClipboard(dataKey);
+                        this.success(dataKey);
+                        return;
                     }
-                }, 300);
+                    
+                    setTimeout(() => this.checkClipboard(), 300);
+                }, delay + 100);
             }
 
-            async verifyAndExtract(button) {
+            async checkClipboard() {
                 try {
-                    const clipboardText = await navigator.clipboard.readText().catch(() => '');
-                    if (clipboardText && this.keyPattern.test(clipboardText)) {
-                        this.success(clipboardText, 'Clipboard');
+                    const text = await navigator.clipboard.readText();
+                    if (text && this.keyPattern.test(text)) {
+                        this.success(text);
                         return;
                     }
                 } catch(e) {}
-
-                const dataKey = button.getAttribute('data-clipboard-text') || 
-                               button.getAttribute('data-key');
                 
-                if (dataKey && this.keyPattern.test(dataKey)) {
-                    GM_setClipboard(dataKey);
-                    this.success(dataKey, 'Atributo');
-                    return;
-                }
-
-                this.fallbackManualExtract();
+                this.fallbackExtract();
             }
 
-            fallbackManualExtract() {
-                const selectors = ['input[type="text"]', 'textarea', 'code', 'pre', '.key', '#key', '[class*="key"]'];
+            fallbackExtract() {
+                const selectors = [
+                    'input[type="text"]',
+                    'textarea',
+                    'code',
+                    'pre',
+                    '[class*="key"]',
+                    '[id*="key"]',
+                    'div[class*="MuiBox"]',
+                    'div[class*="container"]'
+                ];
+                
                 for (const selector of selectors) {
                     const elements = document.querySelectorAll(selector);
                     for (const el of elements) {
                         const text = (el.value || el.textContent || '').trim();
-                        const match = text.match(this.keyPattern);
+                        const match = text.match(/punkx\s*-+\s*[a-z0-9-]+/i);
                         if (match) {
                             GM_setClipboard(match[0]);
-                            this.success(match[0], 'DOM');
+                            this.success(match[0]);
                             return;
                         }
                     }
                 }
-
-                const bodyText = document.body.innerText;
-                const match = bodyText.match(this.keyPattern);
+                
+                const bodyText = document.body.innerText || document.body.textContent;
+                const match = bodyText.match(/punkx\s*-+\s*[a-z0-9-]+/i);
                 if (match) {
                     GM_setClipboard(match[0]);
-                    this.success(match[0], 'Texto');
+                    this.success(match[0]);
                     return;
                 }
-
-                this.error('Key no encontrada');
+                
+                console.error('[PandaDev AutoCopy] No se encontró la key');
             }
 
-            success(key, method) {
+            success(key) {
                 if (this.hasCopied) return;
                 this.hasCopied = true;
                 
-                if (this.observer) this.observer.disconnect();
-                
                 GM_setClipboard(key);
                 GM_notification({
-                    text: `Key copiada: ${key}`,
+                    text: 'Key copiada: ' + key,
                     title: "PandaDevelopment AutoCopy",
                     timeout: 4000
                 });
-            }
-
-            error(message) {
-                GM_notification({
-                    text: message,
-                    title: "PandaDevelopment Error",
-                    timeout: 5000
-                });
+                console.log('[PandaDev AutoCopy] Éxito: ' + key);
             }
         }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                const autoCopy = new PandaKeyAutoCopy();
-                autoCopy.start();
-            });
-        } else {
-            const autoCopy = new PandaKeyAutoCopy();
-            autoCopy.start();
-        }
+        const autoCopy = new PandaKeyAutoCopy();
+        autoCopy.start();
         
         return;
     }
