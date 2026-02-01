@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bypass.vip + PandaDev AutoCopy
 // @namespace    bypass-pandadev-combined
-// @version      1.6.1
+// @version      1.6.2
 // @description  Bypass ad-links + auto-copy keys on pandadevelopment.net
 // @author       bypass.vip | Mw_Anonymous (Adapted)
 // @match        *://linkvertise.com/*/*
@@ -17,182 +17,214 @@
 // @grant        GM_xmlhttpRequest
 // @run-at       document-start
 // ==/UserScript==
-
-(async () => {
+(function() {
     'use strict';
-    
-    if (window.top !== window.self) return;
 
     const hostname = window.location.hostname;
-
+    
     if (hostname.includes('pandadevelopment.net')) {
+        
         class PandaKeyAutoCopy {
             constructor() {
                 this.hasCopied = false;
-                this.keyPattern = /punkx\s*-\s*[a-z0-9]+/i;
+                this.keyPattern = /punkx\s*-+\s*[a-z0-9]+/i;
+                this.attempts = 0;
+                this.maxAttempts = 60;
             }
 
-            async start() {
+            start() {
                 if (this.hasCopied) return;
                 
-                console.log('[PandaDev AutoCopy] Searching for copy button...');
+                console.log('[PandaDev AutoCopy] Iniciado en ' + hostname);
                 
-                const copyButton = await this.waitForCopyButton();
+                this.pollForButton();
                 
-                if (copyButton) {
-                    await this.clickCopyButton(copyButton);
-                } else {
-                    console.warn('[PandaDev AutoCopy] Button not found, using manual fallback');
-                    this.fallbackManualExtract();
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', () => this.pollForButton());
                 }
             }
 
-            waitForCopyButton() {
-                return new Promise(resolve => {
-                    let attempts = 0;
-                    const maxAttempts = 50;
+            pollForButton() {
+                const interval = setInterval(() => {
+                    if (this.hasCopied || this.attempts >= this.maxAttempts) {
+                        clearInterval(interval);
+                        if (!this.hasCopied) this.fallbackExtract();
+                        return;
+                    }
                     
-                    const check = () => {
-                        attempts++;
-                        const button = this.findCopyButton();
-                        
-                        if (button) {
-                            console.log('[PandaDev AutoCopy] Button found after', attempts, 'attempts');
-                            resolve(button);
-                        } else if (attempts >= maxAttempts) {
-                            console.error('[PandaDev AutoCopy] Timeout: Button not found');
-                            resolve(null);
-                        } else {
-                            setTimeout(check, 100);
-                        }
-                    };
+                    this.attempts++;
+                    const button = this.findCopyButton();
                     
-                    check();
-                });
+                    if (button) {
+                        clearInterval(interval);
+                        console.log('[PandaDev AutoCopy] Botón encontrado, intentando click');
+                        this.simulateHumanClick(button);
+                    }
+                }, 500);
             }
 
             findCopyButton() {
-                const selectors = [
-                    'button:contains("Copy Key")',
-                    'button:contains("copy key")',
-                    'button:contains("Copy")',
-                    'input[type="button"]:contains("Copy")',
-                    '.copy-key-btn',
-                    '#copy-key-btn',
-                    '.btn-copy',
-                    '.copy-button',
-                    '[class*="copy"]',
-                    '[id*="copy"]',
-                    'button[data-clipboard-text]'
-                ];
-
-                for (let selector of selectors) {
-                    try {
-                        if (selector.includes(':contains')) {
-                            const parts = selector.split(':contains');
-                            const baseSelector = parts[0];
-                            const text = parts[1].replace(/[()]/g, '');
-                            const elements = document.querySelectorAll(baseSelector);
-                            for (let el of elements) {
-                                if (el.textContent.toLowerCase().includes(text.toLowerCase())) {
-                                    return el;
-                                }
-                            }
-                        } else {
-                            const element = document.querySelector(selector);
-                            if (element && !element.disabled && 
-                                window.getComputedStyle(element).display !== 'none') {
-                                return element;
-                            }
-                        }
-                    } catch (e) {}
-                }
-                return null;
-            }
-
-            async clickCopyButton(button) {
-                try {
-                    console.log('[PandaDev AutoCopy] Clicking button');
-                    
-                    const clickEvent = new MouseEvent('click', {
-                        view: window,
-                        bubbles: true,
-                        cancelable: true,
-                        button: 0
-                    });
-                    
-                    button.dispatchEvent(clickEvent);
-                    
-                    setTimeout(async () => {
-                        const clipboardText = await navigator.clipboard.readText().catch(() => '');
-                        if (clipboardText && this.keyPattern.test(clipboardText)) {
-                            this.success(clipboardText, 'Button');
-                        } else {
-                            this.fallbackExtractFromButton(button);
-                        }
-                    }, 300);
-                    
-                } catch (e) {
-                    console.error('[PandaDev AutoCopy] Error clicking:', e);
-                    this.fallbackExtractFromButton(button);
-                }
-            }
-
-            fallbackExtractFromButton(button) {
-                const dataKey = button.getAttribute('data-clipboard-text') || 
-                               button.getAttribute('data-key');
+                const candidates = [];
                 
-                if (dataKey && this.keyPattern.test(dataKey)) {
-                    this.success(dataKey, 'Data attribute');
-                } else {
-                    this.fallbackManualExtract();
-                }
-            }
-
-            fallbackManualExtract() {
-                console.log('[PandaDev AutoCopy] Manual extraction started');
-                
-                const elements = document.querySelectorAll('div, span, p, code, pre, input, textarea');
-                for (let el of elements) {
-                    const text = (el.textContent || el.value || '').trim();
-                    const match = text.match(this.keyPattern);
-                    if (match) {
-                        this.success(match[0], 'Manual extraction');
-                        return;
+                const allElements = document.querySelectorAll('button, div, span, a, input');
+                for (const el of allElements) {
+                    const text = el.textContent.toLowerCase().trim();
+                    const hasCopyText = text.includes('copy') && (text.includes('key') || text.length < 20);
+                    const isVisible = this.isVisible(el);
+                    const isClickable = el.tagName === 'BUTTON' || 
+                                       el.onclick || 
+                                       el.getAttribute('role') === 'button' ||
+                                       el.style.cursor === 'pointer' ||
+                                       window.getComputedStyle(el).cursor === 'pointer';
+                    
+                    if (hasCopyText && isVisible) {
+                        candidates.push({el, priority: 10});
+                    } else if (text === 'copy' && isVisible) {
+                        candidates.push({el, priority: 8});
+                    } else if (el.getAttribute('data-clipboard-text') && isVisible) {
+                        candidates.push({el, priority: 9});
                     }
                 }
                 
-                this.error('Could not find key on page');
+                if (candidates.length > 0) {
+                    candidates.sort((a, b) => b.priority - a.priority);
+                    return candidates[0].el;
+                }
+                
+                const specificSelectors = [
+                    'button[class*="copy"]',
+                    'button[id*="copy"]',
+                    '[data-clipboard-text]',
+                    '[data-key]',
+                    '.copy-btn',
+                    '.btn-copy',
+                    'button:has(svg)',
+                    '.MuiButton-root',
+                    '[class*="MuiButton"]'
+                ];
+                
+                for (const selector of specificSelectors) {
+                    try {
+                        const el = document.querySelector(selector);
+                        if (el && this.isVisible(el)) return el;
+                    } catch(e) {}
+                }
+                
+                return null;
             }
 
-            success(key, method) {
+            isVisible(el) {
+                if (!el) return false;
+                const rect = el.getBoundingClientRect();
+                const style = window.getComputedStyle(el);
+                return !!(rect.width && rect.height && 
+                         style.display !== 'none' && 
+                         style.visibility !== 'hidden' &&
+                         rect.top >= 0 &&
+                         rect.left >= 0);
+            }
+
+            simulateHumanClick(element) {
+                const rect = element.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+                
+                const events = [
+                    new MouseEvent('mousemove', { bubbles: true, cancelable: true, clientX: x, clientY: y }),
+                    new MouseEvent('mouseenter', { bubbles: true, cancelable: true, clientX: x, clientY: y }),
+                    new MouseEvent('mouseover', { bubbles: true, cancelable: true, clientX: x, clientY: y }),
+                    new MouseEvent('mousedown', { bubbles: true, cancelable: true, button: 0, clientX: x, clientY: y }),
+                    new MouseEvent('mouseup', { bubbles: true, cancelable: true, button: 0, clientX: x, clientY: y }),
+                    new MouseEvent('click', { bubbles: true, cancelable: true, button: 0, clientX: x, clientY: y })
+                ];
+                
+                let delay = 0;
+                events.forEach((event, index) => {
+                    setTimeout(() => {
+                        element.dispatchEvent(event);
+                    }, delay);
+                    delay += 50 + Math.random() * 50;
+                });
+                
+                setTimeout(() => {
+                    element.click();
+                    
+                    const dataKey = element.getAttribute('data-clipboard-text') || 
+                                   element.getAttribute('data-key');
+                    if (dataKey) {
+                        GM_setClipboard(dataKey);
+                        this.success(dataKey);
+                        return;
+                    }
+                    
+                    setTimeout(() => this.checkClipboard(), 300);
+                }, delay + 100);
+            }
+
+            async checkClipboard() {
+                try {
+                    const text = await navigator.clipboard.readText();
+                    if (text && this.keyPattern.test(text)) {
+                        this.success(text);
+                        return;
+                    }
+                } catch(e) {}
+                
+                this.fallbackExtract();
+            }
+
+            fallbackExtract() {
+                const selectors = [
+                    'input[type="text"]',
+                    'textarea',
+                    'code',
+                    'pre',
+                    '[class*="key"]',
+                    '[id*="key"]',
+                    'div[class*="MuiBox"]',
+                    'div[class*="container"]'
+                ];
+                
+                for (const selector of selectors) {
+                    const elements = document.querySelectorAll(selector);
+                    for (const el of elements) {
+                        const text = (el.value || el.textContent || '').trim();
+                        const match = text.match(/punkx\s*-+\s*[a-z0-9-]+/i);
+                        if (match) {
+                            GM_setClipboard(match[0]);
+                            this.success(match[0]);
+                            return;
+                        }
+                    }
+                }
+                
+                const bodyText = document.body.innerText || document.body.textContent;
+                const match = bodyText.match(/punkx\s*-+\s*[a-z0-9-]+/i);
+                if (match) {
+                    GM_setClipboard(match[0]);
+                    this.success(match[0]);
+                    return;
+                }
+                
+                console.error('[PandaDev AutoCopy] No se encontró la key');
+            }
+
+            success(key) {
+                if (this.hasCopied) return;
                 this.hasCopied = true;
+                
                 GM_setClipboard(key);
                 GM_notification({
-                    text: `Key automatically copied: ${key}`,
+                    text: 'Key copiada: ' + key,
                     title: "PandaDevelopment AutoCopy",
                     timeout: 4000
                 });
-                console.log(`[PandaDev AutoCopy] Key copied via ${method}: ${key}`);
-            }
-
-            error(message) {
-                GM_notification({
-                    text: message,
-                    title: "PandaDevelopment AutoCopy",
-                    timeout: 5000
-                });
-                console.error('[PandaDev AutoCopy]', message);
+                console.log('[PandaDev AutoCopy] Éxito: ' + key);
             }
         }
 
         const autoCopy = new PandaKeyAutoCopy();
-        
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => autoCopy.start());
-        } else {
-            autoCopy.start();
-        }
+        autoCopy.start();
         
         return;
     }
