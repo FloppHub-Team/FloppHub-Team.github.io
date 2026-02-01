@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PunkX Bypass | AdMavenshort + Linkvertise
 // @namespace    Combined Bypass Scripts
-// @version      2.1
+// @version      2.2
 // @description:es  Bypass.vip modificado y auto-copy keys en Pandadevelopment
 // @description  Rapid-links handled by Bypass.vip and auto-copy keys in Pandadevelopment
 // @author       TheRealBanHammer | Bypass.vip | Mw_Anonymous
@@ -9,6 +9,7 @@
 // @match        https://rapid-links.com/s* 
 // @match        https://linkvertise.com/*/*
 // @match        https://pandadevelopment.net/getkey?*
+// @match        https://new.pandadevelopment.net/getkey/punkxreleasekey?*
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
 // @updateURL    https://flopphub-team.github.io/UserScript/User.js
 // @downloadURL  https://flopphub-team.github.io/UserScript/User.js
