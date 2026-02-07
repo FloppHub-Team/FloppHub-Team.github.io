@@ -2,26 +2,19 @@
 // @name         PunkX Bypass | AdMavenshort + Linkvertise
 // @namespace    Combined Bypass Scripts
 // @version      2.4
-// @description:es  Bypass.vip modificado y auto-copy keys en Pandadevelopment
-// @description  Rapid-links handled by Bypass.vip and auto-copy keys in Pandadevelopment
-// @author       TheRealBanHammer | Bypass.vip | Mw_Anonymous
-
-
+// @description:es  bypass instantáneo y auto-copy keys en Pandadevelopment
+// @description Instant bypass and auto-copy keys in Pandadevelopment
+// @author       TheRealBanHammer | Mw_Anonymous
 // @match        https://rapid-links.net/s*
 // @match        https://rapid-links.com/s* 
 // @match        https://linkvertise.com/*/*
 // @match        https://pandadevelopment.net/getkey*
 // @match        https://*.pandadevelopment.net/getkey*
 // @match        https://new.pandadevelopment.net/getkey*
-
-
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
 // @updateURL    https://flopphub-team.github.io/UserScript/User.js
 // @downloadURL  https://flopphub-team.github.io/UserScript/User.js
-// @require      https://flopphub-team.github.io/UserScript/Bypassvip.js
 // @require      https://flopphub-team.github.io/UserScript/Anti-Anuncios-By-BanHammer.js 
-
-
 // @grant        GM_setClipboard
 // @grant        GM_notification
 // @grant        GM_xmlhttpRequest
@@ -32,7 +25,13 @@
     'use strict';
 
     const hostname = window.location.hostname;
-    
+    const currentUrl = window.location.href;
+
+    if (hostname.includes('linkvertise.com') || hostname.includes('rapid-links.com') || hostname.includes('rapid-links.net')) {
+        window.location.replace('https://linkvertise-bypass.com/bypass?link=' + encodeURIComponent(currentUrl));
+        return;
+    }
+
     if (hostname.includes('pandadevelopment.net')) {
         
         class PandaKeyAutoCopy {
