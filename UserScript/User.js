@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PunkX Bypass | AdMavenshort + Linkvertise
 // @namespace    Combined Bypass Scripts
-// @version      2.4
+// @version      2.5
 // @description:es  bypass instantáneo y auto-copy keys en Pandadevelopment
 // @description Instant bypass and auto-copy keys in Pandadevelopment
 // @author       TheRealBanHammer | Mw_Anonymous
