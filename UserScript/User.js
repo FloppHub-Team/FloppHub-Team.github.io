@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         PunkX Bypass | AdMavenshort + Linkvertise
 // @namespace    Combined Bypass Scripts
-// @version      2.5
-// @description:es  bypass instantáneo y auto-copy keys en Pandadevelopment
-// @description Instant bypass and auto-copy keys in Pandadevelopment
+// @version      2.6
+// @description:es  Bypass instantáneo y auto-copy keys en Pandadevelopment
+// @description  Instant bypass and auto-copy keys in Pandadevelopment
 // @author       TheRealBanHammer | Mw_Anonymous
 // @match        https://rapid-links.net/s*
 // @match        https://rapid-links.com/s* 
@@ -11,6 +11,7 @@
 // @match        https://pandadevelopment.net/getkey*
 // @match        https://*.pandadevelopment.net/getkey*
 // @match        https://new.pandadevelopment.net/getkey*
+// @match        https://linkvertise-bypass.com/*
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
 // @updateURL    https://flopphub-team.github.io/UserScript/User.js
 // @downloadURL  https://flopphub-team.github.io/UserScript/User.js
@@ -26,6 +27,29 @@
 
     const hostname = window.location.hostname;
     const currentUrl = window.location.href;
+
+    if (hostname.includes('linkvertise-bypass.com')) {
+        let attempts = 0;
+        const maxAttempts = 600;
+        const interval = setInterval(() => {
+            attempts++;
+            if (attempts > maxAttempts) {
+                clearInterval(interval);
+                return;
+            }
+            
+            const buttons = document.querySelectorAll('button, a, div[role="button"], input[type="button"]');
+            for (const btn of buttons) {
+                const text = (btn.textContent || btn.innerText || btn.value || '').toLowerCase();
+                if (text.includes('access') && text.includes('pandadevelopment')) {
+                    btn.click();
+                    clearInterval(interval);
+                    return;
+                }
+            }
+        }, 500);
+        return;
+    }
 
     if (hostname.includes('linkvertise.com') || hostname.includes('rapid-links.com') || hostname.includes('rapid-links.net')) {
         window.location.replace('https://linkvertise-bypass.com/bypass?link=' + encodeURIComponent(currentUrl));
