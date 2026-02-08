@@ -16,7 +16,7 @@
 // @updateURL    https://flopphub-team.github.io/UserScript/User.js
 // @downloadURL  https://flopphub-team.github.io/UserScript/User.js
 // @require      https://flopphub-team.github.io/UserScript/Anti-Anuncios-By-BanHammer.js
-// @require   https://update.greasyfork.org/scripts/462314/hCaptcha%20Autoclick.user.js 
+// @require        https://update.greasyfork.org/scripts/462314/hCaptcha%20Autoclick.user.js 
 // @grant        GM_setClipboard
 // @grant        GM_notification
 // @grant        GM_xmlhttpRequest
