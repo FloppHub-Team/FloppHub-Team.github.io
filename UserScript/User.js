@@ -1,13 +1,12 @@
 // ==UserScript==
-// @name         PunkX Bypass | AdMavenshort + Linkvertise
+// @name         PunkX Bypass | AdMavenshort + Linkvertise (Modificado)
 // @namespace    Combined Bypass Scripts
-// @version      2.6.1
-// @description:es  Bypass instantáneo y auto-copy keys en Pandadevelopment
+// @version      2.6.3
+// @description:es  Bypass instantáneo y auto-copy keys en Pandadevelopment con redirección lógica
 // @description  Instant bypass and auto-copy keys in Pandadevelopment
 // @author       TheRealBanHammer | Mw_Anonymous
 // @match        https://rapid-links.net/s*
-// @match        https://rapid-links.com/s* 
-// @match        https://linkvertise.com/*/*
+// @match        https://rapid-links.com/s* // @match        https://linkvertise.com/*/*
 // @match        https://pandadevelopment.net/getkey*
 // @match        https://*.pandadevelopment.net/getkey*
 // @match        https://new.pandadevelopment.net/getkey*
@@ -29,6 +28,7 @@
     const hostname = window.location.hostname;
     const currentUrl = window.location.href;
 
+    // --- BLOQUE 1: LINKVERTISE BYPASS (El intermediario) ---
     if (hostname.includes('linkvertise-bypass.com')) {
         let attempts = 0;
         const maxAttempts = 600;
@@ -38,12 +38,32 @@
                 clearInterval(interval);
                 return;
             }
-            
+
             const buttons = document.querySelectorAll('button, a, div[role="button"], input[type="button"]');
             for (const btn of buttons) {
                 const text = (btn.textContent || btn.innerText || btn.value || '').toLowerCase();
+                
                 if (text.includes('access') && text.includes('pandadevelopment')) {
-                    btn.click();
+                    // MODIFICACIÓN: Lógica de retorno y espera
+                    
+                    // 1. Intentamos obtener el link de destino (Panda) y el original
+                    let targetUrl = btn.href || btn.getAttribute('href');
+                    const originalLink = new URLSearchParams(window.location.search).get('link');
+
+                    // Si tenemos ambos links y el botón es un enlace válido
+                    if (targetUrl && originalLink && targetUrl.startsWith('http')) {
+                        console.log('Objetivo encontrado. Iniciando secuencia de retorno...');
+                        
+                        // 2. Guardamos el destino en memoria para usarlo después
+                        localStorage.setItem('punkx_pending_target', targetUrl);
+                        
+                        // 3. Redirigimos de vuelta al Linkvertise original
+                        window.location.href = originalLink;
+                    } else {
+                        // Fallback: Si no podemos extraer el link (ej. es un botón JS), hacemos click normal
+                        btn.click();
+                    }
+                    
                     clearInterval(interval);
                     return;
                 }
@@ -52,13 +72,34 @@
         return;
     }
 
+    // --- BLOQUE 2: LINKVERTISE / RAPID-LINKS (El origen) ---
     if (hostname.includes('linkvertise.com') || hostname.includes('rapid-links.com') || hostname.includes('rapid-links.net')) {
+        
+        // MODIFICACIÓN: Comprobar si venimos del bypass con un destino pendiente
+        const pendingTarget = localStorage.getItem('punkx_pending_target');
+        
+        if (pendingTarget) {
+            console.log('Bypass completado. Esperando 3 segundos para redirigir...');
+            
+            // Limpiamos la memoria para evitar bucles futuros
+            localStorage.removeItem('punkx_pending_target');
+            
+            // Esperamos 3 segundos y vamos al destino final (PandaDevelopment)
+            setTimeout(() => {
+                window.location.replace(pendingTarget);
+            }, 3000);
+            
+            return; // Detenemos el script aquí para que no intente hacer bypass de nuevo
+        }
+
+        // Comportamiento normal (ir al bypasser)
         window.location.replace('https://linkvertise-bypass.com/bypass?link=' + encodeURIComponent(currentUrl));
         return;
     }
 
+    // --- BLOQUE 3: PANDADEVELOPMENT (El destino final - AutoCopy) ---
     if (hostname.includes('pandadevelopment.net')) {
-        
+
         class PandaKeyAutoCopy {
             constructor() {
                 this.hasCopied = false;
@@ -69,11 +110,11 @@
 
             start() {
                 if (this.hasCopied) return;
-                
+
                 console.log('[PandaDev AutoCopy] Iniciado en ' + hostname);
-                
+
                 this.pollForButton();
-                
+
                 if (document.readyState === 'loading') {
                     document.addEventListener('DOMContentLoaded', () => this.pollForButton());
                 }
@@ -86,10 +127,10 @@
                         if (!this.hasCopied) this.fallbackExtract();
                         return;
                     }
-                    
+
                     this.attempts++;
                     const button = this.findCopyButton();
-                    
+
                     if (button) {
                         clearInterval(interval);
                         console.log('[PandaDev AutoCopy] Botón encontrado, intentando click');
@@ -100,7 +141,7 @@
 
             findCopyButton() {
                 const candidates = [];
-                
+
                 const allElements = document.querySelectorAll('button, div, span, a, input');
                 for (const el of allElements) {
                     const text = el.textContent.toLowerCase().trim();
@@ -111,7 +152,7 @@
                                        el.getAttribute('role') === 'button' ||
                                        el.style.cursor === 'pointer' ||
                                        window.getComputedStyle(el).cursor === 'pointer';
-                    
+
                     if (hasCopyText && isVisible) {
                         candidates.push({el, priority: 10});
                     } else if (text === 'copy' && isVisible) {
@@ -120,12 +161,12 @@
                         candidates.push({el, priority: 9});
                     }
                 }
-                
+
                 if (candidates.length > 0) {
                     candidates.sort((a, b) => b.priority - a.priority);
                     return candidates[0].el;
                 }
-                
+
                 const specificSelectors = [
                     'button[class*="copy"]',
                     'button[id*="copy"]',
@@ -137,14 +178,14 @@
                     '.MuiButton-root',
                     '[class*="MuiButton"]'
                 ];
-                
+
                 for (const selector of specificSelectors) {
                     try {
                         const el = document.querySelector(selector);
                         if (el && this.isVisible(el)) return el;
                     } catch(e) {}
                 }
-                
+
                 return null;
             }
 
@@ -163,7 +204,7 @@
                 const rect = element.getBoundingClientRect();
                 const x = rect.left + rect.width / 2;
                 const y = rect.top + rect.height / 2;
-                
+
                 const events = [
                     new MouseEvent('mousemove', { bubbles: true, cancelable: true, clientX: x, clientY: y }),
                     new MouseEvent('mouseenter', { bubbles: true, cancelable: true, clientX: x, clientY: y }),
@@ -172,7 +213,7 @@
                     new MouseEvent('mouseup', { bubbles: true, cancelable: true, button: 0, clientX: x, clientY: y }),
                     new MouseEvent('click', { bubbles: true, cancelable: true, button: 0, clientX: x, clientY: y })
                 ];
-                
+
                 let delay = 0;
                 events.forEach((event, index) => {
                     setTimeout(() => {
@@ -180,10 +221,10 @@
                     }, delay);
                     delay += 50 + Math.random() * 50;
                 });
-                
+
                 setTimeout(() => {
                     element.click();
-                    
+
                     const dataKey = element.getAttribute('data-clipboard-text') || 
                                    element.getAttribute('data-key');
                     if (dataKey) {
@@ -191,7 +232,7 @@
                         this.success(dataKey);
                         return;
                     }
-                    
+
                     setTimeout(() => this.checkClipboard(), 300);
                 }, delay + 100);
             }
@@ -204,7 +245,7 @@
                         return;
                     }
                 } catch(e) {}
-                
+
                 this.fallbackExtract();
             }
 
@@ -219,7 +260,7 @@
                     'div[class*="MuiBox"]',
                     'div[class*="container"]'
                 ];
-                
+
                 for (const selector of selectors) {
                     const elements = document.querySelectorAll(selector);
                     for (const el of elements) {
@@ -232,7 +273,7 @@
                         }
                     }
                 }
-                
+
                 const bodyText = document.body.innerText || document.body.textContent;
                 const match = bodyText.match(/punkx\s*-+\s*[a-z0-9-]+/i);
                 if (match) {
@@ -240,14 +281,14 @@
                     this.success(match[0]);
                     return;
                 }
-                
+
                 console.error('[PandaDev AutoCopy] No se encontró la key');
             }
 
             success(key) {
                 if (this.hasCopied) return;
                 this.hasCopied = true;
-                
+
                 GM_setClipboard(key);
                 GM_notification({
                     text: 'Key copiada: ' + key,
@@ -260,7 +301,7 @@
 
         const autoCopy = new PandaKeyAutoCopy();
         autoCopy.start();
-        
+
         return;
     }
-})(); 
+})();
