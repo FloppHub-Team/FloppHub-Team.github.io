@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PunkX Bypass | AdMavenshort + Linkvertise
 // @namespace    Combined Bypass Scripts
-// @version      2.6
+// @version      2.6.1
 // @description:es  Bypass instantáneo y auto-copy keys en Pandadevelopment
 // @description  Instant bypass and auto-copy keys in Pandadevelopment
 // @author       TheRealBanHammer | Mw_Anonymous
@@ -15,7 +15,8 @@
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
 // @updateURL    https://flopphub-team.github.io/UserScript/User.js
 // @downloadURL  https://flopphub-team.github.io/UserScript/User.js
-// @require      https://flopphub-team.github.io/UserScript/Anti-Anuncios-By-BanHammer.js 
+// @require      https://flopphub-team.github.io/UserScript/Anti-Anuncios-By-BanHammer.js
+// @require https://update.greasyfork.org/scripts/462314/hCaptcha%20Autoclick.user.js 
 // @grant        GM_setClipboard
 // @grant        GM_notification
 // @grant        GM_xmlhttpRequest
