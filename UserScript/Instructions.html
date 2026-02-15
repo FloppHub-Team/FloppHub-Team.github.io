@@ -2,24 +2,47 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FloppHub UserScript Installation Guide</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FloppHub UserScript Guide</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+
     <style>
         :root {
-            --bg-black: #050505;
-            --bg-dark: #0a0a0a;
-            --bg-card: rgba(26, 26, 26, 0.6);
-            --primary-orange: #ff6b00;
-            --primary-glow: rgba(255, 107, 0, 0.5);
-            --accent-orange: #ff8c42;
-            --text-white: #ffffff;
-            --text-gray: #cccccc;
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --transition-speed: 0.3s;
+            --bg: #050505;
+            --bg-soft: #0b0b0b;
+            --card: rgba(255, 255, 255, 0.04);
+            --card-strong: rgba(255, 255, 255, 0.06);
+
+            --border: rgba(255, 255, 255, 0.08);
+            --border-strong: rgba(255, 255, 255, 0.12);
+
+            --text: #ffffff;
+            --muted: rgba(255, 255, 255, 0.68);
+            --muted-2: rgba(255, 255, 255, 0.5);
+
+            --orange: #ff6b00;
+            --orange-soft: rgba(255, 107, 0, 0.18);
+            --orange-glow: rgba(255, 107, 0, 0.32);
+            --orange-2: #ff9a3c;
+
+            --blue: #5865F2;
+            --blue-glow: rgba(88, 101, 242, 0.3);
+
+            --radius-xl: 26px;
+            --radius-lg: 20px;
+            --radius-md: 14px;
+
+            --shadow: 0 18px 60px rgba(0, 0, 0, 0.55);
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+            --transition: 0.28s cubic-bezier(.2, .8, .2, 1);
         }
 
         * {
@@ -28,678 +51,1043 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--bg-black);
-            color: var(--text-white);
-            line-height: 1.6;
-            overflow-x: hidden;
-            background-image:
-                radial-gradient(circle at 10% 20%, rgba(255, 107, 0, 0.05) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(255, 140, 66, 0.05) 0%, transparent 20%);
+        html {
+            scroll-behavior: smooth;
         }
 
+        body {
+            font-family: "Outfit", sans-serif;
+            background: radial-gradient(circle at 15% 15%, rgba(255, 107, 0, 0.08), transparent 40%),
+                radial-gradient(circle at 85% 70%, rgba(255, 154, 60, 0.06), transparent 42%),
+                radial-gradient(circle at 70% 20%, rgba(255, 255, 255, 0.02), transparent 45%),
+                var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Subtle noise overlay (premium look) */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.08;
+            mix-blend-mode: overlay;
+            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+            z-index: 1;
+        }
+
+        /* Smooth scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 9px;
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--bg-dark);
+            background: #0a0a0a;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--primary-orange);
-            border-radius: 4px;
+            background: rgba(255, 107, 0, 0.55);
+            border-radius: 8px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-orange);
+            background: rgba(255, 107, 0, 0.75);
         }
 
-        header {
-            background: rgba(10, 10, 10, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 4rem 1rem;
-            text-align: center;
-            border-bottom: 1px solid var(--primary-orange);
+        a {
+            color: inherit;
+        }
+
+        .page {
             position: relative;
-            z-index: 10;
+            z-index: 2;
+        }
+
+        /* Floating blobs (soft neon, no eye burn) */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.18;
+            pointer-events: none;
+            animation: blobFloat 12s ease-in-out infinite;
+        }
+
+        .blob.orange {
+            background: var(--orange);
+        }
+
+        .blob.white {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .blob.one {
+            width: 320px;
+            height: 320px;
+            top: -90px;
+            left: -90px;
+        }
+
+        .blob.two {
+            width: 420px;
+            height: 420px;
+            bottom: -140px;
+            right: -140px;
+            animation-delay: 2.5s;
+        }
+
+        .blob.three {
+            width: 260px;
+            height: 260px;
+            top: 45%;
+            left: 55%;
+            animation-delay: 4.2s;
+        }
+
+        @keyframes blobFloat {
+            0% {
+                transform: translate(0px, 0px) scale(1);
+            }
+
+            50% {
+                transform: translate(20px, -15px) scale(1.08);
+            }
+
+            100% {
+                transform: translate(0px, 0px) scale(1);
+            }
+        }
+
+        /* Layout */
+        .container {
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 22px;
+        }
+
+        /* Header */
+        header.hero {
+            padding: 70px 0 40px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            position: relative;
             overflow: hidden;
         }
 
-        header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary-orange), transparent);
-            box-shadow: 0 0 15px var(--primary-orange);
-        }
-
-        .logo-container {
-            display: flex;
-            justify-content: center;
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 36px;
             align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-bottom: 1.5rem;
         }
 
-        .logo-container img {
-            height: 100px;
-            border-radius: 16px;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            border: 2px solid transparent;
+        .hero-left {
+            position: relative;
         }
 
-        .logo-container img:hover {
-            transform: scale(1.1) rotate(2deg);
-            box-shadow: 0 0 30px var(--primary-glow);
-            border-color: var(--primary-orange);
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.92rem;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            margin-bottom: 18px;
+        }
+
+        .badge span {
+            color: var(--orange);
+            font-weight: 700;
         }
 
         h1 {
-            color: var(--text-white);
-            font-size: 3rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 20px var(--primary-glow);
-            background: linear-gradient(to right, #fff, var(--primary-orange));
+            font-size: clamp(2.3rem, 4vw, 3.3rem);
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            line-height: 1.1;
+            margin-bottom: 14px;
+
+            /* REQUIRED gradient white -> orange */
+            background: linear-gradient(90deg, #ffffff 0%, #ffffff 30%, var(--orange) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin: 0;
-            padding: 0.5rem;
+
+            text-shadow: 0 0 25px rgba(255, 107, 0, 0.10);
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
+        .subtitle {
+            font-size: 1.05rem;
+            max-width: 580px;
+            color: var(--muted);
+            margin-bottom: 22px;
         }
 
-        section {
-            background: var(--bg-card);
-            backdrop-filter: blur(12px);
-            margin: 3rem 0;
-            padding: 2.5rem;
-            border-radius: 20px;
-            border: 1px solid var(--glass-border);
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 1px solid transparent;
+            border-radius: 999px;
+            padding: 14px 22px;
+            font-weight: 700;
+            font-size: 1.02rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
             position: relative;
             overflow: hidden;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-            opacity: 0;
-            transform: translateY(30px);
         }
 
-        section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
+        .btn.primary {
+            background: linear-gradient(135deg, var(--orange), var(--orange-2));
+            color: #0a0a0a;
+            box-shadow: 0 0 28px rgba(255, 107, 0, 0.14);
+        }
+
+        .btn.primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 42px rgba(255, 107, 0, 0.20);
+        }
+
+        .btn.secondary {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.09);
+            color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+        }
+
+        .btn.secondary:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 107, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .hero-right {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-stack {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .logo {
+            width: 115px;
+            height: 115px;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            box-shadow: var(--shadow-soft);
+            background: rgba(255, 255, 255, 0.03);
+            overflow: hidden;
+            transform: translateY(0);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .logo img {
+            width: 100%;
             height: 100%;
-            background: var(--primary-orange);
-            box-shadow: 0 0 10px var(--primary-orange);
+            object-fit: cover;
+            display: block;
+            filter: contrast(1.1) saturate(1.1);
         }
 
-        section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
-            border-color: var(--primary-orange);
+        .logo::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+            transform: translateX(-120%);
+            transition: 0.6s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-8px) rotate(1deg) scale(1.04);
+            border-color: rgba(255, 107, 0, 0.25);
+            box-shadow: 0 0 40px rgba(255, 107, 0, 0.10);
+        }
+
+        .logo:hover::after {
+            transform: translateX(120%);
+        }
+
+        /* Main sections */
+        main {
+            padding: 40px 0 70px 0;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: var(--radius-xl);
+            padding: 30px;
+            margin: 22px 0;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 18px 70px rgba(0, 0, 0, 0.25);
+            position: relative;
+            overflow: hidden;
+
+            opacity: 0;
+            transform: translateY(22px);
+            transition: 0.65s cubic-bezier(.2, .8, .2, 1);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 10%, rgba(255, 107, 0, 0.08), transparent 40%);
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 2;
         }
 
         h2 {
-            color: var(--primary-orange);
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            text-shadow: 0 0 10px rgba(255, 107, 0, 0.3);
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: rgba(255, 255, 255, 0.92);
         }
 
-        h3 {
-            color: var(--accent-orange);
-            font-size: 1.4rem;
-            margin: 1.5rem 0 0.8rem 0;
+        .section-tag {
+            font-size: 0.85rem;
+            padding: 7px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 107, 0, 0.22);
+            background: rgba(255, 107, 0, 0.07);
+            color: rgba(255, 180, 120, 0.9);
+            font-weight: 700;
+            white-space: nowrap;
         }
 
         p {
-            color: var(--text-gray);
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
+            color: var(--muted);
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 2;
         }
 
-        .browser-grid {
+        /* Browser device cards */
+        .device-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 18px;
+            position: relative;
+            z-index: 2;
         }
 
         .device-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--glass-border);
-            padding: 2rem;
-            border-radius: 16px;
-            text-align: center;
-            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.035);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            transition: var(--transition);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
             position: relative;
+            overflow: hidden;
         }
 
         .device-card:hover {
-            background: rgba(255, 107, 0, 0.1);
-            border-color: var(--primary-orange);
-            box-shadow: 0 0 25px rgba(255, 107, 0, 0.2) inset;
-            transform: scale(1.02);
+            transform: translateY(-6px);
+            border-color: rgba(255, 107, 0, 0.22);
+            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .device-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
         }
 
         .device-icon {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
-            transition: transform 0.3s ease;
+            font-size: 2.2rem;
+            filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.08));
         }
 
-        .device-card:hover .device-icon {
-            transform: scale(1.1);
-            filter: drop-shadow(0 0 15px var(--primary-orange));
+        .device-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.9);
         }
 
-        .device-card ul {
+        .device-sub {
+            font-size: 0.9rem;
+            color: var(--muted-2);
+            margin-bottom: 12px;
+        }
+
+        .device-list {
             list-style: none;
-            text-align: left;
-            margin-top: 1.5rem;
+            margin-top: 10px;
         }
 
-        .device-card li {
-            padding: 0.5rem 0;
+        .device-list li {
+            padding: 8px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.78);
             font-size: 0.95rem;
         }
 
-        .device-card li:last-child {
+        .device-list li:last-child {
             border-bottom: none;
         }
 
+        .danger {
+            color: #ff4f4f !important;
+            font-weight: 700;
+        }
+
+        /* Downloads */
         .download-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 18px;
+            position: relative;
+            z-index: 2;
         }
 
         .download-card {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid var(--glass-border);
-            transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            transition: var(--transition);
         }
 
         .download-card:hover {
-            border-color: var(--primary-orange);
-            box-shadow: 0 5px 20px rgba(255, 107, 0, 0.15);
+            transform: translateY(-5px);
+            border-color: rgba(255, 107, 0, 0.18);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.35);
+        }
+
+        .download-card h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: rgba(255, 255, 255, 0.92);
         }
 
         .download-links {
             display: flex;
             flex-direction: column;
-            gap: 0.8rem;
-            margin-top: 1rem;
+            gap: 10px;
         }
 
         .download-links a {
-            color: var(--text-white);
             text-decoration: none;
-            padding: 0.8rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 500;
+            padding: 11px 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.82);
+            transition: var(--transition);
         }
 
         .download-links a:hover {
-            background: var(--primary-orange);
-            border-color: var(--primary-orange);
-            color: #000;
-            box-shadow: 0 0 15px var(--primary-orange);
-            font-weight: 700;
+            background: rgba(255, 107, 0, 0.12);
+            border-color: rgba(255, 107, 0, 0.22);
+            transform: translateX(4px);
+        }
+
+        /* Extension list */
+        .extension-block {
+            margin-top: 18px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .ext-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 20px;
+            margin-bottom: 10px;
         }
 
         .extension-list {
             list-style: none;
-            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        .extension-list li {
-            background: rgba(255, 255, 255, 0.03);
-            margin: 1rem 0;
-            padding: 1.2rem;
-            border-radius: 12px;
+        .extension-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .extension-list li:hover {
-            border-color: var(--accent-orange);
-            background: rgba(255, 140, 66, 0.1);
-        }
-
-        .extension-list a {
-            color: var(--bg-black);
-            text-decoration: none;
-            font-weight: 700;
-            padding: 0.6rem 1.2rem;
-            background: var(--primary-orange);
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .extension-list a:hover {
-            background: #fff;
-            color: var(--primary-orange);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .warning-box {
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.1), rgba(255, 140, 66, 0.05));
-            border: 1px solid var(--primary-orange);
-            color: var(--text-white);
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin: 1.5rem 0;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            box-shadow: 0 0 20px rgba(255, 107, 0, 0.1) inset;
-        }
-
-        .warning-box strong {
-            color: var(--primary-orange);
-            font-size: 1.2rem;
-        }
-
-        .install-btn {
-            display: inline-block;
-            padding: 1.2rem 3rem;
-            background: linear-gradient(45deg, var(--primary-orange), var(--accent-orange));
-            color: #000;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 800;
-            font-size: 1.3rem;
-            margin: 1.5rem 0;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px var(--primary-glow);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid transparent;
-        }
-
-        .install-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: 0.5s;
-        }
-
-        .install-btn:hover::before {
-            left: 100%;
-        }
-
-        .install-btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 30px var(--primary-glow);
-            color: #fff;
-            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-            background: var(--bg-black);
-            border-color: var(--primary-orange);
-        }
-
-        .userscript-info {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 2rem;
+            gap: 14px;
+            padding: 16px 16px;
             border-radius: 16px;
-            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            transition: var(--transition);
         }
 
-        footer {
-            background: var(--bg-dark);
-            text-align: center;
-            padding: 4rem 2rem;
-            margin-top: 4rem;
-            border-top: 1px solid var(--glass-border);
+        .extension-item:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 107, 0, 0.22);
+        }
+
+        .extension-item span {
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+        .extension-item a {
+            text-decoration: none;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--orange), var(--orange-2));
+            color: #0b0b0b;
+            font-weight: 900;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .extension-item a:hover {
+            transform: scale(1.06);
+            box-shadow: 0 0 28px rgba(255, 107, 0, 0.18);
+        }
+
+        /* Warning */
+        .warning {
+            margin-top: 16px;
+            border-radius: var(--radius-lg);
+            padding: 18px 18px;
+            border: 1px solid rgba(255, 107, 0, 0.25);
+            background: rgba(255, 107, 0, 0.07);
+            color: rgba(255, 255, 255, 0.85);
             position: relative;
+            z-index: 2;
         }
 
-        footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            height: 1px;
-            background: radial-gradient(circle, var(--primary-orange) 0%, transparent 100%);
+        .warning strong {
+            color: rgba(255, 180, 120, 0.95);
+        }
+
+        /* Script block */
+        .script-box {
+            margin-top: 18px;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+        .feature {
+            border-radius: 16px;
+            padding: 14px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            background: rgba(0, 0, 0, 0.22);
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .feature:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 107, 0, 0.18);
+        }
+
+        .script-footer {
+            text-align: center;
+            margin-top: 22px;
+        }
+
+        .note {
+            margin-top: 10px;
+            font-size: 0.88rem;
+            color: rgba(255, 255, 255, 0.55);
+        }
+
+        /* Footer */
+        footer {
+            padding: 50px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(14px);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .footer-title {
+            font-size: 1.7rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .discord-btn {
             display: inline-flex;
+            justify-content: center;
             align-items: center;
-            gap: 0.8rem;
-            padding: 1rem 2.5rem;
-            background: #5865F2;
-            color: white;
+            gap: 10px;
+            padding: 14px 20px;
+            border-radius: 999px;
+            font-weight: 900;
             text-decoration: none;
-            border-radius: 50px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            margin-top: 1.5rem;
-            box-shadow: 0 5px 15px rgba(88, 101, 242, 0.3);
-            font-size: 1.1rem;
+            background: rgba(88, 101, 242, 0.12);
+            border: 1px solid rgba(88, 101, 242, 0.35);
+            color: rgba(255, 255, 255, 0.9);
+            transition: var(--transition);
+            box-shadow: 0 0 30px rgba(88, 101, 242, 0.10);
         }
 
         .discord-btn:hover {
-            background: #4752C4;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.5);
+            transform: translateY(-4px);
+            background: rgba(88, 101, 242, 0.2);
+            box-shadow: 0 0 40px rgba(88, 101, 242, 0.16);
         }
 
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
+        .copyright {
+            margin-top: 28px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+        }
+
+        /* MOBILE VERSION (app-like UI) */
+        @media (max-width: 920px) {
+            header.hero {
+                padding: 60px 0 34px 0;
             }
 
-            .logo-container img {
-                height: 70px;
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
             }
 
+            .subtitle {
+                margin: 0 auto 18px auto;
+            }
+
+            .cta-row {
+                justify-content: center;
+            }
+
+            .device-grid,
+            .download-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        /* Super small phones */
+        @media (max-width: 480px) {
             .container {
-                padding: 1rem;
+                padding: 0 16px;
             }
 
-            section {
-                padding: 1.5rem;
-                margin: 2rem 0;
+            .section {
+                padding: 22px;
             }
 
-            .extension-list li {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-            .install-btn {
+            .btn {
                 width: 100%;
+            }
+
+            .extension-item {
+                flex-direction: column;
+                align-items: stretch;
                 text-align: center;
             }
-        }
 
-        @keyframes float {
-            0% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-
-            100% {
-                transform: translateY(0px);
+            .extension-item a {
+                width: 100%;
             }
         }
 
-        .logo-container img {
-            animation: float 6s ease-in-out infinite;
-        }
+        /* Subtle fade-in for everything */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(22px);
+            }
 
-        .logo-container img:nth-child(2) {
-            animation-delay: 1s;
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 
 <body>
-    <header>
-        <div class="logo-container">
-            <img src="https://i.postimg.cc/brq86RKj/loc-phub.jpg.png" alt="FloppHub Logo">
-            <img src="https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg" alt="UserScript Logo">
-        </div>
-        <h1>FloppHub UserScript Guide</h1>
-    </header>
+    <div class="page">
+        <div class="blob orange one"></div>
+        <div class="blob orange two"></div>
+        <div class="blob white three"></div>
 
-    <div class="container">
-        <section id="what-is">
-            <h2>🔍 What is a UserScript?</h2>
-            <p>A UserScript is a JavaScript program that modifies web pages to enhance functionality, automate tasks, or
-                customize your browsing experience. Think of it as a mini-extension that runs directly in your browser
-                to improve how websites work for you.</p>
-            <p>UserScripts are lightweight, fast, and highly customizable solutions for power users who want more
-                control over their web experience.</p>
-        </section>
+        <header class="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="hero-left">
+                        <div class="badge">
+                            ⚡ <span>FloppHub</span> UserScript Installation Guide
+                        </div>
 
-        <section id="browsers">
-            <h2>🌐 Compatible Browsers by Device</h2>
-            <div class="browser-grid">
-                <div class="device-card">
-                    <div class="device-icon">💻</div>
-                    <h3>Desktop</h3>
-                    <p style="font-size: 0.9rem; margin-bottom: 0;">Windows / macOS / Linux</p>
-                    <ul>
-                        <li>✅ Google Chrome</li>
-                        <li>✅ Mozilla Firefox</li>
-                        <li>✅ Microsoft Edge</li>
-                        <li>✅ Opera</li>
-                        <li>✅ Brave</li>
-                    </ul>
-                </div>
-                <div class="device-card">
-                    <div class="device-icon">📱</div>
-                    <h3>iOS</h3>
-                    <p style="font-size: 0.9rem; margin-bottom: 0;">iPhone / iPad</p>
-                    <ul>
-                        <li>✅ Safari (with Userscripts app)</li>
-                        <li>✅ Orion Browser</li>
-                        <li>✅ Firefox (Limited support)</li>
-                    </ul>
-                </div>
-                <div class="device-card">
-                    <div class="device-icon">🤖</div>
-                    <h3>Android</h3>
-                    <p style="font-size: 0.9rem; margin-bottom: 0;">Mobile / Tablet</p>
-                    <ul>
-                        <li>✅ Firefox Nightly/Standard</li>
-                        <li>✅ Yandex Browser</li>
-                        <li>✅ Samsung Internet (via Add-ons)</li>
-                        <li>✅ Lemur Browser</li>
-                        <li style="color: #ff4444;">❌ Google Chrome (No Extensions)</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+                        <h1>FloppHub UserScript Guide</h1>
 
-        <section id="browser-downloads">
-            <h2>⬇️ Browser Downloads</h2>
-            <div class="download-grid">
-                <div class="download-card">
-                    <h4>🖥️ Desktop</h4>
-                    <div class="download-links">
-                        <a href="https://www.google.com/chrome/" target="_blank">Google Chrome</a>
-                        <a href="https://www.mozilla.org/firefox/new/" target="_blank">Mozilla Firefox</a>
-                        <a href="https://www.microsoft.com/edge" target="_blank">Microsoft Edge</a>
-                        <a href="https://www.opera.com/download" target="_blank">Opera Browser</a>
-                        <a href="https://brave.com/download/" target="_blank">Brave Browser</a>
+                        <p class="subtitle">
+                            A clean, modern and professional guide to install UserScripts on desktop and mobile.
+                            Designed for speed, clarity, and a premium dark aesthetic.
+                        </p>
+
+                        <div class="cta-row">
+                            <a href="#flopphub-script" class="btn primary">🚀 Get the Script</a>
+                            <a href="#extensions" class="btn secondary">🔧 Required Extensions</a>
+                        </div>
                     </div>
-                </div>
-                <div class="download-card">
-                    <h4>📱 iOS</h4>
-                    <div class="download-links">
-                        <a href="https://apps.apple.com/app/safari/id1146564808" target="_blank">Safari</a>
-                        <a href="https://apps.apple.com/app/orion-browser/id1484498200" target="_blank">Orion
-                            Browser</a>
-                    </div>
-                </div>
-                <div class="download-card">
-                    <h4>🤖 Android</h4>
-                    <div class="download-links">
-                        <a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox"
-                            target="_blank">Firefox</a>
-                        <a href="https://play.google.com/store/apps/details?id=com.yandex.browser"
-                            target="_blank">Yandex Browser</a>
-                        <a href="https://play.google.com/store/apps/details?id=com.sec.android.app.sbrowser"
-                            target="_blank">Samsung Internet</a>
-                        <a href="https://play.google.com/store/apps/details?id=com.lemurbrowser.exts"
-                            target="_blank">Lemur Browser</a>
+
+                    <div class="hero-right">
+                        <div class="logo-stack">
+                            <div class="logo">
+                                <img src="https://i.postimg.cc/brq86RKj/loc-phub.jpg.png" alt="FloppHub Logo">
+                            </div>
+                            <div class="logo">
+                                <img src="https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg"
+                                    alt="UserScript Logo">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </header>
 
-        <section id="extensions">
-            <h2>🔧 Required Extensions</h2>
-            <p>To run UserScripts, you need a manager extension. Choose one based on your browser:</p>
+        <main>
+            <div class="container">
 
-            <h3>Violentmonkey (Recommended)</h3>
-            <ul class="extension-list">
-                <li>
-                    <span>🖥️ Chrome / Edge / Opera</span>
-                    <a href="https://chrome.google.com/webstore/detail/violentmonkey/jinjaccalgkejednnccoanngcbfjdicp"
-                        target="_blank">Install for Chrome</a>
-                </li>
-                <li>
-                    <span>🦊 Firefox</span>
-                    <a href="https://addons.mozilla.org/en-US/firefox/addon/violentmonkey/" target="_blank">Install for
-                        Firefox</a>
-                </li>
-            </ul>
-
-            <h3>Tampermonkey</h3>
-            <ul class="extension-list">
-                <li>
-                    <span>🖥️ Chrome / Edge / Opera</span>
-                    <a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo"
-                        target="_blank">Install for Chrome</a>
-                </li>
-                <li>
-                    <span>🦊 Firefox</span>
-                    <a href="https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/" target="_blank">Install for
-                        Firefox</a>
-                </li>
-                <li>
-                    <span>📱 iOS - Userscripts App</span>
-                    <a href="https://apps.apple.com/us/app/userscripts/id1463298887" target="_blank">Install from App
-                        Store</a>
-                </li>
-            </ul>
-        </section>
-
-        <section id="chrome-android">
-            <h2>⚠️ Chrome on Android</h2>
-            <div class="warning-box">
-                <div>
-                    <strong>Important Limitation:</strong> <br>
-                    Google Chrome for Android <strong>does not support extensions</strong>. This is a deliberate
-                    restriction by Google.
-                </div>
-            </div>
-            <p>Android users must install alternative browsers like <strong>Firefox</strong>, <strong>Yandex</strong>,
-                or <strong>Lemur</strong> to use this script. These browsers fully support the extensions needed.</p>
-        </section>
-
-        <section id="flopphub-script">
-            <h2>🎯 FloppHub UserScript</h2>
-            <div class="userscript-info">
-                <h3>🔑 PunkX Key Automation</h3>
-                <p>Streamline your key retrieval from PunkX. This script automatically bypasses AdMavenshort links and
-                    copies the key to your clipboard instantly.</p>
-
-                <div style="margin: 1.5rem 0; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px;">
-                    <strong style="color: var(--primary-orange); display: block; margin-bottom: 0.5rem;">✨ Key
-                        Features:</strong>
-                    <ul style="margin-left: 1.5rem; color: var(--text-gray);">
-                        <li>Auto-bypass AdMavenshort links</li>
-                        <li>Instant key copy to clipboard</li>
-                        <li>Seamless PunkX integration</li>
-                        <li>Saves valuable time</li>
-                    </ul>
-                </div>
-
-                <p style="font-size: 0.9rem; opacity: 0.8;">
-                    <strong>Note:</strong> Integrates with Linkvertse-Bypass.com infrastructure. Not affiliated with
-                    pandadevelopment.net.
-                </p>
-
-                <div style="text-align: center; margin-top: 2rem;">
-                    <a href="https://flopphub-team.github.io/UserScript/User.js" class="install-btn" target="_blank">📥
-                        Install Script</a>
-                    <p style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.6;">Requires one of the extensions above
+                <section class="section" id="what-is">
+                    <div class="section-title">
+                        <h2>🔍 What is a UserScript?</h2>
+                        <div class="section-tag">Basics</div>
+                    </div>
+                    <p>
+                        A <strong>UserScript</strong> is a JavaScript program that runs inside your browser to modify or
+                        enhance websites.
+                        It works like a lightweight extension that can automate tasks, unlock features, or improve the
+                        browsing experience.
                     </p>
+                    <p>
+                        UserScripts are fast, customizable, and extremely useful for power users.
+                    </p>
+                </section>
+
+                <section class="section" id="browsers">
+                    <div class="section-title">
+                        <h2>🌐 Compatible Browsers by Device</h2>
+                        <div class="section-tag">Platforms</div>
+                    </div>
+
+                    <p>
+                        Choose the best browser depending on your device. This ensures full extension support and smooth
+                        script execution.
+                    </p>
+
+                    <div class="device-grid">
+                        <div class="device-card">
+                            <div class="device-head">
+                                <div class="device-title">Desktop</div>
+                                <div class="device-icon">💻</div>
+                            </div>
+                            <div class="device-sub">Windows / macOS / Linux</div>
+                            <ul class="device-list">
+                                <li>✅ Google Chrome</li>
+                                <li>✅ Mozilla Firefox</li>
+                                <li>✅ Microsoft Edge</li>
+                                <li>✅ Opera</li>
+                                <li>✅ Brave</li>
+                            </ul>
+                        </div>
+
+                        <div class="device-card">
+                            <div class="device-head">
+                                <div class="device-title">iOS</div>
+                                <div class="device-icon">📱</div>
+                            </div>
+                            <div class="device-sub">iPhone / iPad</div>
+                            <ul class="device-list">
+                                <li>✅ Safari (with Userscripts app)</li>
+                                <li>✅ Orion Browser</li>
+                                <li>⚠️ Firefox (Limited support)</li>
+                            </ul>
+                        </div>
+
+                        <div class="device-card">
+                            <div class="device-head">
+                                <div class="device-title">Android</div>
+                                <div class="device-icon">🤖</div>
+                            </div>
+                            <div class="device-sub">Mobile / Tablet</div>
+                            <ul class="device-list">
+                                <li>✅ Firefox Nightly / Standard</li>
+                                <li>✅ Yandex Browser</li>
+                                <li>✅ Samsung Internet</li>
+                                <li>✅ Lemur Browser</li>
+                                <li class="danger">❌ Google Chrome (No Extensions)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section" id="browser-downloads">
+                    <div class="section-title">
+                        <h2>⬇️ Browser Downloads</h2>
+                        <div class="section-tag">Links</div>
+                    </div>
+
+                    <p>
+                        Install one of these browsers to guarantee compatibility and full UserScript support.
+                    </p>
+
+                    <div class="download-grid">
+                        <div class="download-card">
+                            <h3>🖥️ Desktop</h3>
+                            <div class="download-links">
+                                <a href="https://www.google.com/chrome/" target="_blank">Google Chrome</a>
+                                <a href="https://www.mozilla.org/firefox/new/" target="_blank">Mozilla Firefox</a>
+                                <a href="https://www.microsoft.com/edge" target="_blank">Microsoft Edge</a>
+                                <a href="https://www.opera.com/download" target="_blank">Opera Browser</a>
+                                <a href="https://brave.com/download/" target="_blank">Brave Browser</a>
+                            </div>
+                        </div>
+
+                        <div class="download-card">
+                            <h3>📱 iOS</h3>
+                            <div class="download-links">
+                                <a href="https://apps.apple.com/app/safari/id1146564808" target="_blank">Safari</a>
+                                <a href="https://apps.apple.com/app/orion-browser/id1484498200"
+                                    target="_blank">Orion Browser</a>
+                            </div>
+                        </div>
+
+                        <div class="download-card">
+                            <h3>🤖 Android</h3>
+                            <div class="download-links">
+                                <a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox"
+                                    target="_blank">Firefox</a>
+                                <a href="https://play.google.com/store/apps/details?id=com.yandex.browser"
+                                    target="_blank">Yandex Browser</a>
+                                <a href="https://play.google.com/store/apps/details?id=com.sec.android.app.sbrowser"
+                                    target="_blank">Samsung Internet</a>
+                                <a href="https://play.google.com/store/apps/details?id=com.lemurbrowser.exts"
+                                    target="_blank">Lemur Browser</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section" id="extensions">
+                    <div class="section-title">
+                        <h2>🔧 Required Extensions</h2>
+                        <div class="section-tag">Must Have</div>
+                    </div>
+
+                    <p>
+                        To run UserScripts, you need a UserScript manager extension.
+                        The best choices are <strong>Violentmonkey</strong> and <strong>Tampermonkey</strong>.
+                    </p>
+
+                    <div class="extension-block">
+                        <div class="ext-title">Violentmonkey (Recommended)</div>
+                        <ul class="extension-list">
+                            <li class="extension-item">
+                                <span>🖥️ Chrome / Edge / Opera</span>
+                                <a href="https://chrome.google.com/webstore/detail/violentmonkey/jinjaccalgkejednnccoanngcbfjdicp"
+                                    target="_blank">Install</a>
+                            </li>
+                            <li class="extension-item">
+                                <span>🦊 Firefox</span>
+                                <a href="https://addons.mozilla.org/en-US/firefox/addon/violentmonkey/"
+                                    target="_blank">Install</a>
+                            </li>
+                        </ul>
+
+                        <div class="ext-title">Tampermonkey</div>
+                        <ul class="extension-list">
+                            <li class="extension-item">
+                                <span>🖥️ Chrome / Edge / Opera</span>
+                                <a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo"
+                                    target="_blank">Install</a>
+                            </li>
+                            <li class="extension-item">
+                                <span>🦊 Firefox</span>
+                                <a href="https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/"
+                                    target="_blank">Install</a>
+                            </li>
+                            <li class="extension-item">
+                                <span>📱 iOS - Userscripts App</span>
+                                <a href="https://apps.apple.com/us/app/userscripts/id1463298887"
+                                    target="_blank">Install</a>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section" id="chrome-android">
+                    <div class="section-title">
+                        <h2>⚠️ Chrome on Android</h2>
+                        <div class="section-tag">Warning</div>
+                    </div>
+
+                    <div class="warning">
+                        <strong>Important:</strong> Google Chrome for Android does <strong>NOT</strong> support browser
+                        extensions.
+                        This is a limitation from Google itself.
+                    </div>
+
+                    <p style="margin-top: 14px;">
+                        Android users must install alternative browsers like <strong>Firefox</strong>,
+                        <strong>Yandex</strong>, or <strong>Lemur</strong> to use this script.
+                    </p>
+                </section>
+
+                <section class="section" id="flopphub-script">
+                    <div class="section-title">
+                        <h2>🎯 FloppHub UserScript</h2>
+                        <div class="section-tag">Main</div>
+                    </div>
+
+                    <div class="script-box">
+                        <p style="font-size: 1.05rem;">
+                            <strong>🔑 PunkX Key Automation</strong> — Automates key retrieval by bypassing AdMavenshort
+                            links
+                            and copying the key instantly to your clipboard.
+                        </p>
+
+                        <div class="feature-grid">
+                            <div class="feature">⚡ Auto-bypass AdMavenshort links</div>
+                            <div class="feature">📋 Instant key copy to clipboard</div>
+                            <div class="feature">🔗 Seamless PunkX integration</div>
+                            <div class="feature">🕒 Saves time and clicks</div>
+                        </div>
+
+                        <p class="note">
+                            Note: Integrates with Linkvertse-Bypass.com infrastructure. Not affiliated with
+                            pandadevelopment.net.
+                        </p>
+
+                        <div class="script-footer">
+                            <a href="https://flopphub-team.github.io/UserScript/User.js" class="btn primary"
+                                target="_blank">
+                                📥 Install Script
+                            </a>
+
+                            <div class="note">
+                                Requires Violentmonkey or Tampermonkey.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+
+        <footer>
+            <div class="container">
+                <div class="footer-grid">
+                    <div>
+                        <div class="footer-title">🔗 Join the Community</div>
+                        <div class="footer-text">
+                            Get support, updates, and chat with other users in the official Discord server.
+                        </div>
+                    </div>
+
+                    <div style="display:flex; justify-content:center;">
+                        <a href="https://discord.gg/J9dSv7hq55" class="discord-btn" target="_blank">
+                            💬 Join Discord Server
+                        </a>
+                    </div>
+                </div>
+
+                <div class="copyright">
+                    © 2026 FloppHub Team. All rights reserved.
                 </div>
             </div>
-        </section>
+        </footer>
     </div>
 
-    <footer>
-        <h2>🔗 Join the Community</h2>
-        <p>Get support, updates, and chat with other users.</p>
-        <a href="https://discord.gg/J9dSv7hq55" class="discord-btn" target="_blank">
-            <span>💬 Join Discord Server</span>
-        </a>
-        <p style="margin-top: 3rem; color: var(--text-gray); font-size: 0.9rem;">© 2026 FloppHub Team. All rights
-            reserved.</p>
-    </footer>
-
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const sections = document.querySelectorAll('section');
+        // Smooth reveal animation (premium feel)
+        document.addEventListener("DOMContentLoaded", () => {
+            const sections = document.querySelectorAll(".section");
 
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
+                        entry.target.classList.add("visible");
                     }
                 });
             }, {
                 threshold: 0.15,
-                rootMargin: "0px 0px -50px 0px"
+                rootMargin: "0px 0px -80px 0px"
             });
 
-            sections.forEach(section => {
-                observer.observe(section);
-            });
-
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
+            sections.forEach(sec => observer.observe(sec));
         });
     </script>
+
 </body>
 
-</html>
+    </html>
