@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bypass PunkX | iZen API
 // @namespace    Bypass PunkX Lol
-// @version      2.9
+// @version      3.0
 // @description  PunkX bypass automated with izen
 // @author       nytralis | Mw_Anonymous | TheRealBanHammer
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
