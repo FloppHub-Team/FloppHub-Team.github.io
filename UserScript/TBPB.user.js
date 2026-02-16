@@ -1,27 +1,27 @@
 // ==UserScript==
 // @name         Bypass PunkX | iZen API
 // @namespace    Bypass PunkX Lol
-// @version      2.8
+// @version      2.9
 // @description  PunkX bypass automated with izen
 // @author       nytralis | Mw_Anonymous | TheRealBanHammer
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
-// @match        https://izen.lol/ *
-// @match        https://linkvertise.com/ *
-// @match        https://link-to.net/ *
-// @match        https://direct-link.net/ *
-// @match        https://link-center.net/ *
-// @match        https://direkt-wissen.com/ *
-// @match        https://loot-link.com/ *
-// @match        https://links-loot.com/ *
-// @match        https://rapid-links.com/s? *
-// @match        https://short-jambo.com/ *
-// @match        https://new.pandadevelopment.net/getkey/ *
-// @match        https://pandadevelopment.net/getkey/ *
+// @match        https://izen.lol/*
+// @match        https://linkvertise.com/*
+// @match        https://link-to.net/*
+// @match        https://direct-link.net/*
+// @match        https://link-center.net/*
+// @match        https://direkt-wissen.com/*
+// @match        https://loot-link.com/*
+// @match        https://links-loot.com/*
+// @match        https://rapid-links.com/s?*
+// @match        https://short-jambo.com/*
+// @match        https://new.pandadevelopment.net/getkey/*
+// @match        https://pandadevelopment.net/getkey/*
 // @grant        GM_setClipboard
 // @grant        GM_notification
 // @grant        GM_xmlhttpRequest
 // @connect      *
-// @require      https://flopphub-team.github.io/UserScript/Anti-Anuncios-By-BanHammer.js 
+// @require      https://flopphub-team.github.io/UserScript/Anti-Anuncios-By-BanHammer.js
 // @downloadURL  https://github.com/FloppHub-Team/FloppHub-Team.github.io/raw/refs/heads/main/UserScript/TBPB.user.js
 // @updateURL    https://github.com/FloppHub-Team/FloppHub-Team.github.io/raw/refs/heads/main/UserScript/TBPB.user.js
 // @run-at       document-start
@@ -62,7 +62,7 @@
             navigator.clipboard.writeText(currentUrl).catch(console.error);
             console.log('[Redirect] URL copiée via navigator.clipboard');
         }
-        window.location.replace('https://izen.lol/ ');
+        window.location.replace('https://izen.lol/');
     }
 
     if (!isIzen && isTargetDomain) {
@@ -123,7 +123,7 @@
             const u = params.get('url');
             if (u) return u;
             if (document.referrer) return document.referrer;
-            return 'https://www.google.com/ ';
+            return 'https://www.google.com/';
         };
 
         const targetURL = getTargetURL();
@@ -135,7 +135,7 @@
                 if (!correctedURL.endsWith('/')) correctedURL += '/';
             }
         } catch (e) {
-            correctedURL = 'https://www.youtube.com/ ';
+            correctedURL = 'https://www.youtube.com/';
         }
 
         console.log('[Izen.lol] URL à utiliser :', correctedURL);
@@ -542,14 +542,14 @@
 
             const data = new FormData(form);
             return new Promise((resolve, reject) => {
-                GM.xmlhttpRequest({
+                GM_xmlhttpRequest({
                     method: "POST",
                     url: form.action,
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                         'Referer': window.location.href,
                     },
-                    data: new URLSearchParams(data),
+                    data: new URLSearchParams(data).toString(),
                     onload: (response) => resolve(response.finalUrl),
                     onerror: reject
                 });
@@ -627,8 +627,9 @@
         const hostname = window.location.hostname;
 
         if (hostname.includes('pandadev') || hostname.includes('new.pandadevelopment')) {
-            notification('ULTRA AutoCopy aktiviert (v2.1)', 3000);
+            notification('ULTRA AutoCopy aktiviert (v2.9)', 3000);
             await pandadevelopment();
         }
     })();
 })();
+ 
