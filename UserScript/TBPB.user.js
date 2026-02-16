@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bypass PunkX | iZen API
 // @namespace    Bypass PunkX Lol
-// @version      2.7
+// @version      2.8
 // @description  PunkX bypass automated with izen
 // @author       nytralis | Mw_Anonymous | TheRealBanHammer
 // @match        https://izen.lol/ *
@@ -21,6 +21,8 @@
 // @grant        GM_xmlhttpRequest
 // @connect      *
 // @require      https://flopphub-team.github.io/UserScript/Anti-Anuncios-By-BanHammer.js 
+// @downloadURL  https://flopphub-team.github.io/Userscript/TBPB.user.js
+// @updateURL    https://flopphub-team.github.io/Userscript/TBPB.user.js
 // @run-at       document-start
 // ==/UserScript==
 
