@@ -21,6 +21,7 @@
 // @grant        GM_xmlhttpRequest
 // @connect      *
 // @require      https://flopphub-team.github.io/UserScript/Anti-Anuncios-By-BanHammer.js 
+// @require      https://update.greasyfork.org/scripts/462314/hCaptcha%20Autoclick.user.js
 // @downloadURL  https://github.com/FloppHub-Team/FloppHub-Team.github.io/raw/refs/heads/main/UserScript/TBPB.user.js
 // @updateURL    https://github.com/FloppHub-Team/FloppHub-Team.github.io/raw/refs/heads/main/UserScript/TBPB.user.js
 // @run-at       document-start
