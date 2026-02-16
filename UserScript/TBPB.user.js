@@ -21,8 +21,8 @@
 // @grant        GM_xmlhttpRequest
 // @connect      *
 // @require      https://flopphub-team.github.io/UserScript/Anti-Anuncios-By-BanHammer.js 
-// @downloadURL  https://flopphub-team.github.io/Userscript/TBPB.user.js
-// @updateURL    https://flopphub-team.github.io/Userscript/TBPB.user.js
+// @downloadURL  https://github.com/FloppHub-Team/FloppHub-Team.github.io/raw/refs/heads/main/UserScript/TBPB.user.js
+// @updateURL    https://github.com/FloppHub-Team/FloppHub-Team.github.io/raw/refs/heads/main/UserScript/TBPB.user.js
 // @run-at       document-start
 // ==/UserScript==
 
