@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bypass PunkX | iZen API
 // @namespace    Bypass PunkX Lol
-// @version      3.0
+// @version      3.1
 // @description  PunkX bypass automated with izen
 // @author       nytralis | Mw_Anonymous | TheRealBanHammer
 // @icon         https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg
@@ -25,7 +25,7 @@
 // @require      https://update.greasyfork.org/scripts/455610/AUTO-OPEN%20hCaptcha%20%2B%20reCaptcha.user.js
 // @downloadURL  https://github.com/FloppHub-Team/FloppHub-Team.github.io/raw/refs/heads/main/UserScript/TBPB.user.js
 // @updateURL    https://github.com/FloppHub-Team/FloppHub-Team.github.io/raw/refs/heads/main/UserScript/TBPB.user.js
-// @run-at       document-start
+// @run-at       document-idle
 // ==/UserScript==
 
 (function () {
@@ -268,211 +268,170 @@
         constructor() {
             this.hasCopied = false;
             this.keyPattern = /PUNKX--[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}/i;
+            this.maxAttempts = 100;
+            this.attemptInterval = 500;
         }
 
         async start() {
-            if (this.hasCopied) return;
-            console.log('[Pangdev ULTRA] Suche nach Copy-Button...');
-            const copyButton = await this.waitForCopyButton();
-            if (copyButton) {
-                await this.clickCopyButton(copyButton);
-            } else {
-                console.warn('[Pangdev ULTRA] Copy-Button nicht gefunden, versuche Fallback');
-                this.fallbackManualExtract();
-            }
+            console.log('[Pangdev ULTRA] Iniciando búsqueda continua de key...');
+            
+            this.startDOMObserver();
+            this.startPeriodicCheck();
+            setTimeout(() => this.waitAndClickCopyButton(), 2000);
         }
 
-        waitForCopyButton() {
-            return new Promise(resolve => {
-                let attempts = 0;
-                const maxAttempts = 50;
-                const check = () => {
-                    attempts++;
-                    const button = this.findCopyButton();
-                    if (button) {
-                        console.log('[Pangdev ULTRA] Copy-Button gefunden nach', attempts, 'Versuchen');
-                        resolve(button);
-                    } else if (attempts >= maxAttempts) {
-                        console.error('[Pangdev ULTRA] Timeout: Copy-Button nicht gefunden');
-                        resolve(null);
-                    } else {
-                        setTimeout(check, 100);
-                    }
-                };
-                check();
-            });
-        }
-
-        findCopyButton() {
-            const selectors = [
-                'button[class*="bg-[#38B2AC]"]',
-                'button[class*="rounded-lg"]',
-                'button:has-text("Copy Key")',
-                'button:contains("Copy Key")',
-                'button:contains("copy key")',
-                'button:contains("Copy")',
-                '.copy-key-btn',
-                '#copy-key-btn',
-                '.btn-copy',
-                '.copy-button',
-                '[class*="copy"]',
-                '[id*="copy"]',
-                'button[data-clipboard-text]',
-                'button.w-full',
-                'button.bg-gradient-to-r',
-                'button'
-            ];
-
-            for (let selector of selectors) {
-                try {
-                    if (selector.includes(':contains')) {
-                        const parts = selector.split(':contains');
-                        const baseSelector = parts[0] || '*';
-                        const text = parts[1].replace(/[()]/g, '').replace(/"/g, '');
-                        const elements = document.querySelectorAll(baseSelector);
-                        for (let el of elements) {
-                            if (el.textContent.toLowerCase().includes(text.toLowerCase())) {
-                                return el;
-                            }
-                        }
-                    } else if (selector.includes(':has-text')) {
-                        const baseSelector = selector.split(':has-text')[0] || 'button';
-                        const text = selector.match(/:has-text\(["'](.+?)["']\)/)?.[1] || 'Copy';
-                        const elements = document.querySelectorAll(baseSelector);
-                        for (let el of elements) {
-                            if (el.textContent.includes(text)) return el;
-                        }
-                    } else {
-                        const element = document.querySelector(selector);
-                        if (element) {
-                            const style = window.getComputedStyle(element);
-                            if (style.display !== 'none' &&
-                                style.visibility !== 'hidden' &&
-                                !element.disabled) {
-                                if (element.tagName === 'BUTTON' ||
-                                    element.onclick ||
-                                    element.getAttribute('role') === 'button' ||
-                                    element.classList.contains('cursor-pointer')) {
-                                    return element;
-                                }
-                            }
-                        }
-                    }
-                } catch (e) {}
-            }
-
-            const buttons = document.querySelectorAll('button');
-            for (let btn of buttons) {
-                const text = btn.textContent.toLowerCase();
-                if (text.includes('copy') && text.includes('key')) {
-                    const style = window.getComputedStyle(btn);
-                    if (style.display !== 'none' && style.visibility !== 'hidden') {
-                        return btn;
-                    }
+        startDOMObserver() {
+            const observer = new MutationObserver(() => {
+                if (!this.hasCopied) {
+                    this.tryExtractKey();
                 }
-            }
-
-            return null;
+            });
+            
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true,
+                characterData: true
+            });
+            
+            console.log('[Pangdev ULTRA] MutationObserver activado');
         }
 
-        async clickCopyButton(button) {
-            try {
-                console.log('[Pangdev ULTRA] Klicke auf Copy-Button:', button.tagName, button.className);
-                const clickEvent = new MouseEvent('click', {
-                    view: window,
-                    bubbles: true,
-                    cancelable: true,
-                    button: 0
-                });
-                button.dispatchEvent(clickEvent);
-
-                setTimeout(async () => {
-                    try {
-                        const clipboardText = await navigator.clipboard.readText().catch(() => '');
-                        if (clipboardText && this.keyPattern.test(clipboardText)) {
-                            this.hasCopied = true;
-                            GM_notification({
-                                text: `Key automatisch kopiert: ${clipboardText}`,
-                                title: "Pangdev ULTRA",
-                                timeout: 4000
-                            });
-                            console.log('[Pangdev ULTRA] Key erfolgreich ueber Button-Klick kopiert');
-                            await GM_setClipboard(clipboardText);
-                        } else {
-                            console.warn('[Pangdev ULTRA] Klick hat nicht funktioniert, nutze Fallback');
-                            this.fallbackExtractFromButton(button);
-                        }
-                    } catch (e) {
-                        this.fallbackExtractFromButton(button);
-                    }
-                }, 500);
-            } catch (e) {
-                console.error('[Pangdev ULTRA] Fehler beim Klicken:', e);
-                this.fallbackManualExtract();
-            }
+        startPeriodicCheck() {
+            let attempts = 0;
+            const interval = setInterval(() => {
+                attempts++;
+                
+                if (this.hasCopied) {
+                    clearInterval(interval);
+                    console.log('[Pangdev ULTRA] Key copiada, deteniendo checks');
+                    return;
+                }
+                
+                if (attempts > this.maxAttempts) {
+                    clearInterval(interval);
+                    console.error('[Pangdev ULTRA] Timeout después de', attempts, 'intentos');
+                    return;
+                }
+                
+                this.tryExtractKey();
+            }, this.attemptInterval);
         }
 
-        fallbackExtractFromButton(button) {
-            const dataKey = button.getAttribute('data-clipboard-text') ||
-                           button.getAttribute('data-key') ||
-                           button.getAttribute('data-text');
-
-            if (dataKey && this.keyPattern.test(dataKey)) {
-                GM_setClipboard(dataKey);
-                this.hasCopied = true;
-                GM_notification({
-                    text: `Key ueber Fallback kopiert: ${dataKey}`,
-                    title: "Pangdev ULTRA",
-                    timeout: 4000
-                });
-                console.log('[Pangdev ULTRA] Key ueber data-attribute Fallback kopiert');
-            } else {
-                this.fallbackManualExtract();
+        async waitAndClickCopyButton() {
+            await this.sleep(3000);
+            
+            for (let i = 0; i < 20; i++) {
+                if (this.hasCopied) break;
+                
+                const button = this.findCopyButton();
+                if (button) {
+                    console.log('[Pangdev ULTRA] Botón encontrado, intentando click...');
+                    await this.clickCopyButton(button);
+                    await this.sleep(1000);
+                }
+                
+                await this.sleep(1000);
             }
         }
 
-        fallbackManualExtract() {
-            console.log('[Pangdev ULTRA] Starte manuelle Extraktion...');
-            const elements = document.querySelectorAll('div, span, p, code, pre, input, textarea, h1, h2, h3, h4, h5, h6, [class*="key"], [id*="key"]');
-
+        tryExtractKey() {
+            if (this.hasCopied) return;
+            
+            const bodyText = document.body.innerText || document.body.textContent || '';
+            const match = bodyText.match(this.keyPattern);
+            
+            if (match) {
+                const key = match[0].toUpperCase();
+                this.copyKey(key, 'extracción automática del texto');
+                return true;
+            }
+            
+            const elements = document.querySelectorAll('div, span, p, code, pre, input, textarea, button, [class*="key"], [id*="key"]');
             for (let el of elements) {
                 const text = (el.textContent || el.value || el.getAttribute('data-key') || '').trim();
                 const match = text.match(this.keyPattern);
                 if (match) {
                     const key = match[0].toUpperCase();
-                    GM_setClipboard(key);
-                    this.hasCopied = true;
-                    GM_notification({
-                        text: `Key manuell kopiert: ${key}`,
-                        title: "Pangdev ULTRA",
-                        timeout: 4000
-                    });
-                    console.log('[Pangdev ULTRA] Key ueber manuelle Extraktion gefunden');
-                    return;
+                    this.copyKey(key, 'elemento DOM');
+                    return true;
                 }
             }
+            
+            return false;
+        }
 
-            const bodyText = document.body.innerText || document.body.textContent;
-            const matches = bodyText.match(this.keyPattern);
-            if (matches && matches[0]) {
-                const key = matches[0].toUpperCase();
-                GM_setClipboard(key);
-                this.hasCopied = true;
-                GM_notification({
-                    text: `Key aus Seitentext kopiert: ${key}`,
-                    title: "Pangdev ULTRA",
-                    timeout: 4000
-                });
-                console.log('[Pangdev ULTRA] Key aus body text extrahiert');
-                return;
+        findCopyButton() {
+            const allButtons = document.querySelectorAll('button');
+            for (let btn of allButtons) {
+                const text = (btn.textContent || '').toLowerCase();
+                const classes = btn.className || '';
+                
+                if (text.includes('copy') || classes.includes('copy')) {
+                    const style = window.getComputedStyle(btn);
+                    if (style.display !== 'none' && style.visibility !== 'hidden' && !btn.disabled) {
+                        return btn;
+                    }
+                }
             }
+            
+            return null;
+        }
 
-            console.error('[Pangdev ULTRA] Alle Extraktionsmethoden fehlgeschlagen');
-            GM_notification({
-                text: "Fehler: Key konnte nicht kopiert werden",
-                title: "Pangdev ULTRA",
-                timeout: 5000
-            });
+        async clickCopyButton(button) {
+            try {
+                console.log('[Pangdev ULTRA] Clicking button:', button);
+                
+                button.click();
+                button.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+                button.dispatchEvent(new PointerEvent('click', { bubbles: true, cancelable: true }));
+                
+                await this.sleep(800);
+                
+                try {
+                    const clipboardText = await navigator.clipboard.readText();
+                    if (clipboardText && this.keyPattern.test(clipboardText)) {
+                        this.copyKey(clipboardText, 'click en botón');
+                        return;
+                    }
+                } catch (e) {
+                    console.log('[Pangdev ULTRA] No se pudo leer clipboard:', e);
+                }
+                
+                const dataKey = button.getAttribute('data-clipboard-text') ||
+                              button.getAttribute('data-key') ||
+                              button.getAttribute('value');
+                
+                if (dataKey && this.keyPattern.test(dataKey)) {
+                    this.copyKey(dataKey, 'data-attribute del botón');
+                }
+            } catch (e) {
+                console.error('[Pangdev ULTRA] Error en click:', e);
+            }
+        }
+
+        copyKey(key, method) {
+            if (this.hasCopied) return;
+            
+            const cleanKey = key.trim().toUpperCase();
+            
+            try {
+                GM_setClipboard(cleanKey);
+                this.hasCopied = true;
+                
+                GM_notification({
+                    text: `✓ Key copiada (${method}): ${cleanKey}`,
+                    title: "Pangdev ULTRA Success",
+                    timeout: 5000
+                });
+                
+                console.log(`[Pangdev ULTRA] ✓ KEY COPIADA via ${method}:`, cleanKey);
+            } catch (e) {
+                console.error('[Pangdev ULTRA] Error al copiar:', e);
+            }
+        }
+
+        sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
         }
     }
 
@@ -525,9 +484,6 @@
     }
 
     async function pandadevelopment() {
-        const keyCopier = new PunkXUltraExtractor();
-        keyCopier.start();
-
         let antiAdblockRemover = setInterval(() => {
             const antiAdblock = document.querySelector('.adblock_title');
             if (antiAdblock) {
@@ -596,6 +552,13 @@
 
             console.log('[Pangdev ULTRA] URL-Parameter:', { hwid, service, token, provider });
 
+            if (!provider && (document.body.innerText.includes('PUNKX') || document.body.innerText.includes('Copy'))) {
+                console.log('[Pangdev ULTRA] Página final detectada, iniciando extracción...');
+                const keyCopier = new PunkXUltraExtractor();
+                await keyCopier.start();
+                return;
+            }
+
             const adUrl = await getAdLink();
             const dest = getDestUrl(adUrl);
 
@@ -628,9 +591,8 @@
         const hostname = window.location.hostname;
 
         if (hostname.includes('pandadev') || hostname.includes('new.pandadevelopment')) {
-            notification('ULTRA AutoCopy aktiviert (v2.9)', 3000);
+            notification('ULTRA AutoCopy aktiviert (v3.1)', 3000);
             await pandadevelopment();
         }
     })();
-})();
- 
+})(); 
