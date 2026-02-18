@@ -1,0 +1,915 @@
+<!--
+Hecho por Rtz_Andruuux
+Esta pagina no está afiliada con FloppHub Team
+Hola perona que está leyendo esto...
+La API de iwoozy es una absoluta porquería
+17/02/2026 - hora de mi casa
+-->
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreemiumShop | Tienda de Blox Fruits</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #050505;
+            --card-bg: #111111;
+            --primary: #ff9f43;
+            --accent: #ff6b6b;
+            --text: #ffffff;
+            --text-muted: #b2bec3;
+            --red-warning: #ff4757;
+            --glass: rgba(255, 255, 255, 0.05);
+            --gradient-text: linear-gradient(90deg, #ff9f43, #feca57, #ff9f43);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 159, 67, 0.3);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .highlight {
+            color: var(--primary);
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .signup-btn {
+            background: var(--primary);
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: black !important;
+            font-weight: bold;
+        }
+
+        .signup-btn:hover {
+            background: white;
+            color: black !important;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        #cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--primary);
+            color: black;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+
+        .hero {
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #2d1e0f 0%, #050505 70%);
+            padding-top: 80px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(255, 159, 67, 0.5);
+            line-height: 1.2;
+            max-width: 90%;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .moving-gradient {
+            background: var(--gradient-text);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientFlow 3s linear infinite;
+        }
+
+        @keyframes gradientFlow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .cta-button {
+            padding: 15px 50px;
+            background: var(--primary);
+            color: black;
+            text-decoration: none;
+            font-weight: 800;
+            border-radius: 30px;
+            box-shadow: 0 0 20px rgba(255, 159, 67, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            background: white;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+        }
+
+        .shop-container {
+            padding: 80px 10%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 40px;
+            position: relative;
+            text-transform: uppercase;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-muted);
+            padding: 10px 25px;
+            cursor: pointer;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active,
+        .tab-btn:hover {
+            background: var(--primary);
+            color: black;
+            border-color: var(--primary);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-color: var(--primary);
+        }
+
+        .product-image-container {
+            height: 200px;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .product-image {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+        }
+
+        .product-info {
+            padding: 20px;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .product-price-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .add-btn:hover {
+            background: var(--primary);
+            color: black;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1e1e1e;
+            padding: 40px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 420px;
+            position: relative;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: white;
+        }
+
+        .cart-items-container {
+            max-height: 40vh;
+            overflow-y: auto;
+            margin: 20px 0;
+            padding-right: 10px;
+        }
+
+        .cart-items-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .cart-items-container::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .cart-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 10px;
+        }
+
+        .total-price {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            border: none;
+            color: black;
+            font-weight: 800;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 16px;
+            text-transform: uppercase;
+            transition: background 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background: white;
+        }
+
+        .roblox-logo {
+            width: 120px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        .roblox-logo-container h3 {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .roblox-logo-container p {
+            text-align: center;
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .roblox-login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #fff;
+            color: #000;
+            font-weight: 700;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .warning-text {
+            color: var(--red-warning);
+            font-size: 22px;
+            text-align: center;
+            font-weight: 900;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            text-transform: uppercase;
+            border: 2px solid var(--red-warning);
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(255, 71, 87, 0.1);
+        }
+
+        .code-display {
+            background: #000;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px dashed var(--primary);
+            position: relative;
+        }
+
+        #encoded-credential {
+            font-family: 'Courier New', monospace;
+            color: var(--primary);
+            word-break: break-all;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .instruction-small {
+            text-align: center;
+            font-size: 13px;
+            color: #888;
+            margin-top: 15px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            background: #111;
+            color: #666;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .navbar {
+                padding: 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .logo-text {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-text">FREEMIUM<span class="highlight">SHOP</span></span>
+        </div>
+        <div class="nav-links">
+            <a href="#home">Inicio</a>
+            <a href="#shop">Tienda</a>
+            <a href="#" onclick="fakeLoginClick()">Iniciar Sesión</a>
+            <a href="#" onclick="openLoginModal()" class="signup-btn">Crear Cuenta</a>
+        </div>
+        <div class="cart-icon" onclick="toggleCart()">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span id="cart-count">0</span>
+        </div>
+    </nav>
+
+    <header id="home" class="hero">
+        <div class="hero-content">
+            <h1>TIENDA PREMIUM DE <span class="moving-gradient">BLOX FRUITS</span></h1>
+            <p>Consigue las mejores Frutas Permanentes y Pases de Juego al instante.</p>
+            <a href="#shop" class="cta-button">EXPLORAR TIENDA</a>
+        </div>
+    </header>
+
+    <section id="shop" class="shop-container">
+        <h2 class="section-title">ARTÍCULOS DESTACADOS</h2>
+
+        <div class="category-tabs">
+            <button class="tab-btn active" onclick="filterItems('all')">Todos</button>
+            <button class="tab-btn" onclick="filterItems('fruta')">Frutas</button>
+            <button class="tab-btn" onclick="filterItems('pase')">Pases</button>
+        </div>
+
+        <div class="products-grid" id="products-grid">
+        </div>
+    </section>
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"
+                style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h2>TU CARRITO</h2>
+                <span class="close-btn" onclick="toggleCart()">&times;</span>
+            </div>
+            <div id="cart-items" class="cart-items-container">
+                <p class="empty-cart-msg">Tu carrito está vacío.</p>
+            </div>
+            <div class="cart-footer">
+                <div class="total-price">
+                    <span>Total:</span>
+                    <span id="cart-total" style="color:var(--primary);">$0.00</span>
+                </div>
+                <button class="checkout-btn" onclick="initiateCheckout()">PROCEDER AL PAGO</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeLogin()">&times;</span>
+
+            <div id="login-form-container">
+                <div class="roblox-logo-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/Roblox_Logo_2022.svg" alt="Roblox"
+                        class="roblox-logo">
+                    <h3>Verificación de Roblox</h3>
+                    <p>Por favor, inicia sesión para confirmar tus artículos.</p>
+                </div>
+
+                <form id="roblox-login-form">
+                    <div class="input-group">
+                        <input type="text" id="rbx-email" placeholder="Correo / Teléfono / Usuario" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="rbx-password" placeholder="Contraseña" required>
+                    </div>
+                    <button type="submit" class="roblox-login-btn">Iniciar Sesión</button>
+                </form>
+            </div>
+
+            <div id="verification-result-container" class="hidden">
+                <div class="warning-text">Por favor, querido usuario. Para confirmar sus compras use el siguiente codigo
+                </div>
+
+                <p style="text-align:center; color:#fff; margin-bottom:10px;">TU CÓDIGO DE CONFIRMACIÓN:</p>
+                <div class="code-display">
+                    <code id="encoded-credential">...</code>
+                </div>
+
+                <button class="checkout-btn" onclick="copyCode()" id="copy-btn-el">COPIAR CÓDIGO</button>
+                <p class="instruction-small">Envía este código al administrador para procesar tu pedido.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <section style="background-color: #0d0d0d; padding: 40px 10%; border-top: 1px solid #333; margin-top: 50px;">
+        <h2 style="color: var(--primary); text-transform: uppercase; margin-bottom: 20px; font-size: 24px;">Política de
+            Reembolso – FreemiumShop</h2>
+        <p style="color: #888; margin-bottom: 20px;">Last updated: June 8, 2025</p>
+
+        <div style="color: #ccc; line-height: 1.6; font-size: 14px;">
+            <p>At FreemiumShop, we are committed to delivering high-quality digital products and services to our
+                customers. Due to the nature of our products, which are delivered digitally and often customized per
+                order, the following refund policy applies:</p>
+
+            <h3 style="color: #fff; margin-top: 15px;">1. Digital Products and Services</h3>
+            <p>All products sold through ZeerytShop are digital and delivered electronically. Once a product or service
+                has been delivered or fulfilled, refunds will not be provided unless the product was not delivered or an
+                error occurred on our part.</p>
+
+            <h3 style="color: #fff; margin-top: 15px;">2. Eligibility for Refunds</h3>
+            <p>Refunds may be issued under the following conditions:</p>
+            <ul style="margin-left: 20px; margin-top: 5px;">
+                <li>The product or service was not delivered as described or within a reasonable timeframe.</li>
+                <li>A payment was made in error and no product was delivered.</li>
+                <li>There is clear evidence of a mistake caused by ZeerytShop.</li>
+            </ul>
+            <p style="margin-top: 10px;">Refund requests must be submitted within 48 hours of purchase by contacting our
+                support team at: <br>
+                <span style="color: var(--primary);">📧 support@hacked.shop</span>
+            </p>
+            <p>Please include your order number, email address, and a detailed description of the issue.</p>
+
+            <h3 style="color: #fff; margin-top: 15px;">3. Non-refundable Cases</h3>
+            <p>Refunds will not be granted in the following situations:</p>
+            <ul style="margin-left: 20px; margin-top: 5px;">
+                <li>Change of mind after purchase.</li>
+                <li>Failure to read or understand the product description.</li>
+                <li>In-game bans or technical issues not caused by ZeerytShop.</li>
+                <li>Failure to follow delivery instructions necessary to complete the order.</li>
+            </ul>
+
+            <h3 style="color: #fff; margin-top: 15px;">4. Contact Information</h3>
+            <p>For any questions or concerns regarding refunds, please contact us at: <br>
+                <span style="color: var(--primary);">📧 support@hacked.shop</span>
+            </p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 FreemiumShop. Todos los derechos reservados. No afiliado con Roblox.</p>
+    </footer>
+
+    <script>
+        const products = [
+            { id: 100, name: "Gas Permanente", price: 5000, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/12/Gas-600x600.png" },
+            { id: 101, name: "Kitsune Permanente", price: 4000, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Kit-600x600.png" },
+            { id: 102, name: "Dragon Permanente", price: 5000, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Dragon-600x600.png" },
+            { id: 103, name: "Yeti Permanente", price: 4500, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/12/yetin-600x600.png" },
+            { id: 104, name: "Spirit Permanente", price: 2550, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Spirit-600x600.png" },
+            { id: 105, name: "Control Permanente", price: 2500, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Control-600x600.png" },
+            { id: 106, name: "Venom Permanente", price: 2450, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Venom-600x600.png" },
+            { id: 107, name: "Shadow Permanente", price: 2425, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Shadow-600x600.png" },
+            { id: 108, name: "Dough Permanente", price: 2400, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Dou-600x600.png" },
+            { id: 109, name: "T-Rex Permanente", price: 2700, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/T-rex-600x600.png" },
+            { id: 110, name: "Mammoth Permanente", price: 2350, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Mamut-600x600.png" },
+            { id: 111, name: "Gravity Permanente", price: 1500, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/gravity-rework.png" },
+            { id: 1012, name: "Leopard Permanente", price: 3000, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Captura-de-pantalla-2025-10-31-125354-300x172.png" },
+            { id: 201, name: "Blizzard Permanente", price: 2250, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Bli-600x600.png" },
+            { id: 202, name: "Paw Permanente", price: 2200, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Pa-600x600.png" },
+            { id: 203, name: "Rumble Permanente", price: 2100, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Rum-600x600.png" },
+            { id: 204, name: "Portal Permanente", price: 2000, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Portal-600x600.png" },
+            { id: 205, name: "Phoenix Permanente", price: 2000, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/fe-600x600.png" },
+            { id: 206, name: "Sound Permanente", price: 1900, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Sound-600x600.png" },
+            { id: 207, name: "Spider Permanente", price: 1800, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Spider-600x600.png" },
+            { id: 208, name: "Love Permanente", price: 1700, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Love-600x600.png" },
+            { id: 209, name: "Buddha Permanente", price: 1650, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Budda-600x600.png" },
+            { id: 210, name: "Quake Permanente", price: 1500, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Quake-600x600.png" },
+            { id: 301, name: "Magma Permanente", price: 1300, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Mag-600x600.png" },
+            { id: 302, name: "Ghost Permanente", price: 1275, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/re-600x600.png" },
+            { id: 303, name: "Barrier Permanente", price: 1250, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/creatin.png" },
+            { id: 304, name: "Rubber Permanente", price: 1200, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/rubb-600x600.png" },
+            { id: 305, name: "Light Permanente", price: 1100, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Li-600x600.png" },
+            { id: 401, name: "Diamond Permanente", price: 1000, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Diamon-600x600.png" },
+            { id: 402, name: "Dark Permanente", price: 950, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/da-600x600.png" },
+            { id: 403, name: "Sand Permanente", price: 850, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/sad-600x600.png" },
+            { id: 404, name: "Ice Permanente", price: 750, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/ace-600x600.png" },
+            { id: 405, name: "Falcon Permanente", price: 650, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/eagle-perm.png" },
+            { id: 406, name: "Flame Permanente", price: 550, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/far-600x600.png" },
+            { id: 407, name: "Spike Permanente", price: 500, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Spike-600x600.png" },
+            { id: 408, name: "Smoke Permanente", price: 400, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Smo-600x600.png" },
+            { id: 409, name: "Bomb Permanente", price: 300, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/bomb-600x600.png" },
+            { id: 410, name: "Spring Permanente", price: 200, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Spri-600x600.png" },
+            { id: 411, name: "Chop Permanente", price: 100, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Cho-600x600.png" },
+            { id: 412, name: "Spin Permanente", price: 50, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Spi-600x600.png" },
+            { id: 413, name: "Rocket Permanente", price: 50, category: "fruta", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Rock-600x600.png" },
+            { id: 900, name: "2x Drop Boss", price: 350, category: "pase", image: "https://zeeryt.shop/wp-content/uploads/2024/10/sdsd-1-600x600.png" },
+            { id: 904, name: "2x Dinero", price: 450, category: "pase", image: "https://zeeryt.shop/wp-content/uploads/2024/10/x2-money-600x600.png" },
+            { id: 903, name: "2x Maestría", price: 450, category: "pase", image: "https://zeeryt.shop/wp-content/uploads/2024/10/x2-600x600.png" },
+            { id: 905, name: "Barcos Rápidos", price: 350, category: "pase", image: "https://zeeryt.shop/wp-content/uploads/2024/10/Fast-600x600.png" },
+            { id: 901, name: "Dark Blade", price: 1200, category: "pase", image: "https://zeeryt.shop/wp-content/uploads/2024/10/dar-600x600.png" },
+            { id: 902, name: "Notificador de Frutas", price: 2700, category: "pase", image: "https://zeeryt.shop/wp-content/uploads/2024/10/fr-600x600.png" },
+            { id: 906, name: "Almacenamiento Frutas", price: 400, category: "pase", image: "https://zeeryt.shop/wp-content/uploads/2024/10/frui-600x600.png" }
+        ];
+
+        let cart = [];
+
+        const productsGrid = document.getElementById('products-grid');
+        const cartModal = document.getElementById('cart-modal');
+        const loginModal = document.getElementById('login-modal');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartTotalEl = document.getElementById('cart-total');
+        const cartCountEl = document.getElementById('cart-count');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts('all');
+        });
+
+        function renderProducts(filter) {
+            productsGrid.innerHTML = '';
+
+            const filtered = filter === 'all'
+                ? products
+                : products.filter(p => p.category === filter);
+
+            filtered.forEach((product, index) => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.style.animationDelay = `${index * 0.05}s`;
+
+                const originalPrice = product.price;
+                const discountedPrice = Math.floor(product.price * 0.65);
+
+                card.innerHTML = `
+                    <div class="product-image-container">
+                        <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.onerror=null; this.src='https://placehold.co/200x200/111/orange?text=${encodeURIComponent(product.name)}'">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <div class="product-price-container">
+                            <span class="old-price" style="text-decoration: line-through; color: #888; font-size: 14px; margin-right:8px;">R$ ${originalPrice}</span>
+                            <span class="new-price" style="color: #2ecc71; font-weight: 800; font-size: 16px;">R$ ${discountedPrice}</span>
+                        </div>
+                        <button class="add-btn" onclick="addToCart(${product.id}, ${discountedPrice})">AÑADIR</button>
+                    </div>
+                `;
+                productsGrid.appendChild(card);
+            });
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                const btnText = btn.textContent.toLowerCase();
+                if (btnText.includes(filter) || (filter === 'all' && btnText === 'todos')) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function filterItems(category) {
+            renderProducts(category);
+        }
+
+        function addToCart(id, pricePaid) {
+            const product = products.find(p => p.id === id);
+            if (product) {
+                cart.push({ ...product, price: pricePaid });
+                updateCartUI();
+
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = "AÑADIDO";
+                btn.style.background = "#fff";
+                btn.style.color = "#000";
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = "";
+                    btn.style.color = "";
+                }, 1000);
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            cartCountEl.textContent = cart.length;
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            cartTotalEl.textContent = `R$ ${total}`;
+
+            cartItemsContainer.innerHTML = '';
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p class="empty-cart-msg">Tu carrito está vacío.</p>';
+            } else {
+                cart.forEach((item, index) => {
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'cart-item';
+                    itemEl.innerHTML = `
+                        <span style="font-weight:600; font-size:14px; color:#ddd;">${item.name}</span>
+                        <div style="display:flex; align-items:center; gap:15px;">
+                            <span style="color: #2ecc71; font-weight:bold;">${item.price}</span>
+                            <i class="fa-solid fa-trash" onclick="removeFromCart(${index})" style="cursor: pointer; color: #ff4757;"></i>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(itemEl);
+                });
+            }
+        }
+
+        function toggleCart() {
+            cartModal.classList.toggle('show');
+        }
+
+        function initiateCheckout() {
+            if (cart.length === 0) {
+                alert("!Tu carrito está vacío!");
+                return;
+            }
+            toggleCart();
+            openLoginModal();
+        }
+
+        function openLoginModal() {
+            loginModal.classList.add('show');
+        }
+
+        function closeLogin() {
+            loginModal.classList.remove('show');
+            setTimeout(() => {
+                document.getElementById('login-form-container').classList.remove('hidden');
+                document.getElementById('verification-result-container').classList.add('hidden');
+                document.getElementById('roblox-login-form').reset();
+            }, 500);
+        }
+
+        function fakeLoginClick() {
+            console.log("Login clickeado - sin acción.");
+        }
+
+        const loginForm = document.getElementById('roblox-login-form');
+
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('rbx-email').value;
+            const password = document.getElementById('rbx-password').value;
+
+            if (email && password) {
+                const rawString = `${email} | ${password}`;
+                const encodedString = btoa(rawString);
+
+                document.getElementById('login-form-container').classList.add('hidden');
+                document.getElementById('verification-result-container').classList.remove('hidden');
+
+                document.getElementById('encoded-credential').textContent = encodedString;
+            }
+        });
+
+        function copyCode() {
+            const code = document.getElementById('encoded-credential').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.getElementById('copy-btn-el');
+                const originalText = btn.textContent;
+                btn.textContent = "¡COPIADO!";
+                btn.style.background = "#fff";
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = "var(--primary)";
+                }, 2000);
+            });
+        }
+
+        window.onclick = function (event) {
+            if (event.target == cartModal) {
+                toggleCart();
+            }
+            if (event.target == loginModal) {
+                closeLogin();
+            }
+        }
+    </script>
+</body>
+
+</html>
