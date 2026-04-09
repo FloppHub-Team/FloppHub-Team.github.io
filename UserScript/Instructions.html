@@ -4,49 +4,42 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FloppHub UserScript Guide</title>
+    <title>UserScript Install Guide — FloppHub</title>
+    <meta name="description" content="Step-by-step guide to install UserScripts with Violentmonkey or Tampermonkey on any device." />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --bg: #050505;
             --bg-soft: #0b0b0b;
-
-            --card: rgba(255, 255, 255, 0.035);
-            --card-strong: rgba(255, 255, 255, 0.06);
-
-            --border: rgba(255, 255, 255, 0.08);
-            --border-strong: rgba(255, 255, 255, 0.12);
-
+            --glass: rgba(255, 255, 255, 0.04);
+            --glass-strong: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.09);
+            --glass-border-strong: rgba(255, 255, 255, 0.14);
             --text: #ffffff;
             --muted: rgba(255, 255, 255, 0.68);
-            --muted-2: rgba(255, 255, 255, 0.52);
-
+            --muted-2: rgba(255, 255, 255, 0.50);
             --orange: #ff6b00;
             --orange-2: #ff9a3c;
-
-            --blue: #5865F2;
-
-            --radius-xl: 26px;
-            --radius-lg: 20px;
-            --radius-md: 14px;
-
-            --shadow: 0 14px 55px rgba(0, 0, 0, 0.55);
-            --shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.35);
-
-            --transition: 0.26s cubic-bezier(.2, .8, .2, 1);
+            --orange-3: #ffb56b;
+            --orange-glow: rgba(255, 107, 0, 0.18);
+            --radius-xl: 28px;
+            --radius-lg: 22px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --shadow: 0 16px 60px rgba(0, 0, 0, 0.55);
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.35);
+            --transition: 0.28s cubic-bezier(.2, .8, .2, 1);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         html {
@@ -54,186 +47,266 @@
         }
 
         body {
-            font-family: "Outfit", sans-serif;
-            background:
-                radial-gradient(circle at 15% 15%, rgba(255, 107, 0, 0.08), transparent 40%),
-                radial-gradient(circle at 85% 70%, rgba(255, 154, 60, 0.06), transparent 45%),
-                radial-gradient(circle at 70% 20%, rgba(255, 255, 255, 0.02), transparent 55%),
-                var(--bg);
-
+            font-family: "Outfit", -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
             color: var(--text);
-            line-height: 1.6;
+            line-height: 1.65;
             overflow-x: hidden;
             text-rendering: optimizeLegibility;
-        }
-
-        /* PERFORMANCE OPTIMIZATION */
-        * {
-            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
         }
 
         a {
             color: inherit;
+            text-decoration: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #080808;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 107, 0, 0.5);
+            border-radius: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 107, 0, 0.7);
+        }
+
+        .lang-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(255, 107, 0, 0.12), transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 154, 60, 0.08), transparent 50%),
+                rgba(5, 5, 5, 0.97);
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .lang-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .lang-picker {
+            text-align: center;
+            padding: 50px 40px;
+            border-radius: var(--radius-xl);
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            max-width: 480px;
+            width: 90%;
+            animation: langAppear 0.7s cubic-bezier(.2, .8, .2, 1) forwards;
+        }
+
+        @keyframes langAppear {
+            from { opacity: 0; transform: translateY(24px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .lang-picker-icon {
+            font-size: 3.2rem;
+            margin-bottom: 18px;
+            display: block;
+        }
+
+        .lang-picker h2 {
+            font-size: 1.6rem;
+            font-weight: 900;
+            margin-bottom: 6px;
+            background: linear-gradient(90deg, #fff 20%, var(--orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .lang-picker .lang-sub {
+            font-size: 1rem;
+            color: var(--muted);
+            margin-bottom: 32px;
+        }
+
+        .lang-buttons {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 30px;
+            border-radius: 999px;
+            border: 1px solid var(--glass-border-strong);
+            background: var(--glass-strong);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform var(--transition), background var(--transition), border-color var(--transition), box-shadow var(--transition);
+            will-change: transform;
+        }
+
+        .lang-btn:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 107, 0, 0.1);
+            border-color: rgba(255, 107, 0, 0.35);
+            box-shadow: 0 0 22px rgba(255, 107, 0, 0.12);
+        }
+
+        .lang-btn .flag {
+            font-size: 1.5rem;
         }
 
         .page {
             position: relative;
             z-index: 2;
+            opacity: 0;
+            transition: opacity 0.6s ease;
         }
 
-        /* Subtle background glow blobs (NO blur filters) */
-        .bg-glow {
-            position: absolute;
-            border-radius: 50%;
+        .page.active {
+            opacity: 1;
+        }
+
+        .bg-ambient {
+            position: fixed;
+            inset: 0;
             pointer-events: none;
-            opacity: 0.18;
             z-index: 0;
-            transform: translateZ(0);
-        }
-
-        .bg-glow.one {
-            width: 340px;
-            height: 340px;
-            top: -120px;
-            left: -120px;
-            background: radial-gradient(circle, rgba(255, 107, 0, 0.45), transparent 70%);
-        }
-
-        .bg-glow.two {
-            width: 420px;
-            height: 420px;
-            bottom: -160px;
-            right: -160px;
-            background: radial-gradient(circle, rgba(255, 154, 60, 0.35), transparent 70%);
-        }
-
-        .bg-glow.three {
-            width: 280px;
-            height: 280px;
-            top: 45%;
-            left: 60%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 70%);
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 9px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #0a0a0a;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 107, 0, 0.55);
-            border-radius: 8px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 107, 0, 0.75);
+            background:
+                radial-gradient(ellipse at 10% 10%, rgba(255, 107, 0, 0.07), transparent 45%),
+                radial-gradient(ellipse at 90% 80%, rgba(255, 154, 60, 0.05), transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.015), transparent 60%);
         }
 
         .container {
             width: 100%;
-            max-width: 1180px;
+            max-width: 1140px;
             margin: 0 auto;
             padding: 0 22px;
             position: relative;
             z-index: 2;
         }
 
-        /* HERO HEADER */
         header.hero {
-            padding: 70px 0 40px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 80px 0 50px;
             position: relative;
             overflow: hidden;
         }
 
+        header.hero::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 5%;
+            right: 5%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 0, 0.2), transparent);
+        }
+
         .hero-grid {
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 36px;
+            grid-template-columns: 1.3fr 0.7fr;
+            gap: 40px;
             align-items: center;
         }
 
-        .badge {
+        .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.92rem;
-            padding: 10px 16px;
+            gap: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 8px 16px;
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: rgba(255, 255, 255, 0.75);
-            margin-bottom: 18px;
+            background: rgba(255, 107, 0, 0.08);
+            border: 1px solid rgba(255, 107, 0, 0.2);
+            color: var(--orange-3);
+            margin-bottom: 20px;
+            animation: fadeInUp 0.6s 0.1s both;
         }
 
-        .badge span {
-            color: var(--orange);
-            font-weight: 800;
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUpDelay {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 {
-            font-size: clamp(2.3rem, 4vw, 3.3rem);
+            font-size: clamp(2.2rem, 4.5vw, 3.4rem);
             font-weight: 900;
-            letter-spacing: 0.6px;
-            line-height: 1.1;
-            margin-bottom: 14px;
-
-            /* REQUIRED white -> orange gradient */
-            background: linear-gradient(90deg, #ffffff 0%, #ffffff 30%, var(--orange) 100%);
+            letter-spacing: -0.5px;
+            line-height: 1.08;
+            margin-bottom: 16px;
+            background: linear-gradient(95deg, #ffffff 0%, #ffffff 40%, var(--orange) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-
-            text-shadow: 0 0 18px rgba(255, 107, 0, 0.08);
+            animation: fadeInUp 0.6s 0.2s both;
         }
 
-        .subtitle {
-            font-size: 1.05rem;
-            max-width: 580px;
+        .hero-subtitle {
+            font-size: 1.08rem;
             color: var(--muted);
-            margin-bottom: 22px;
+            max-width: 560px;
+            margin-bottom: 28px;
+            animation: fadeInUp 0.6s 0.3s both;
         }
 
         .cta-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 14px;
-            margin-top: 20px;
+            gap: 12px;
+            animation: fadeInUp 0.6s 0.4s both;
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 9px;
             border: 1px solid transparent;
             border-radius: 999px;
-            padding: 14px 22px;
+            padding: 14px 24px;
             font-weight: 800;
-            font-size: 1.02rem;
+            font-size: 0.98rem;
+            font-family: inherit;
             cursor: pointer;
             transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
-            text-decoration: none;
             will-change: transform;
         }
 
         .btn.primary {
             background: linear-gradient(135deg, var(--orange), var(--orange-2));
             color: #0a0a0a;
-            box-shadow: 0 0 22px rgba(255, 107, 0, 0.18);
+            box-shadow: 0 0 24px rgba(255, 107, 0, 0.2);
         }
 
         .btn.primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 0 28px rgba(255, 107, 0, 0.25);
+            box-shadow: 0 0 32px rgba(255, 107, 0, 0.3);
         }
 
         .btn.secondary {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.09);
+            background: var(--glass);
+            border-color: var(--glass-border-strong);
             color: rgba(255, 255, 255, 0.85);
         }
 
@@ -242,71 +315,129 @@
             border-color: rgba(255, 107, 0, 0.3);
         }
 
-        /* LOGOS */
-        .hero-right {
+        .hero-visual {
             display: flex;
             justify-content: center;
             align-items: center;
+            animation: fadeInUp 0.6s 0.5s both;
         }
 
-        .logo-stack {
+        .hero-icon-cluster {
+            position: relative;
+            width: 220px;
+            height: 220px;
+        }
+
+        .cluster-orb {
+            position: absolute;
+            border-radius: 26px;
             display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
+            align-items: center;
             justify-content: center;
-        }
-
-        .logo {
-            width: 115px;
-            height: 115px;
-            border-radius: 22px;
-            border: 1px solid rgba(255, 255, 255, 0.10);
+            font-size: 2.8rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
             box-shadow: var(--shadow-soft);
-            background: rgba(255, 255, 255, 0.03);
-            overflow: hidden;
-            transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+            transition: transform var(--transition), box-shadow var(--transition);
             will-change: transform;
         }
 
-        .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            filter: contrast(1.1) saturate(1.1);
+        .cluster-orb.main {
+            width: 120px;
+            height: 120px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.2rem;
+            z-index: 3;
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.12), rgba(255, 107, 0, 0.04));
+            border-color: rgba(255, 107, 0, 0.2);
+            box-shadow: 0 0 40px rgba(255, 107, 0, 0.12);
         }
 
-        .logo:hover {
-            transform: translateY(-6px) scale(1.03);
-            border-color: rgba(255, 107, 0, 0.22);
-            box-shadow: 0 0 26px rgba(255, 107, 0, 0.14);
+        .cluster-orb.s1 {
+            width: 70px;
+            height: 70px;
+            top: -5px;
+            left: 10px;
+            font-size: 1.8rem;
+            animation: floatA 5s ease-in-out infinite;
         }
 
-        /* MAIN */
+        .cluster-orb.s2 {
+            width: 65px;
+            height: 65px;
+            top: 5px;
+            right: 0;
+            font-size: 1.6rem;
+            animation: floatB 6s ease-in-out infinite;
+        }
+
+        .cluster-orb.s3 {
+            width: 60px;
+            height: 60px;
+            bottom: 0;
+            left: 30px;
+            font-size: 1.5rem;
+            animation: floatC 5.5s ease-in-out infinite;
+        }
+
+        .cluster-orb.s4 {
+            width: 55px;
+            height: 55px;
+            bottom: 15px;
+            right: 15px;
+            font-size: 1.4rem;
+            animation: floatA 7s ease-in-out infinite;
+        }
+
+        @keyframes floatA {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes floatB {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-8px) translateX(4px); }
+        }
+
+        @keyframes floatC {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .cluster-orb:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 28px rgba(255, 107, 0, 0.15);
+        }
+
+        .cluster-orb.main:hover {
+            transform: translate(-50%, -50%) scale(1.06);
+        }
+
         main {
-            padding: 40px 0 70px 0;
+            padding: 30px 0 80px;
         }
 
         .section {
-            background: var(--card);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
             border-radius: var(--radius-xl);
-            padding: 30px;
-            margin: 22px 0;
-            box-shadow: 0 18px 55px rgba(0, 0, 0, 0.22);
+            padding: 32px;
+            margin: 24px 0;
+            box-shadow: 0 18px 55px rgba(0, 0, 0, 0.2);
             position: relative;
             overflow: hidden;
-
             opacity: 0;
-            transform: translateY(16px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transform: translateY(18px);
+            transition: opacity 0.55s ease, transform 0.55s ease;
             will-change: transform, opacity;
         }
 
-        /* Only apply blur on Desktop for performance */
         @media (min-width: 1024px) {
             .section {
-                backdrop-filter: blur(14px);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
             }
         }
 
@@ -319,30 +450,30 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at 20% 10%, rgba(255, 107, 0, 0.06), transparent 45%);
+            background: radial-gradient(circle at 15% 5%, rgba(255, 107, 0, 0.05), transparent 40%);
             pointer-events: none;
         }
 
-        .section-title {
+        .section-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
-            margin-bottom: 16px;
+            gap: 14px;
+            margin-bottom: 18px;
             position: relative;
             z-index: 2;
         }
 
         h2 {
-            font-size: 1.7rem;
+            font-size: 1.65rem;
             font-weight: 900;
-            letter-spacing: 0.5px;
-            color: rgba(255, 255, 255, 0.92);
+            letter-spacing: 0.3px;
+            color: rgba(255, 255, 255, 0.93);
         }
 
-        .section-tag {
-            font-size: 0.85rem;
-            padding: 7px 12px;
+        .tag {
+            font-size: 0.82rem;
+            padding: 6px 14px;
             border-radius: 999px;
             border: 1px solid rgba(255, 107, 0, 0.22);
             background: rgba(255, 107, 0, 0.06);
@@ -353,12 +484,137 @@
 
         p {
             color: var(--muted);
-            font-size: 1.05rem;
+            font-size: 1.02rem;
             position: relative;
             z-index: 2;
         }
 
-        /* DEVICE CARDS */
+        p + p {
+            margin-top: 10px;
+        }
+
+        p strong {
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--orange), var(--orange-2));
+            color: #0a0a0a;
+            font-weight: 900;
+            font-size: 1rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .step-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-content h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .step-content p {
+            font-size: 0.98rem;
+        }
+
+        .ext-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .ext-card {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            transition: transform var(--transition), border-color var(--transition);
+            will-change: transform;
+        }
+
+        .ext-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 107, 0, 0.22);
+        }
+
+        .ext-card-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 6px;
+        }
+
+        .ext-card-head img {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .ext-card-head h3 {
+            font-size: 1.2rem;
+            font-weight: 900;
+        }
+
+        .ext-card-desc {
+            font-size: 0.92rem;
+            color: var(--muted-2);
+            margin-bottom: 14px;
+        }
+
+        .ext-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .ext-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 14px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            transition: transform var(--transition), background var(--transition);
+            will-change: transform;
+        }
+
+        .ext-link:hover {
+            background: rgba(255, 107, 0, 0.08);
+            transform: translateX(4px);
+        }
+
+        .ext-link .arrow {
+            color: var(--orange);
+            font-weight: 800;
+        }
+
         .device-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -369,65 +625,63 @@
         }
 
         .device-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
             border-radius: var(--radius-lg);
             padding: 22px;
             transition: transform var(--transition), border-color var(--transition);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.22);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
             will-change: transform;
         }
 
         .device-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 107, 0, 0.22);
+            transform: translateY(-4px);
+            border-color: rgba(255, 107, 0, 0.2);
         }
 
-        .device-head {
+        .device-card-head {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 10px;
         }
 
-        .device-icon {
-            font-size: 2.2rem;
-        }
-
-        .device-title {
-            font-size: 1.15rem;
+        .device-card-title {
+            font-size: 1.12rem;
             font-weight: 900;
             color: rgba(255, 255, 255, 0.9);
         }
 
-        .device-sub {
-            font-size: 0.9rem;
+        .device-card-icon {
+            font-size: 2rem;
+        }
+
+        .device-card-sub {
+            font-size: 0.88rem;
             color: var(--muted-2);
             margin-bottom: 12px;
         }
 
-        .device-list {
+        .compat-list {
             list-style: none;
-            margin-top: 10px;
         }
 
-        .device-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.78);
-            font-size: 0.95rem;
+        .compat-list li {
+            padding: 7px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: rgba(255, 255, 255, 0.76);
+            font-size: 0.93rem;
         }
 
-        .device-list li:last-child {
+        .compat-list li:last-child {
             border-bottom: none;
         }
 
-        .danger {
-            color: #ff4f4f !important;
-            font-weight: 800;
+        .compat-list .no {
+            color: #ff4f4f;
+            font-weight: 700;
         }
 
-        /* DOWNLOAD GRID */
         .download-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -437,332 +691,290 @@
             z-index: 2;
         }
 
-        .download-card {
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+        .dl-card {
+            background: rgba(0, 0, 0, 0.22);
+            border: 1px solid var(--glass-border);
             border-radius: var(--radius-lg);
             padding: 22px;
             transition: transform var(--transition), border-color var(--transition);
             will-change: transform;
         }
 
-        .download-card:hover {
-            transform: translateY(-5px);
+        .dl-card:hover {
+            transform: translateY(-4px);
             border-color: rgba(255, 107, 0, 0.18);
         }
 
-        .download-card h3 {
-            font-size: 1.15rem;
+        .dl-card h3 {
+            font-size: 1.1rem;
             font-weight: 900;
             margin-bottom: 12px;
             color: rgba(255, 255, 255, 0.92);
         }
 
-        .download-links {
+        .dl-links {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .download-links a {
-            text-decoration: none;
-            padding: 11px 12px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+        .dl-links a {
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.035);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             font-weight: 700;
-            color: rgba(255, 255, 255, 0.82);
+            color: rgba(255, 255, 255, 0.8);
             transition: transform var(--transition), background var(--transition);
             will-change: transform;
+            font-size: 0.93rem;
         }
 
-        .download-links a:hover {
-            background: rgba(255, 107, 0, 0.1);
+        .dl-links a:hover {
+            background: rgba(255, 107, 0, 0.08);
             transform: translateX(4px);
         }
 
-        /* EXTENSIONS */
-        .extension-block {
-            margin-top: 18px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .ext-title {
-            font-size: 1.1rem;
-            font-weight: 900;
-            color: rgba(255, 255, 255, 0.9);
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-
-        .extension-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .extension-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 14px;
-            padding: 16px 16px;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            transition: transform var(--transition), border-color var(--transition);
-            will-change: transform;
-        }
-
-        .extension-item:hover {
-            transform: translateY(-3px);
-            border-color: rgba(255, 107, 0, 0.22);
-        }
-
-        .extension-item span {
-            font-weight: 800;
-            color: rgba(255, 255, 255, 0.82);
-        }
-
-        .extension-item a {
-            text-decoration: none;
-            padding: 10px 14px;
-            border-radius: 999px;
-            background: linear-gradient(135deg, var(--orange), var(--orange-2));
-            color: #0b0b0b;
-            font-weight: 950;
-            font-size: 0.9rem;
-            transition: transform var(--transition);
-            will-change: transform;
-        }
-
-        .extension-item a:hover {
-            transform: scale(1.05);
-        }
-
-        /* WARNING */
-        .warning {
+        .warn-box {
             margin-top: 16px;
             border-radius: var(--radius-lg);
-            padding: 18px 18px;
+            padding: 18px 20px;
             border: 1px solid rgba(255, 107, 0, 0.25);
             background: rgba(255, 107, 0, 0.06);
             color: rgba(255, 255, 255, 0.85);
             position: relative;
             z-index: 2;
+            font-size: 0.98rem;
         }
 
-        .warning strong {
-            color: rgba(255, 180, 120, 0.95);
+        .warn-box strong {
+            color: var(--orange-3);
         }
 
-        /* SCRIPT BOX */
         .script-box {
-            margin-top: 18px;
+            margin-top: 20px;
             border-radius: var(--radius-lg);
-            padding: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(255, 255, 255, 0.03);
+            padding: 26px;
+            border: 1px solid rgba(255, 107, 0, 0.15);
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.04), rgba(0, 0, 0, 0.25));
             position: relative;
             z-index: 2;
         }
 
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-            margin-top: 14px;
+        .script-box h3 {
+            font-size: 1.15rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.92);
         }
 
-        .feature {
-            border-radius: 16px;
-            padding: 14px 14px;
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            background: rgba(0, 0, 0, 0.22);
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.95rem;
+        .script-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .script-feat {
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(0, 0, 0, 0.2);
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 0.93rem;
             transition: transform var(--transition), border-color var(--transition);
             will-change: transform;
         }
 
-        .feature:hover {
-            transform: translateY(-4px);
+        .script-feat:hover {
+            transform: translateY(-3px);
             border-color: rgba(255, 107, 0, 0.18);
         }
 
-        .script-footer {
+        .script-cta {
             text-align: center;
             margin-top: 22px;
         }
 
-        .note {
+        .script-note {
             margin-top: 10px;
-            font-size: 0.88rem;
-            color: rgba(255, 255, 255, 0.55);
+            font-size: 0.86rem;
+            color: var(--muted-2);
         }
 
-        /* FOOTER */
+        .faq-item {
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 2;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .faq-item h3 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 6px;
+        }
+
+        .faq-item p {
+            font-size: 0.95rem;
+        }
+
         footer {
             padding: 50px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            background: rgba(0, 0, 0, 0.22);
+            position: relative;
+            background: rgba(0, 0, 0, 0.2);
         }
 
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+        footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 5%;
+            right: 5%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 0, 0.2), transparent);
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             gap: 20px;
-            align-items: center;
+            flex-wrap: wrap;
         }
 
-        .footer-title {
-            font-size: 1.7rem;
+        .footer-brand {
+            font-size: 1.5rem;
             font-weight: 950;
-            margin-bottom: 10px;
+            background: linear-gradient(90deg, #fff, var(--orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .footer-text {
-            color: rgba(255, 255, 255, 0.7);
+        .footer-copy {
+            font-size: 0.88rem;
+            color: var(--muted-2);
         }
 
-        .discord-btn {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 20px;
+        .lang-switch-float {
+            position: fixed;
+            bottom: 22px;
+            right: 22px;
+            z-index: 999;
+            padding: 12px 18px;
             border-radius: 999px;
-            font-weight: 950;
-            text-decoration: none;
-            background: rgba(88, 101, 242, 0.14);
-            border: 1px solid rgba(88, 101, 242, 0.35);
-            color: rgba(255, 255, 255, 0.9);
-            transition: transform var(--transition);
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--glass-border-strong);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform var(--transition), background var(--transition);
             will-change: transform;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .discord-btn:hover {
-            transform: translateY(-4px);
+        .lang-switch-float:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 107, 0, 0.15);
         }
 
-        .copyright {
-            margin-top: 28px;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.5);
-            text-align: center;
-        }
-
-        /* MOBILE */
         @media (max-width: 920px) {
-            header.hero {
-                padding: 60px 0 34px 0;
-            }
-
-            .hero-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .subtitle {
-                margin: 0 auto 18px auto;
-            }
-
-            .cta-row {
-                justify-content: center;
-            }
-
-            .device-grid,
-            .download-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
+            header.hero { padding: 60px 0 36px; }
+            .hero-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero-subtitle { margin: 0 auto 22px; }
+            .cta-row { justify-content: center; }
+            .hero-visual { margin-top: 10px; }
+            .ext-grid, .device-grid, .download-grid { grid-template-columns: 1fr; }
+            .script-features { grid-template-columns: 1fr; }
+            .footer-inner { flex-direction: column; text-align: center; }
         }
 
         @media (max-width: 480px) {
-            .container {
-                padding: 0 16px;
-            }
-
-            .section {
-                padding: 22px;
-            }
-
-            .btn {
-                width: 100%;
-            }
-
-            .extension-item {
-                flex-direction: column;
-                align-items: stretch;
-                text-align: center;
-            }
-
-            .extension-item a {
-                width: 100%;
-            }
+            .container { padding: 0 16px; }
+            .section { padding: 22px 18px; border-radius: var(--radius-lg); }
+            .btn { width: 100%; }
+            .ext-card { padding: 18px; }
+            .lang-picker { padding: 36px 22px; }
+            .lang-buttons { flex-direction: column; }
+            .lang-btn { width: 100%; justify-content: center; }
         }
 
-        /* Disable hover effects on touch devices (PERFORMANCE) */
         @media (hover: none) {
-            .logo:hover,
             .btn:hover,
             .device-card:hover,
-            .download-card:hover,
-            .feature:hover,
-            .extension-item:hover,
-            .discord-btn:hover {
+            .dl-card:hover,
+            .ext-card:hover,
+            .ext-link:hover,
+            .script-feat:hover,
+            .cluster-orb:hover,
+            .lang-btn:hover,
+            .lang-switch-float:hover {
                 transform: none !important;
+            }
+            .cluster-orb.main:hover {
+                transform: translate(-50%, -50%) !important;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="page">
-        <div class="bg-glow one"></div>
-        <div class="bg-glow two"></div>
-        <div class="bg-glow three"></div>
+
+    <div class="lang-overlay" id="langOverlay">
+        <div class="lang-picker">
+            <span class="lang-picker-icon">🌐</span>
+            <h2>Select Language / Selecciona Idioma</h2>
+            <p class="lang-sub">Choose your preferred language to continue<br>Elige tu idioma preferido para continuar</p>
+            <div class="lang-buttons">
+                <button class="lang-btn" onclick="setLang('en')">
+                    <span class="flag">🇺🇸</span> English
+                </button>
+                <button class="lang-btn" onclick="setLang('es')">
+                    <span class="flag">🇪🇸</span> Español
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-ambient"></div>
+
+    <div class="page" id="pageContent">
 
         <header class="hero">
             <div class="container">
                 <div class="hero-grid">
                     <div class="hero-left">
-                        <div class="badge">
-                            ⚡ <span>FloppHub</span> UserScript Installation Guide
+                        <div class="hero-badge">
+                            ⚡ <span data-en="UserScript Installation Guide" data-es="Guía de Instalación de UserScript"></span>
                         </div>
 
-                        <h1>FloppHub UserScript Guide</h1>
+                        <h1 data-en="Install Your First UserScript" data-es="Instala Tu Primer UserScript"></h1>
 
-                        <p class="subtitle">
-                            A clean, modern and professional guide to install UserScripts on desktop and mobile.
-                            Designed for speed, clarity, and a premium dark aesthetic.
-                        </p>
+                        <p class="hero-subtitle" data-en="A complete, step-by-step guide to install and run UserScripts on any device. From understanding what they are to getting your first script running in minutes." data-es="Una guía completa, paso a paso, para instalar y ejecutar UserScripts en cualquier dispositivo. Desde entender qué son hasta tener tu primer script funcionando en minutos."></p>
 
                         <div class="cta-row">
-                            <a href="#flopphub-script" class="btn primary">🚀 Get the Script</a>
-                            <a href="#extensions" class="btn secondary">🔧 Required Extensions</a>
+                            <a href="#install-script" class="btn primary" data-en="🚀 Install Script" data-es="🚀 Instalar Script"></a>
+                            <a href="#extensions" class="btn secondary" data-en="🔧 Get Extensions" data-es="🔧 Obtener Extensiones"></a>
                         </div>
                     </div>
 
-                    <div class="hero-right">
-                        <div class="logo-stack">
-                            <div class="logo">
-                                <img src="https://i.postimg.cc/brq86RKj/loc-phub.jpg.png" alt="FloppHub Logo">
-                            </div>
-                            <div class="logo">
-                                <img src="https://flopphub-team.github.io/UserScript/Rip-Pandadevelopment-Lol.jpg"
-                                    alt="UserScript Logo">
-                            </div>
+                    <div class="hero-visual">
+                        <div class="hero-icon-cluster">
+                            <div class="cluster-orb main">⚙️</div>
+                            <div class="cluster-orb s1">🧩</div>
+                            <div class="cluster-orb s2">🔧</div>
+                            <div class="cluster-orb s3">📦</div>
+                            <div class="cluster-orb s4">🚀</div>
                         </div>
                     </div>
                 </div>
@@ -773,40 +985,61 @@
             <div class="container">
 
                 <section class="section" id="what-is">
-                    <div class="section-title">
-                        <h2>🔍 What is a UserScript?</h2>
-                        <div class="section-tag">Basics</div>
+                    <div class="section-header">
+                        <h2 data-en="🔍 What is a UserScript?" data-es="🔍 ¿Qué es un UserScript?"></h2>
+                        <div class="tag" data-en="Basics" data-es="Básico"></div>
                     </div>
-                    <p>
-                        A <strong>UserScript</strong> is a JavaScript program that runs inside your browser to modify or
-                        enhance websites.
-                        It works like a lightweight extension that can automate tasks, unlock features, or improve the
-                        browsing experience.
-                    </p>
-                    <p>
-                        UserScripts are fast, customizable, and extremely useful for power users.
-                    </p>
+                    <p data-en="A UserScript is a small JavaScript program that runs automatically in your browser. It modifies or enhances websites by adding features, removing annoyances, automating tasks, or unlocking hidden functionalities — all without needing to install a full browser extension." data-es="Un UserScript es un pequeño programa JavaScript que se ejecuta automáticamente en tu navegador. Modifica o mejora sitios web agregando funciones, eliminando molestias, automatizando tareas o desbloqueando funcionalidades ocultas — todo sin necesidad de instalar una extensión completa."></p>
+                    <p data-en="Think of it as a lightweight, customizable browser add-on that gives you full control over how any website works for you." data-es="Piénsalo como un complemento ligero y personalizable para tu navegador que te da control total sobre cómo funciona cualquier sitio web para ti."></p>
+                </section>
+
+                <section class="section" id="how-it-works">
+                    <div class="section-header">
+                        <h2 data-en="💡 How Does It Work?" data-es="💡 ¿Cómo Funciona?"></h2>
+                        <div class="tag" data-en="Overview" data-es="Resumen"></div>
+                    </div>
+
+                    <div class="step-row">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3 data-en="Install a Script Manager" data-es="Instala un Gestor de Scripts"></h3>
+                            <p data-en="First, install a browser extension like Violentmonkey or Tampermonkey. These managers handle running your scripts automatically." data-es="Primero, instala una extensión como Violentmonkey o Tampermonkey. Estos gestores se encargan de ejecutar tus scripts automáticamente."></p>
+                        </div>
+                    </div>
+
+                    <div class="step-row">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3 data-en="Click an Install Link" data-es="Haz Clic en un Enlace de Instalación"></h3>
+                            <p data-en="When you click a .user.js link, your script manager will detect it and show you an installation prompt. Just confirm and it's done!" data-es="Cuando hagas clic en un enlace .user.js, tu gestor de scripts lo detectará y te mostrará un aviso de instalación. Solo confirma y ¡listo!"></p>
+                        </div>
+                    </div>
+
+                    <div class="step-row">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3 data-en="The Script Runs Automatically" data-es="El Script se Ejecuta Automáticamente"></h3>
+                            <p data-en="Once installed, the script activates whenever you visit the target website. No extra steps needed — it just works in the background." data-es="Una vez instalado, el script se activa cada vez que visitas el sitio web objetivo. No necesitas hacer nada más — simplemente funciona en segundo plano."></p>
+                        </div>
+                    </div>
                 </section>
 
                 <section class="section" id="browsers">
-                    <div class="section-title">
-                        <h2>🌐 Compatible Browsers by Device</h2>
-                        <div class="section-tag">Platforms</div>
+                    <div class="section-header">
+                        <h2 data-en="🌐 Compatible Browsers" data-es="🌐 Navegadores Compatibles"></h2>
+                        <div class="tag" data-en="Platforms" data-es="Plataformas"></div>
                     </div>
 
-                    <p>
-                        Choose the best browser depending on your device. This ensures full extension support and smooth
-                        script execution.
-                    </p>
+                    <p data-en="Choose the right browser for your device to ensure full UserScript support." data-es="Elige el navegador adecuado para tu dispositivo para garantizar soporte completo de UserScripts."></p>
 
                     <div class="device-grid">
                         <div class="device-card">
-                            <div class="device-head">
-                                <div class="device-title">Desktop</div>
-                                <div class="device-icon">💻</div>
+                            <div class="device-card-head">
+                                <div class="device-card-title">Desktop</div>
+                                <div class="device-card-icon">💻</div>
                             </div>
-                            <div class="device-sub">Windows / macOS / Linux</div>
-                            <ul class="device-list">
+                            <div class="device-card-sub">Windows / macOS / Linux</div>
+                            <ul class="compat-list">
                                 <li>✅ Google Chrome</li>
                                 <li>✅ Mozilla Firefox</li>
                                 <li>✅ Microsoft Edge</li>
@@ -816,182 +1049,233 @@
                         </div>
 
                         <div class="device-card">
-                            <div class="device-head">
-                                <div class="device-title">iOS</div>
-                                <div class="device-icon">📱</div>
+                            <div class="device-card-head">
+                                <div class="device-card-title">iOS</div>
+                                <div class="device-card-icon">📱</div>
                             </div>
-                            <div class="device-sub">iPhone / iPad</div>
-                            <ul class="device-list">
-                                <li>✅ Safari (with Userscripts app)</li>
+                            <div class="device-card-sub">iPhone / iPad</div>
+                            <ul class="compat-list">
+                                <li>✅ Safari (Userscripts app)</li>
                                 <li>✅ Orion Browser</li>
-                                <li>⚠️ Firefox (Limited support)</li>
+                                <li>⚠️ Firefox (<span data-en="Limited" data-es="Limitado"></span>)</li>
                             </ul>
                         </div>
 
                         <div class="device-card">
-                            <div class="device-head">
-                                <div class="device-title">Android</div>
-                                <div class="device-icon">🤖</div>
+                            <div class="device-card-head">
+                                <div class="device-card-title">Android</div>
+                                <div class="device-card-icon">🤖</div>
                             </div>
-                            <div class="device-sub">Mobile / Tablet</div>
-                            <ul class="device-list">
-                                <li>✅ Firefox Nightly / Standard</li>
+                            <div class="device-card-sub">Mobile / Tablet</div>
+                            <ul class="compat-list">
+                                <li>✅ Firefox / Firefox Nightly</li>
                                 <li>✅ Yandex Browser</li>
                                 <li>✅ Samsung Internet</li>
                                 <li>✅ Lemur Browser</li>
-                                <li class="danger">❌ Google Chrome (No Extensions)</li>
+                                <li class="no">❌ Chrome (<span data-en="No Extensions" data-es="Sin Extensiones"></span>)</li>
                             </ul>
                         </div>
                     </div>
                 </section>
 
                 <section class="section" id="browser-downloads">
-                    <div class="section-title">
-                        <h2>⬇️ Browser Downloads</h2>
-                        <div class="section-tag">Links</div>
+                    <div class="section-header">
+                        <h2 data-en="⬇️ Download a Browser" data-es="⬇️ Descarga un Navegador"></h2>
+                        <div class="tag" data-en="Downloads" data-es="Descargas"></div>
                     </div>
 
-                    <p>
-                        Install one of these browsers to guarantee compatibility and full UserScript support.
-                    </p>
+                    <p data-en="If you don't have a compatible browser yet, pick one below." data-es="Si aún no tienes un navegador compatible, elige uno a continuación."></p>
 
                     <div class="download-grid">
-                        <div class="download-card">
+                        <div class="dl-card">
                             <h3>🖥️ Desktop</h3>
-                            <div class="download-links">
-                                <a href="https://www.google.com/chrome/" target="_blank">Google Chrome</a>
-                                <a href="https://www.mozilla.org/firefox/new/" target="_blank">Mozilla Firefox</a>
-                                <a href="https://www.microsoft.com/edge" target="_blank">Microsoft Edge</a>
-                                <a href="https://www.opera.com/download" target="_blank">Opera Browser</a>
-                                <a href="https://brave.com/download/" target="_blank">Brave Browser</a>
+                            <div class="dl-links">
+                                <a href="https://www.google.com/chrome/" target="_blank" rel="noopener">Google Chrome</a>
+                                <a href="https://www.mozilla.org/firefox/new/" target="_blank" rel="noopener">Mozilla Firefox</a>
+                                <a href="https://www.microsoft.com/edge" target="_blank" rel="noopener">Microsoft Edge</a>
+                                <a href="https://www.opera.com/download" target="_blank" rel="noopener">Opera</a>
+                                <a href="https://brave.com/download/" target="_blank" rel="noopener">Brave</a>
                             </div>
                         </div>
 
-                        <div class="download-card">
+                        <div class="dl-card">
                             <h3>📱 iOS</h3>
-                            <div class="download-links">
-                                <a href="https://apps.apple.com/app/safari/id1146564808" target="_blank">Safari</a>
-                                <a href="https://apps.apple.com/app/orion-browser/id1484498200"
-                                    target="_blank">Orion Browser</a>
+                            <div class="dl-links">
+                                <a href="https://apps.apple.com/app/safari/id1146564808" target="_blank" rel="noopener">Safari</a>
+                                <a href="https://apps.apple.com/app/orion-browser/id1484498200" target="_blank" rel="noopener">Orion Browser</a>
                             </div>
                         </div>
 
-                        <div class="download-card">
+                        <div class="dl-card">
                             <h3>🤖 Android</h3>
-                            <div class="download-links">
-                                <a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox"
-                                    target="_blank">Firefox</a>
-                                <a href="https://play.google.com/store/apps/details?id=com.yandex.browser"
-                                    target="_blank">Yandex Browser</a>
-                                <a href="https://play.google.com/store/apps/details?id=com.sec.android.app.sbrowser"
-                                    target="_blank">Samsung Internet</a>
-                                <a href="https://play.google.com/store/apps/details?id=com.lemurbrowser.exts"
-                                    target="_blank">Lemur Browser</a>
+                            <div class="dl-links">
+                                <a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox" target="_blank" rel="noopener">Firefox</a>
+                                <a href="https://play.google.com/store/apps/details?id=com.yandex.browser" target="_blank" rel="noopener">Yandex Browser</a>
+                                <a href="https://play.google.com/store/apps/details?id=com.sec.android.app.sbrowser" target="_blank" rel="noopener">Samsung Internet</a>
+                                <a href="https://play.google.com/store/apps/details?id=com.lemurbrowser.exts" target="_blank" rel="noopener">Lemur Browser</a>
                             </div>
                         </div>
                     </div>
                 </section>
 
                 <section class="section" id="extensions">
-                    <div class="section-title">
-                        <h2>🔧 Required Extensions</h2>
-                        <div class="section-tag">Must Have</div>
+                    <div class="section-header">
+                        <h2 data-en="🔧 Install a Script Manager" data-es="🔧 Instala un Gestor de Scripts"></h2>
+                        <div class="tag" data-en="Required" data-es="Requerido"></div>
                     </div>
 
-                    <p>
-                        To run UserScripts, you need a UserScript manager extension.
-                        The best choices are <strong>Violentmonkey</strong> and <strong>Tampermonkey</strong>.
-                    </p>
+                    <p data-en="You need a UserScript manager extension to run scripts. These are the two best options — choose either one." data-es="Necesitas una extensión de gestor de UserScripts para ejecutar scripts. Estas son las dos mejores opciones — elige cualquiera de las dos."></p>
 
-                    <div class="extension-block">
-                        <div class="ext-title">Violentmonkey (Recommended)</div>
-                        <ul class="extension-list">
-                            <li class="extension-item">
-                                <span>🖥️ Chrome / Edge / Opera</span>
-                                <a href="https://chrome.google.com/webstore/detail/violentmonkey/jinjaccalgkejednnccoanngcbfjdicp"
-                                    target="_blank">Install</a>
-                            </li>
-                            <li class="extension-item">
-                                <span>🦊 Firefox</span>
-                                <a href="https://addons.mozilla.org/en-US/firefox/addon/violentmonkey/"
-                                    target="_blank">Install</a>
-                            </li>
-                        </ul>
+                    <div class="ext-grid">
+                        <div class="ext-card">
+                            <div class="ext-card-head">
+                                <img src="https://addons.mozilla.org/user-media/addon_icons/797/797378-64.png?modified=1773795053" alt="Violentmonkey" loading="lazy">
+                                <h3>Violentmonkey</h3>
+                            </div>
+                            <p class="ext-card-desc" data-en="Open-source, fast and lightweight. Recommended for most users." data-es="Código abierto, rápido y ligero. Recomendado para la mayoría."></p>
+                            <div class="ext-links">
+                                <a class="ext-link" href="https://chrome.google.com/webstore/detail/violentmonkey/jinjaccalgkejednnccoanngcbfjdicp" target="_blank" rel="noopener">
+                                    <span>Chrome / Edge / Opera</span>
+                                    <span class="arrow">→</span>
+                                </a>
+                                <a class="ext-link" href="https://addons.mozilla.org/en-US/firefox/addon/violentmonkey/" target="_blank" rel="noopener">
+                                    <span>Firefox</span>
+                                    <span class="arrow">→</span>
+                                </a>
+                            </div>
+                        </div>
 
-                        <div class="ext-title">Tampermonkey</div>
-                        <ul class="extension-list">
-                            <li class="extension-item">
-                                <span>🖥️ Chrome / Edge / Opera</span>
-                                <a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo"
-                                    target="_blank">Install</a>
-                            </li>
-                            <li class="extension-item">
-                                <span>🦊 Firefox</span>
-                                <a href="https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/"
-                                    target="_blank">Install</a>
-                            </li>
-                            <li class="extension-item">
-                                <span>📱 iOS - Userscripts App</span>
-                                <a href="https://apps.apple.com/us/app/userscripts/id1463298887"
-                                    target="_blank">Install</a>
-                            </li>
-                        </ul>
+                        <div class="ext-card">
+                            <div class="ext-card-head">
+                                <img src="https://www.tampermonkey.net/images/ape.svg" alt="Tampermonkey" loading="lazy">
+                                <h3>Tampermonkey</h3>
+                            </div>
+                            <p class="ext-card-desc" data-en="Most popular script manager. Works on all platforms including iOS." data-es="El gestor de scripts más popular. Funciona en todas las plataformas incluido iOS."></p>
+                            <div class="ext-links">
+                                <a class="ext-link" href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo" target="_blank" rel="noopener">
+                                    <span>Chrome / Edge / Opera</span>
+                                    <span class="arrow">→</span>
+                                </a>
+                                <a class="ext-link" href="https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/" target="_blank" rel="noopener">
+                                    <span>Firefox</span>
+                                    <span class="arrow">→</span>
+                                </a>
+                                <a class="ext-link" href="https://apps.apple.com/us/app/userscripts/id1463298887" target="_blank" rel="noopener">
+                                    <span>iOS (Userscripts App)</span>
+                                    <span class="arrow">→</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
-                <section class="section" id="chrome-android">
-                    <div class="section-title">
-                        <h2>⚠️ Chrome on Android</h2>
-                        <div class="section-tag">Warning</div>
+                <section class="section" id="step-by-step">
+                    <div class="section-header">
+                        <h2 data-en="📋 Step-by-Step Installation" data-es="📋 Instalación Paso a Paso"></h2>
+                        <div class="tag" data-en="Tutorial" data-es="Tutorial"></div>
                     </div>
 
-                    <div class="warning">
-                        <strong>Important:</strong> Google Chrome for Android does <strong>NOT</strong> support browser
-                        extensions.
-                        This is a limitation from Google itself.
+                    <div class="step-row">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3 data-en="Open Your Browser" data-es="Abre tu Navegador"></h3>
+                            <p data-en="Launch a compatible browser from the list above. Make sure it supports extensions." data-es="Abre un navegador compatible de la lista anterior. Asegúrate de que soporte extensiones."></p>
+                        </div>
                     </div>
 
-                    <p style="margin-top: 14px;">
-                        Android users must install alternative browsers like <strong>Firefox</strong>,
-                        <strong>Yandex</strong>, or <strong>Lemur</strong> to use this script.
-                    </p>
+                    <div class="step-row">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3 data-en="Install Violentmonkey or Tampermonkey" data-es="Instala Violentmonkey o Tampermonkey"></h3>
+                            <p data-en="Go to the extensions section above and click the install link for your browser. Follow the prompts to add the extension." data-es="Ve a la sección de extensiones arriba y haz clic en el enlace de instalación para tu navegador. Sigue las indicaciones para agregar la extensión."></p>
+                        </div>
+                    </div>
+
+                    <div class="step-row">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3 data-en="Click the Script Install Link" data-es="Haz Clic en el Enlace de Instalación del Script"></h3>
+                            <p data-en="Click the 'Install Script' button below. Your script manager will automatically detect the .user.js file and open an installation dialog." data-es="Haz clic en el botón 'Instalar Script' a continuación. Tu gestor de scripts detectará automáticamente el archivo .user.js y abrirá un diálogo de instalación."></p>
+                        </div>
+                    </div>
+
+                    <div class="step-row">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3 data-en="Confirm Installation" data-es="Confirma la Instalación"></h3>
+                            <p data-en="Review the script details shown by your manager, then click 'Install' or 'Confirm'. The script is now active!" data-es="Revisa los detalles del script que muestra tu gestor, luego haz clic en 'Instalar' o 'Confirmar'. ¡El script ya está activo!"></p>
+                        </div>
+                    </div>
+
+                    <div class="step-row">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3 data-en="Visit the Target Website" data-es="Visita el Sitio Web Objetivo"></h3>
+                            <p data-en="Navigate to the website the script is designed for. The script will activate automatically — no manual action needed." data-es="Navega al sitio web para el cual está diseñado el script. El script se activará automáticamente — no necesitas hacer nada manualmente."></p>
+                        </div>
+                    </div>
                 </section>
 
-                <section class="section" id="flopphub-script">
-                    <div class="section-title">
-                        <h2>🎯 FloppHub UserScript</h2>
-                        <div class="section-tag">Main</div>
+                <section class="section" id="android-warning">
+                    <div class="section-header">
+                        <h2 data-en="⚠️ Chrome on Android" data-es="⚠️ Chrome en Android"></h2>
+                        <div class="tag" data-en="Warning" data-es="Aviso"></div>
+                    </div>
+
+                    <div class="warn-box">
+                        <strong data-en="Important:" data-es="Importante:"></strong>
+                        <span data-en=" Google Chrome for Android does NOT support browser extensions. This is a limitation imposed by Google. You must use an alternative browser like Firefox, Yandex, or Lemur to run UserScripts on Android." data-es=" Google Chrome para Android NO soporta extensiones de navegador. Esta es una limitación impuesta por Google. Debes usar un navegador alternativo como Firefox, Yandex o Lemur para ejecutar UserScripts en Android."></span>
+                    </div>
+                </section>
+
+                <section class="section" id="install-script">
+                    <div class="section-header">
+                        <h2 data-en="🎯 Install WorkinkBypass Script" data-es="🎯 Instalar Script WorkinkBypass"></h2>
+                        <div class="tag" data-en="Script" data-es="Script"></div>
                     </div>
 
                     <div class="script-box">
-                        <p style="font-size: 1.05rem;">
-                            <strong>🔑 PunkX Key Automation</strong> — Automates key retrieval by bypassing AdMavenshort
-                            links
-                            and copying the key instantly to your clipboard.
-                        </p>
+                        <h3 data-en="🔑 WorkinkBypass — Automated Bypass" data-es="🔑 WorkinkBypass — Bypass Automatizado"></h3>
+                        <p data-en="This script automates the bypass process on Workink-related link shorteners. It saves you time and clicks by handling redirections automatically." data-es="Este script automatiza el proceso de bypass en acortadores de enlaces relacionados con Workink. Te ahorra tiempo y clics manejando las redirecciones automáticamente."></p>
 
-                        <div class="feature-grid">
-                            <div class="feature">⚡ Auto-bypass AdMavenshort links</div>
-                            <div class="feature">📋 Instant key copy to clipboard</div>
-                            <div class="feature">🔗 Seamless PunkX integration</div>
-                            <div class="feature">🕒 Saves time and clicks</div>
+                        <div class="script-features">
+                            <div class="script-feat" data-en="⚡ Automatic bypass execution" data-es="⚡ Ejecución automática del bypass"></div>
+                            <div class="script-feat" data-en="🔗 Handles redirections seamlessly" data-es="🔗 Maneja redirecciones sin interrupciones"></div>
+                            <div class="script-feat" data-en="🕒 Saves time and effort" data-es="🕒 Ahorra tiempo y esfuerzo"></div>
+                            <div class="script-feat" data-en="🛡️ Safe and open-source" data-es="🛡️ Seguro y de código abierto"></div>
                         </div>
 
-                        <p class="note">
-                            Note: Integrates with Linkvertse-Bypass.com infrastructure. Not affiliated with
-                            pandadevelopment.net.
-                        </p>
-
-                        <div class="script-footer">
-                            <a href="https://flopphub-team.github.io/UserScript/User.js" class="btn primary"
-                                target="_blank">
-                                📥 Install Script
-                            </a>
-
-                            <div class="note">
-                                Requires Violentmonkey or Tampermonkey.
-                            </div>
+                        <div class="script-cta">
+                            <a href="https://gist.github.com/FloppHub-Team/75b24ebf0ba140731b2836ecddf127f5/raw/36c01b2c5274f1f54abf8d7e485d0cd1c6937b5b/WorkinkBypass.user.js" class="btn primary" target="_blank" rel="noopener" data-en="📥 Install WorkinkBypass" data-es="📥 Instalar WorkinkBypass"></a>
+                            <p class="script-note" data-en="Requires Violentmonkey or Tampermonkey installed first." data-es="Requiere tener Violentmonkey o Tampermonkey instalado previamente."></p>
                         </div>
+                    </div>
+                </section>
+
+                <section class="section" id="faq">
+                    <div class="section-header">
+                        <h2 data-en="❓ Frequently Asked Questions" data-es="❓ Preguntas Frecuentes"></h2>
+                        <div class="tag">FAQ</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <h3 data-en="Is it safe to use UserScripts?" data-es="¿Es seguro usar UserScripts?"></h3>
+                        <p data-en="UserScripts from trusted sources are generally safe. Always review the code before installing, and only use scripts from developers you trust." data-es="Los UserScripts de fuentes confiables son generalmente seguros. Siempre revisa el código antes de instalarlo y solo usa scripts de desarrolladores en los que confíes."></p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h3 data-en="Can I uninstall a script?" data-es="¿Puedo desinstalar un script?"></h3>
+                        <p data-en="Yes! Open your script manager (Violentmonkey or Tampermonkey), find the script, and click the delete or remove button. It's instant and reversible." data-es="¡Sí! Abre tu gestor de scripts (Violentmonkey o Tampermonkey), busca el script y haz clic en el botón de eliminar. Es instantáneo y reversible."></p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h3 data-en="Do scripts update automatically?" data-es="¿Los scripts se actualizan automáticamente?"></h3>
+                        <p data-en="Most script managers check for updates periodically. You can also manually trigger an update from the manager's dashboard." data-es="La mayoría de los gestores de scripts verifican actualizaciones periódicamente. También puedes forzar una actualización manualmente desde el panel del gestor."></p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h3 data-en="The script doesn't work. What should I do?" data-es="El script no funciona. ¿Qué debo hacer?"></h3>
+                        <p data-en="Make sure your script manager is enabled, the script is active, and you're using a supported browser. Try refreshing the page or reinstalling the script." data-es="Asegúrate de que tu gestor de scripts esté habilitado, el script esté activo y estés usando un navegador compatible. Intenta recargar la página o reinstalar el script."></p>
                     </div>
                 </section>
 
@@ -1000,49 +1284,67 @@
 
         <footer>
             <div class="container">
-                <div class="footer-grid">
-                    <div>
-                        <div class="footer-title">🔗 Join the Community</div>
-                        <div class="footer-text">
-                            Get support, updates, and chat with other users in the official Discord server.
-                        </div>
-                    </div>
-
-                    <div style="display:flex; justify-content:center;">
-                        <a href="https://discord.gg/J9dSv7hq55" class="discord-btn" target="_blank">
-                            💬 Join Discord Server
-                        </a>
-                    </div>
-                </div>
-
-                <div class="copyright">
-                    © 2026 FloppHub Team. All rights reserved.
+                <div class="footer-inner">
+                    <div class="footer-brand">FloppHub</div>
+                    <div class="footer-copy">© 2026 FloppHub Team</div>
                 </div>
             </div>
         </footer>
+
     </div>
 
-    <script>
-        // SUPER LIGHT reveal animation (optimized)
-        document.addEventListener("DOMContentLoaded", () => {
-            const sections = document.querySelectorAll(".section");
+    <button class="lang-switch-float" id="langSwitchBtn" onclick="showLangPicker()">
+        🌐 <span id="langSwitchLabel">EN</span>
+    </button>
 
-            const observer = new IntersectionObserver((entries) => {
-                for (const entry of entries) {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("visible");
-                        observer.unobserve(entry.target);
+    <script>
+        let currentLang = null;
+
+        function setLang(lang) {
+            currentLang = lang;
+            document.getElementById("langOverlay").classList.add("hidden");
+            document.getElementById("pageContent").classList.add("active");
+            document.getElementById("langSwitchLabel").textContent = lang.toUpperCase();
+            document.documentElement.lang = lang;
+            applyLang(lang);
+        }
+
+        function showLangPicker() {
+            document.getElementById("langOverlay").classList.remove("hidden");
+        }
+
+        function applyLang(lang) {
+            var els = document.querySelectorAll("[data-en][data-es]");
+            for (var i = 0; i < els.length; i++) {
+                var el = els[i];
+                var val = lang === "es" ? el.getAttribute("data-es") : el.getAttribute("data-en");
+                if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+                    el.placeholder = val;
+                } else {
+                    el.textContent = val;
+                }
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var sections = document.querySelectorAll(".section");
+            var observer = new IntersectionObserver(function (entries) {
+                for (var i = 0; i < entries.length; i++) {
+                    if (entries[i].isIntersecting) {
+                        entries[i].target.classList.add("visible");
+                        observer.unobserve(entries[i].target);
                     }
                 }
             }, {
-                threshold: 0.15,
-                rootMargin: "0px 0px -80px 0px"
+                threshold: 0.12,
+                rootMargin: "0px 0px -60px 0px"
             });
-
-            sections.forEach(sec => observer.observe(sec));
+            for (var i = 0; i < sections.length; i++) {
+                observer.observe(sections[i]);
+            }
         });
     </script>
 
 </body>
 
-    </html>
+</html>
